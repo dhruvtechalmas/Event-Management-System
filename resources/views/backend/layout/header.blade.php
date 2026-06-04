@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -31,21 +32,29 @@
           <span class="nav-icon"><i class="bi bi-speedometer2" aria-hidden="true"></i></span>
           <span class="nav-text">Dashboard</span>
         </a>
-         <a class="nav-link active " href="events" aria-current="page">
-          <span class="nav-icon"><i class="bi bi-speedometer2" aria-hidden="true"></i></span>
+        <a class="nav-link active " href="events">
+          <span class="nav-icon"><i class="bi bi-calendar2-event-fill" aria-hidden="true"></i></span>
           <span class="nav-text">Events</span>
+        </a>
+        <a class="nav-link active " href="participants">
+          <span class="nav-icon"><i class="bi bi-people-fill" aria-hidden="true"></i></span>
+          <span class="nav-text">Participants</span>
+        </a>
+        <a class="nav-link active " href="tasks">
+          <span class="nav-icon"><i class="bi bi-list-task" aria-hidden="true"></i></span>
+          <span class="nav-text">Tasks</span>
+        </a>
+        <a class="nav-link active " href="roles">
+          <span class="nav-icon"><i class="bi bi-person-fill-gear" aria-hidden="true"></i></span>
+          <span class="nav-text">Roles</span>
+        </a>
+        <a class="nav-link active " href="permissions">
+          <span class="nav-icon"><i class="bi bi-list-columns" aria-hidden="true"></i></span>
+          <span class="nav-text">Permissions</span>
         </a>
         <a class="nav-link active" href="users">
           <span class="nav-icon"><i class="bi bi-people" aria-hidden="true"></i></span>
           <span class="nav-text">Users</span>
-        </a>
-        <a class="nav-link active" href="add-user">
-          <span class="nav-icon"><i class="bi bi-person-plus" aria-hidden="true"></i></span>
-          <span class="nav-text">Add User</span>
-        </a>
-        <a class="nav-link active" href="profile">
-          <span class="nav-icon"><i class="bi bi-person-badge" aria-hidden="true"></i></span>
-          <span class="nav-text">Profile</span>
         </a>
         <a class="nav-link active" href="tables">
           <span class="nav-icon"><i class="bi bi-table" aria-hidden="true"></i></span>
@@ -54,7 +63,11 @@
         <a class="nav-link active" href="forms">
           <span class="nav-icon"><i class="bi bi-ui-checks-grid" aria-hidden="true"></i></span>
           <span class="nav-text">Forms</span>
-        </a> 
+        </a>
+        <a class="nav-link active" href="calendar">
+          <span class="nav-icon"><i class="bi bi-calendar" aria-hidden="true"></i></span>
+          <span class="nav-text">Calendar</span>
+        </a>
         <a class="nav-link active" href="settings">
           <span class="nav-icon"><i class="bi bi-gear" aria-hidden="true"></i></span>
           <span class="nav-text">Settings</span>
@@ -63,12 +76,13 @@
 
 
       <div class="sidebar-user">
-        <img class="avatar-img avatar-md sidebar-user-avatar" src="{{ url('/backend/assets/images/avatar/avatar-2.jpg') }}" alt="Admin Hasan">
+        <img class="avatar-img avatar-md sidebar-user-avatar"
+          src="{{ url('/backend/assets/images/avatar/avatar-2.jpg') }}" alt="Admin Hasan">
         <strong>Super Admin</strong>
         <small>Active Workspace</small>
       </div>
 
-     
+
       <div class="sidebar-footer">
         <span class="status-dot"></span>
         <span class="sidebar-footer-text">System running smoothly</span>
@@ -78,22 +92,26 @@
     <div class="admin-main">
       <nav class="navbar admin-navbar navbar-expand bg-white">
         <div class="container-fluid px-3 px-lg-4">
-          <button class="sidebar-toggle" type="button" data-sidebar-toggle aria-controls="adminSidebar" aria-expanded="true" aria-label="Toggle sidebar">
+          <button class="sidebar-toggle" type="button" data-sidebar-toggle aria-controls="adminSidebar"
+            aria-expanded="true" aria-label="Toggle sidebar">
             <span></span>
             <span></span>
             <span></span>
           </button>
 
           <form class="d-none d-md-flex ms-3 flex-grow-1" role="search">
-            <input class="form-control search-input" type="search" placeholder="Search users, orders, reports" aria-label="Search">
+            <input class="form-control search-input" type="search" placeholder="Search users, orders, reports"
+              aria-label="Search">
           </form>
 
           <div class="navbar-actions ms-auto">
-            <button class="icon-button theme-toggle" type="button" data-theme-toggle aria-label="Switch color theme" title="Switch color theme">
+            <button class="icon-button theme-toggle" type="button" data-theme-toggle aria-label="Switch color theme"
+              title="Switch color theme">
               <i class="bi bi-moon-stars" data-theme-icon aria-hidden="true"></i>
             </button>
             <div class="dropdown">
-              <button class="icon-button" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Notifications">
+              <button class="icon-button" type="button" data-bs-toggle="dropdown" aria-expanded="false"
+                aria-label="Notifications">
                 <span class="notification-dot"></span>
                 <i class="bi bi-bell" aria-hidden="true"></i>
               </button>
@@ -115,14 +133,18 @@
             </div>
 
             <div class="dropdown">
-              <button class="profile-button dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                <img class="avatar-img avatar-sm" src="{{ url('/backend/assets/images/avatar/avatar-2.jpg') }}" alt="Super Admin">
+              <button class="profile-button dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                aria-expanded="false">
+                <img class="avatar-img avatar-sm" src="{{ url('/backend/assets/images/avatar/avatar-2.jpg') }}"
+                  alt="Super Admin">
                 <span class="profile-name d-none d-sm-inline">Super Admin</span>
               </button>
               <ul class="dropdown-menu dropdown-menu-end">
                 <li><a class="dropdown-item" href="profile">Profile</a></li>
                 <li><a class="dropdown-item" href="settings">Account settings</a></li>
-                <li><hr class="dropdown-divider"></li>
+                <li>
+                  <hr class="dropdown-divider">
+                </li>
                 <li><a class="dropdown-item" href="logout">Sign out</a></li>
               </ul>
             </div>
