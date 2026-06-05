@@ -17,11 +17,7 @@
 
           <div class="modal-body">
             @include('backend.users.add-user')
-            @include('backend.users.edit') 
           </div>
-
-          
-
         </div>
       </div>
     </div>
@@ -34,7 +30,6 @@
           <div>
             <p class="eyebrow mb-1">Management</p>
             <h1 class="h3 mb-1">Users</h1>
-            <p class="text-muted mb-0">Review accounts, roles, account status, and team ownership.</p>
           </div>
         </div>
         <div class="heading-actions"><a class="btn btn-outline-secondary btn-sm" href="tables"><i class="bi bi-download"
@@ -47,7 +42,7 @@
         </div>
       </div>
 
-      <section class="row g-3 mt-1" aria-label="User summary">
+      {{-- <section class="row g-3 mt-1" aria-label="User summary">
         <div class="col-12 col-sm-6 col-xl-3">
           <article class="metric-card metric-primary">
             <div class="metric-top">
@@ -103,24 +98,19 @@
             </div>
           </article>
         </div>
-      </section>
+      </section> --}}
 
       <section class="panel mt-3">
         <div class="panel-header">
           <div>
             <h2 class="h5 mb-1 section-title"><i class="bi bi-table" aria-hidden="true"></i><span>User List</span></h2>
-            <p class="text-muted mb-0">Search, review, and manage team member accounts.</p>
           </div>
           <div class="d-flex flex-wrap gap-2">
             <input class="form-control form-control-sm table-search" type="search" placeholder="Search users"
               data-table-search="usersTable" aria-label="Search users">
-
-            <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#addUserModal">
-              <i class="bi bi-person-plus" aria-hidden="true"></i> Add User
-            </button>
-
           </div>
         </div>
+
         <div class="table-responsive">
           <table class="table align-middle mb-0" id="usersTable" data-searchable-table>
             <thead>
@@ -170,34 +160,65 @@
                     </td>
                     <td>{{ $user->email }}</td>
                     <td>{{ $user->phone }}</td>
-                    <td>{{ $user->role_id }}</td>
+                    <td>{{ $user->role_id == 1 ? 'Super Admin' : ($user->role_id == 2 ? 'Event Manager' : 'Staff') }}</td>
                     <td>{{ $user->created_at }}</td>
                     <td class="text-dark">
-                      <a class="btn btn-success btn-sm" href="{{ route('users.edit', $user->id) }}">Edit</a>
-                     <a class="btn btn-danger btn-sm" href="#" onclick="return confirm('Are you sure you want to delete this user?')">Delete</a>
-                    <a class="btn btn-light btn-sm" href="{{ route('users.show', $user->id) }}">View</a>
+                      <button class="btn btn-success btn-sm" data-bs-toggle="modal"
+                        data-bs-target="#editUserModal{{ $user->id }}">
+                        Edit
+                      </button>
+
+                      <form action="{{ route('users.destroy', $user->id) }}" method="POST" style="display: inline;">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this user?')">
+                          Delete
+                        </button>
+                      </form>
+
+                      <a class="btn btn-light btn-sm" href="{{ route('users.show', $user->id) }}">View</a>
                     </td>
                   </tr>
+
+                  @include('backend.users.edit', ['user' => $user, 'roles' => $roles])
                 @endforeach
               @endif
             </tbody>
           </table>
         </div>
 
-
-        <div class="d-flex flex-column flex-sm-row align-items-sm-center justify-content-between gap-3 mt-3">
-          <p class="text-muted small mb-0">Showing 1 to 5 of 124 users</p>
-          <nav aria-label="Users pagination">
-            <ul class="pagination pagination-sm mb-0">
-              <li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
-              <li class="page-item active"><a class="page-link" href="#">1</a></li>
-              <li class="page-item"><a class="page-link" href="#">2</a></li>
-              <li class="page-item"><a class="page-link" href="#">Next</a></li>
-            </ul>
-          </nav>
+        {{-- Pagination controls --}}
+        <div class="d-flex justify-content-end mt-3">
+          {{ $users->links('pagination::bootstrap-4') }}
         </div>
+
+        {{-- <div class="d-flex justify-content-end gap-2 mt-4">
+
+          @if ($users->onFirstPage())
+          <button class="btn btn-outline-secondary" disabled>
+            ← Previous
+          </button>
+          @else
+          <a href="{{ $users->previousPageUrl() }}" class="btn btn-outline-primary">
+            ← Previous
+          </a>
+          @endif
+          @if ($users->hasMorePages())
+          <a href="{{ $users->nextPageUrl() }}" class="btn btn-outline-primary">
+            Next →
+          </a>
+          @else
+          <button class="btn btn-outline-secondary" disabled>
+            Next →
+          </button>
+          @endif
+
+        </div> --}}
+
       </section>
     </div>
+
+
   </main>
 
 

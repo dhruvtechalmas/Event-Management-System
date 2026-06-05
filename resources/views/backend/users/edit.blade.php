@@ -1,53 +1,77 @@
-<div class="px-2 px-md-3">
-  <form action="{{ route('users.update', $user->id) }}" method="POST" class="needs-validation" novalidate>
-    @csrf
-    @method('PUT')
+<div class="modal fade" id="editUserModal{{ $user->id }}" tabindex="-1">
+    <div class="modal-dialog modal-md modal-dialog-centered">
+        <div class="modal-content">
 
-    <div class="row g-3">
+            <div class="modal-header">
+                <h5 class="modal-title">Edit User</h5>
+                <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal">
+                </button>
+            </div>
 
-      <div class="col-md-12">
-        <label class="form-label" for="firstName">Full Name</label>
-        <input class="form-control" id="firstName" name="name" type="text" value="{{ $user->name }}" required>
-        <div class="invalid-feedback">Full name is required.</div>
-      </div>
+            <div class="modal-body">
 
-      <div class="col-md-12">
-        <label class="form-label" for="email">Email</label>
-        <input class="form-control" id="email" name="email" type="email" value="{{ $user->email }}" required>
-        <div class="invalid-feedback">Enter a valid email.</div>
-      </div>
+                <form action="{{ route('users.update', $user->id) }}"
+                      method="POST">
 
-      <div class="col-md-12">
-        <label class="form-label" for="phone">Phone</label>
-        <input class="form-control" id="phone" name="phone" type="tel" value="{{ $user->phone }}" required>
-        <div class="invalid-feedback">Phone number is required.</div>
-      </div>
+                    @csrf
+                   @method('POST')
 
-      <div class="col-md-12">
-        <label class="form-label" for="role">Role</label>
-        <select class="form-select" id="role" name="role_id" required>
-          <option value="">Choose Role</option>
-          @foreach($roles as $role)
-            <option value="{{ $role->name }}" {{ $user->hasRole($role->name) ? 'selected' : '' }}>
-              {{ $role->name }}
-            </option>
-          @endforeach
-        </select>
-        <div class="invalid-feedback">Choose a role.</div>
-      </div>
+                    <div class="mb-3">
+                        <label class="form-label">Name</label>
+                        <input type="text"
+                               name="name"
+                               class="form-control"
+                               value="{{ $user->name }}">
+                    </div>
 
+                    <div class="mb-3">
+                        <label class="form-label">Email</label>
+                        <input type="email"
+                               name="email"
+                               class="form-control"
+                               value="{{ $user->email }}">
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Phone</label>
+                        <input type="text"
+                               name="phone"
+                               class="form-control"
+                               value="{{ $user->phone }}">
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Role</label>
+
+                        <select name="role_id" class="form-select">
+                            @foreach($roles as $role)
+                                <option value="{{ $role->id }}"
+                                    {{ $user->role_id == $role->id ? 'selected' : '' }}>
+                                    {{ $role->name }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <div class="text-end">
+                        <button type="button"
+                                class="btn btn-secondary"
+                                data-bs-dismiss="modal">
+                            Cancel
+                        </button>
+
+                        <button type="submit"
+                                class="btn btn-primary">
+                            Update User
+                        </button>
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
     </div>
-
-    <div class="d-flex justify-content-end gap-2 mt-4 border-top pt-3">
-      <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
-        Cancel
-      </button>
-
-      <button class="btn btn-primary" type="submit">
-        <i class="bi bi-person-check"></i>
-        Update User
-      </button>
-    </div>
-
-  </form>
 </div>

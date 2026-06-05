@@ -119,9 +119,9 @@
                 </p>
               </div>
 
-              <button class="btn btn-primary btn-sm" href="{{ route('users.edit', $user->id) }}">
-                Edit User
-              </button>
+              {{-- <a href="{{ route('users.edit', $user->id) }}" class="btn btn-primary btn-sm">
+                <i class="bi bi-pencil-square"></i> Edit
+              </a> --}}
 
             </div>
 

@@ -18,7 +18,7 @@
 
     <aside class="admin-sidebar" id="adminSidebar" aria-label="Main navigation">
       <div class="sidebar-header">
-        <a class="brand-mark" href="index" aria-label="adminHMD dashboard">
+        <a class="brand-mark" href="{{route('backend.index')}}" aria-label="adminHMD dashboard">
           <span class="brand-icon"><i class="bi bi-grid-1x2-fill" aria-hidden="true"></i></span>
           <span class="brand-copy">
             <span class="brand-title">Event Management</span>
@@ -28,11 +28,11 @@
       </div>
 
       <nav class="sidebar-nav">
-        <a class="nav-link active" href="index" aria-current="page">
+        <a class="nav-link active" href="{{route('backend.index')}}" aria-current="page">
           <span class="nav-icon"><i class="bi bi-speedometer2" aria-hidden="true"></i></span>
           <span class="nav-text">Dashboard</span>
         </a>
-        <a class="nav-link active " href="events">
+        <a class="nav-link active " href="{{route('events.index')}}">
           <span class="nav-icon"><i class="bi bi-calendar2-event-fill" aria-hidden="true"></i></span>
           <span class="nav-text">Events</span>
         </a>
@@ -52,17 +52,9 @@
           <span class="nav-icon"><i class="bi bi-list-columns" aria-hidden="true"></i></span>
           <span class="nav-text">Permissions</span>
         </a>
-        <a class="nav-link active" href="users">
+        <a class="nav-link active" href="{{route('users.index')}}">
           <span class="nav-icon"><i class="bi bi-people" aria-hidden="true"></i></span>
           <span class="nav-text">Users</span>
-        </a>
-        <a class="nav-link active" href="tables">
-          <span class="nav-icon"><i class="bi bi-table" aria-hidden="true"></i></span>
-          <span class="nav-text">Tables</span>
-        </a>
-        <a class="nav-link active" href="forms">
-          <span class="nav-icon"><i class="bi bi-ui-checks-grid" aria-hidden="true"></i></span>
-          <span class="nav-text">Forms</span>
         </a>
         <a class="nav-link active" href="calendar">
           <span class="nav-icon"><i class="bi bi-calendar" aria-hidden="true"></i></span>
