@@ -29,10 +29,12 @@
           </div>
         </div>
 
+        @can('permission.create')
         <button class="btn btn-primary btn-sm d-flex justify-content-end" data-bs-toggle="modal"
           data-bs-target="#permissionsUserModal">
           <i class="bi bi-person-plus" aria-hidden="true"></i> Add Permission
         </button>
+        @endcan
       </div>
 
 
@@ -59,12 +61,15 @@
                   <td>{{ $permission->name }}</td>
                    <td>{{ $permission->created_at->format('d-m-Y') }} </td>
                   <td>
+                    @can('permission.edit')
                     <button class="btn btn-success btn-sm" data-bs-toggle="modal"
                       data-bs-target="#editPermissionModal{{ $permission->id }}">
                       Edit
                     </button>
+                    @endcan
 
-                    <form action="#" method="POST" style="display: inline;">
+                    @can('permission.delete')
+                    <form action="{{ route('permissions.destroy', $permission->id) }}" method="POST" style="display: inline;">
                       @csrf
                       @method('DELETE')
                       <button type="submit" class="btn btn-danger btn-sm"
@@ -72,11 +77,10 @@
                         Delete
                       </button>
                     </form>
-
-                      {{-- <a class="btn btn-light btn-sm" href="{{ route('participants.show',$participant->id) }}">View</a> --}}
+                    @endcan
                   </td>
                 </tr>
-                {{-- @include('backend.permissions.edit', ['permission' => $permission]) --}}
+                @include('backend.permissions.edit', ['permission' => $permission])
               @endforeach
             </tbody>
           </table>

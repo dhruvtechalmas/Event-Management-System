@@ -35,9 +35,11 @@
         <div class="heading-actions"><a class="btn btn-outline-secondary btn-sm" href="tables"><i class="bi bi-download"
               aria-hidden="true"></i> Export</a>
 
-          <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#addUserModal">
-            <i class="bi bi-person-plus" aria-hidden="true"></i> Add User
-          </button>
+          @can('user.create')
+            <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#addUserModal">
+              <i class="bi bi-person-plus" aria-hidden="true"></i> Add User
+            </button>
+          @endcan
 
         </div>
       </div>
@@ -163,20 +165,27 @@
                     <td>{{ $user->role_id == 1 ? 'Super Admin' : ($user->role_id == 2 ? 'Event Manager' : 'Staff') }}</td>
                     <td>{{ $user->created_at }}</td>
                     <td class="text-dark">
-                      <button class="btn btn-success btn-sm" data-bs-toggle="modal"
-                        data-bs-target="#editUserModal{{ $user->id }}">
-                        Edit
-                      </button>
-
-                      <form action="{{ route('users.destroy', $user->id) }}" method="POST" style="display: inline;">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this user?')">
-                          Delete
+                      @can('user.edit')
+                        <button class="btn btn-success btn-sm" data-bs-toggle="modal"
+                          data-bs-target="#editUserModal{{ $user->id }}">
+                          Edit
                         </button>
-                      </form>
+                      @endcan
 
-                      <a class="btn btn-light btn-sm" href="{{ route('users.show', $user->id) }}">View</a>
+                      @can('user.delete')
+                        <form action="{{ route('users.destroy', $user->id) }}" method="POST" style="display: inline;">
+                          @csrf
+                          @method('DELETE')
+                          <button type="submit" class="btn btn-danger btn-sm"
+                            onclick="return confirm('Are you sure you want to delete this user?')">
+                            Delete
+                          </button>
+                        </form>
+                      @endcan
+
+                      @can('user.view')
+                        <a class="btn btn-light btn-sm" href="{{ route('users.show', $user->id) }}">View</a>
+                      @endcan
                     </td>
                   </tr>
 

@@ -31,10 +31,12 @@
           </div>
         </div>
 
+        @can('event.create')
         <button class="btn btn-primary btn-sm d-flex justify-content-end" data-bs-toggle="modal"
           data-bs-target="#eventUserModal">
           <i class="bi bi-person-plus" aria-hidden="true"></i> Add Event
         </button>
+        @endcan
       </div>
 
 
@@ -88,11 +90,14 @@
                           </td>
 
                           <td>
+                            @can('event.edit')
                             <button class="btn btn-success btn-sm" data-bs-toggle="modal"
                               data-bs-target="#editEventModal{{ $event->id }}">
                               Edit
                             </button>
+                            @endcan
 
+                            @can('event.delete')
                             <form action="{{ route('events.destroy', $event->id) }}" method="POST" style="display: inline;">
                               @csrf
                               @method('DELETE')
@@ -101,8 +106,11 @@
                                 Delete
                               </button>
                             </form>
+                            @endcan
 
+                            @can('event.view')
                               <a class="btn btn-light btn-sm" href="{{ route('events.show',$event->id) }}">View</a>
+                             @endcan 
                           </td>
                         </tr>
                         @include('backend.events.edit', ['event' => $event])

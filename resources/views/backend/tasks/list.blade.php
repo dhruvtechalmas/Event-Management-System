@@ -29,10 +29,13 @@
           </div>
         </div>
 
+        @can('task.create')
         <button class="btn btn-primary btn-sm d-flex justify-content-end" data-bs-toggle="modal"
           data-bs-target="#tasksUserModal">
           <i class="bi bi-person-plus" aria-hidden="true"></i> Add Task
         </button>
+        @endcan
+
       </div>
 
 
@@ -61,14 +64,10 @@
                           <td class="fw-semibold">{{ $task->id }}</td>
                           <td>{{ $task->title }}</td>
                           <td>{{ $task->event->event_name ?? 'No Event Selected' }}</td>
-                          <td>
-                              ID: {{ $task->assigned_to }}
-                              <br>
-                              Name: {{ $task->assignee->name ?? '-' }}
-                          </td>
+                          <td>{{ $task->assignee->name ?? '-' }}</td>
                           <td>{{ $task->due_date }}</td>
                           <td>
-                            <span class="badge    
+                            <span class="badge        
                                                                        {{ $task->status == 'pending' ? 'bg-primary' :
                 ($task->status == 'in_progress' ? 'bg-success' :
                   ($task->status == 'completed' ? 'bg-info' : 'bg-danger')) }}">
@@ -78,16 +77,22 @@
                             </span>
                           </td>
                           <td>
+                            @can('task.assign')
+                              
                             <button class="btn btn-info btn-sm" data-bs-toggle="modal"
-                              data-bs-target="#assigncreateTaskModal{{ $task->id }}">
-                              Assign
-                            </button>
-
+                            data-bs-target="#assigncreateTaskModal{{ $task->id }}">
+                            Assign
+                          </button>
+                          @endcan
+                            
+                            @can('task.edit')
                             <button class="btn btn-success btn-sm" data-bs-toggle="modal"
                               data-bs-target="#editTaskModal{{ $task->id }}">
                               Edit
                             </button>
+                            @endcan
 
+                            @can('task.delete')
                             <form action="{{ route('tasks.destroy', $task->id) }}" method="POST" style="display: inline;">
                               @csrf
                               @method('DELETE')
@@ -96,8 +101,12 @@
                                 Delete
                               </button>
                             </form>
+                            @endcan
 
+                            @can('task.view')                             
                             <a class="btn btn-light btn-sm" href="{{ route('tasks.show', $task->id) }}">View</a>
+                            @endcan
+
                           </td>
                         </tr>
                         @include('backend.tasks.edit', ['task' => $task])

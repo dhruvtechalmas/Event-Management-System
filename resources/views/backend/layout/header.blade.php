@@ -26,40 +26,60 @@
           </span>
         </a>
       </div>
-
+      {{-- @dd(auth()->user()->getRoleNames()) --}}
       <nav class="sidebar-nav">
         <a class="nav-link active" href="{{route('backend.index')}}" aria-current="page">
           <span class="nav-icon"><i class="bi bi-speedometer2" aria-hidden="true"></i></span>
           <span class="nav-text">Dashboard</span>
         </a>
-        <a class="nav-link active " href="{{route('events.index')}}">
-          <span class="nav-icon"><i class="bi bi-calendar2-event-fill" aria-hidden="true"></i></span>
-          <span class="nav-text">Events</span>
-        </a>
-        <a class="nav-link active " href="{{route('participants.index')}}">
-          <span class="nav-icon"><i class="bi bi-people-fill" aria-hidden="true"></i></span>
-          <span class="nav-text">Participants</span>
-        </a>
-        <a class="nav-link active " href="{{route('tasks.index')}}">
-          <span class="nav-icon"><i class="bi bi-list-task" aria-hidden="true"></i></span>
-          <span class="nav-text">Tasks</span>
-        </a>
-        <a class="nav-link active " href="roles">
-          <span class="nav-icon"><i class="bi bi-person-fill-gear" aria-hidden="true"></i></span>
-          <span class="nav-text">Roles</span>
-        </a>
-        <a class="nav-link active " href="{{route('permissions.index')}}">
-          <span class="nav-icon"><i class="bi bi-list-columns" aria-hidden="true"></i></span>
-          <span class="nav-text">Permissions</span>
-        </a>
-        <a class="nav-link active" href="{{route('users.index')}}">
-          <span class="nav-icon"><i class="bi bi-people" aria-hidden="true"></i></span>
-          <span class="nav-text">Users</span>
-        </a>
+        @can('event.index')
+          <a class="nav-link active " href="{{route('events.index')}}">
+            <span class="nav-icon"><i class="bi bi-calendar2-event-fill" aria-hidden="true"></i></span>
+            <span class="nav-text">Events</span>
+          </a>
+        @endcan
+
+        @can('participant.index')
+          <a class="nav-link active " href="{{route('participants.index')}}">
+            <span class="nav-icon"><i class="bi bi-people-fill" aria-hidden="true"></i></span>
+            <span class="nav-text">Participants</span>
+          </a>
+        @endcan
+
+        @can('task.index')
+          <a class="nav-link active " href="{{route('tasks.index')}}">
+            <span class="nav-icon"><i class="bi bi-list-task" aria-hidden="true"></i></span>
+            <span class="nav-text">Tasks</span>
+          </a>
+        @endcan
+
+        @can('role.index')
+          <a class="nav-link active " href="roles">
+            <span class="nav-icon"><i class="bi bi-person-fill-gear" aria-hidden="true"></i></span>
+            <span class="nav-text">Roles</span>
+          </a>
+        @endcan
+
+        @can('permission.index')
+          <a class="nav-link active " href="{{route('permissions.index')}}">
+            <span class="nav-icon"><i class="bi bi-list-columns" aria-hidden="true"></i></span>
+            <span class="nav-text">Permissions</span>
+          </a>
+        @endcan
+
+        @can('user.index')
+          <a class="nav-link active" href="{{route('users.index')}}">
+            <span class="nav-icon"><i class="bi bi-people" aria-hidden="true"></i></span>
+            <span class="nav-text">Users</span>
+          </a>
+        @endcan
+
+
         <a class="nav-link active" href="calendar">
           <span class="nav-icon"><i class="bi bi-calendar" aria-hidden="true"></i></span>
           <span class="nav-text">Calendar</span>
         </a>
+
         <a class="nav-link active" href="settings">
           <span class="nav-icon"><i class="bi bi-gear" aria-hidden="true"></i></span>
           <span class="nav-text">Settings</span>

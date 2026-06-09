@@ -21,16 +21,21 @@
 
             <div class="modal-body">
                 <div class="px-2 px-md-3">
-                    <form action="{{ route('tasks.assigntask', $task->id) }}" method="POST" class="needs-validation" novalidate>
+                    <form action="{{ route('tasks.assigntask', $task->id) }}" method="POST" class="needs-validation"
+                        novalidate>
                         @csrf
                         @method('PATCH')
                         <div class="col-md-12">
                             <label class="form-label" for="assigned_to">Assign Task</label>
                             <select class="form-control" id="assigned_to" name="assigned_to">
                                 <option value="">Select an User</option>
+
                                 @foreach ($users as $user)
-                                    <option value="{{ $user->id }}">{{ $user->name }}</option>
+                                    <option value="{{ $user->id }}" {{ $task->assigned_to == $user->id ? 'selected' : '' }}>
+                                        {{ $user->name }}
+                                    </option>
                                 @endforeach
+                                
                             </select>
                             {{-- <div class="invalid-feedback">Please select an User.</div> --}}
                         </div>

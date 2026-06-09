@@ -1,9 +1,9 @@
-{{-- @extends('backend.layout.main')
+@extends('backend.layout.main')
 
 @section('content')
-  Add-event model form
+  {{-- Add-event model form --}}
   <div class="modal fade" id="rolesUserModal" tabindex="-1">
-    <div class="modal-dialog modal-md modal-dialog-centered">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
       <div class="modal-content">
 
         <div class="modal-header">
@@ -17,7 +17,7 @@
       </div>
     </div>
   </div>
-  // Main content area
+  {{-- // Main content area --}}
   <main class="dashboard-content">
     <div class="container-fluid px-3 px-lg-4 py-4">
       <div class="page-heading">
@@ -29,13 +29,13 @@
           </div>
         </div>
 
+        @can('role.create')
         <button class="btn btn-primary btn-sm d-flex justify-content-end" data-bs-toggle="modal"
           data-bs-target="#rolesUserModal">
           <i class="bi bi-person-plus" aria-hidden="true"></i> Add Role
         </button>
+        @endcan
       </div>
-
-
 
       <section class="panel">
         <div class="panel-header"><input class="form-control form-control-sm table-search" type="search"
@@ -48,6 +48,8 @@
               <tr>
                 <th class="text-dark">#</th>
                 <th class="text-dark">Role Name</th>
+                <th class="text-dark">Permissions Name</th>
+                <th class="text-dark">Created</th>
                 <th class="text-dark text-right">Action</th>
               </tr>
             </thead>
@@ -57,30 +59,46 @@
                   <td class="fw-semibold">{{ $role->id }}</td>
                   <td>{{ $role->name }}</td>
                   <td>
+                    @forelse($role->permissions as $permission)
+                      <span class="badge bg-info me-1">
+                        {{ $permission->name }}
+                      </span>
+                    @empty
+                      <span class="badge bg-secondary">
+                        No Permission
+                      </span>
+                    @endforelse
+                  </td>
+                  <td  style="white-space: nowrap;">{{ $role->created_at->format('d-m-Y') }} </td>
+                  <td style="white-space: nowrap;" >
+
+                    @can('role.edit')   
                     <button class="btn btn-success btn-sm" data-bs-toggle="modal"
-                      data-bs-target="#editRoleModal{{ $role->id }}">
-                      Edit
-                    </button>
+                    data-bs-target="#editRoleModal{{ $role->id }}">
+                    Edit
+                  </button>
+                  @endcan
 
-                    <form action="#" method="POST" style="display: inline;">
-                      @csrf
-                      @method('DELETE')
-                      <button type="submit" class="btn btn-danger btn-sm"
-                        onclick="return confirm('Are you sure you want to delete this participant?')">
-                        Delete
-                      </button>
-                    </form>
-
-                      <a class="btn btn-light btn-sm" href="{{ route('participants.show',$participant->id) }}">View</a>
+                  @can('role.delete')          
+                  <form action="{{ route('roles.destroy', $role->id) }}" method="POST" style="display: inline;">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="btn btn-danger btn-sm"
+                    onclick="return confirm('Are you sure you want to delete this participant?')">
+                    Delete
+                  </button>
+                </form>
+                @endcan
+                
                   </td>
                 </tr>
-                @include('backend.participants.edit', ['participant' => $participant])
+                @include('backend.roles.edit', ['role' => $role])
               @endforeach
             </tbody>
           </table>
         </div>
 
-        
+
         <div class="d-flex justify-content-end mt-3">
           {{ $roles->links('pagination::bootstrap-4') }}
         </div>
@@ -89,4 +107,4 @@
   </main>
 
 
-@endsection --}}
+@endsection

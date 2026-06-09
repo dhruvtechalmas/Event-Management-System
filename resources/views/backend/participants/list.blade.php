@@ -29,10 +29,12 @@
           </div>
         </div>
 
+        @can('participant.create')
         <button class="btn btn-primary btn-sm d-flex justify-content-end" data-bs-toggle="modal"
           data-bs-target="#participantsUserModal">
           <i class="bi bi-person-plus" aria-hidden="true"></i> Add Participant
         </button>
+        @endcan
       </div>
 
 
@@ -63,11 +65,14 @@
                   <td>{{ $participant->event->event_name ?? 'No Event Selected' }}</td>
                   <td>{{ $participant->phone }}</td>
                   <td>
+                    @can('participant.edit')
                     <button class="btn btn-success btn-sm" data-bs-toggle="modal"
                       data-bs-target="#editParticipantModal{{ $participant->id }}">
                       Edit
                     </button>
+                    @endcan
 
+                    @can('participant.delete')
                     <form action="{{ route('participants.destroy', $participant->id) }}" method="POST" style="display: inline;">
                       @csrf
                       @method('DELETE')
@@ -76,8 +81,11 @@
                         Delete
                       </button>
                     </form>
+                    @endcan
 
+                    @can('participant.view')
                       <a class="btn btn-light btn-sm" href="{{ route('participants.show',$participant->id) }}">View</a>
+                      @endcan
                   </td>
                 </tr>
                 @include('backend.participants.edit', ['participant' => $participant])
