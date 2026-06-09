@@ -49,6 +49,10 @@ class EventController extends Controller
 
     }
 
+    public function show(Event $event)
+    {
+        return view('backend.events.view', compact('event'));
+    }
 
     /**
      * Show the form for editing the specified resource.
@@ -77,7 +81,7 @@ class EventController extends Controller
             'status' => 'required|in:Draft,Upcoming,Ongoing,Completed,Cancelled',
         ]);
 
-              // Find the user and update their information
+        // Find the user and update their information
         $event->update($validatedEvent);
 
         return redirect()->route('events.index')->with([

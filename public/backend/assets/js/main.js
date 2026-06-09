@@ -147,7 +147,7 @@
 
     // Initialize user profile values in UI. Provide a window.adminHMDUser object to override defaults.
     function initUserProfile() {
-      var user = window.adminHMDUser || { name: "Super Admin", workspace: "Active Workspace", avatar: "./backend/assets/images/avatar/avatar-2.jpg" };
+      var user = window.adminHMDUser || { name: "Super Admin", role: "SuperAdmin", workspace: "Active Workspace", avatar: "./backend/assets/images/avatar/avatar-2.jpg" };
 
       var sidebarNameEl = document.querySelector(".sidebar-user strong");
       var sidebarWorkspaceEl = document.querySelector(".sidebar-user small");
@@ -155,11 +155,15 @@
       var profileNameEls = document.querySelectorAll(".profile-name");
       var profileAvatarEls = document.querySelectorAll(".profile-button .avatar-img, .profile-button img");
 
-      if (sidebarNameEl) sidebarNameEl.textContent = user.name;
+      if (sidebarNameEl) {
+        sidebarNameEl.textContent = user.name + " (" + user.role + ")";
+      }
       if (sidebarWorkspaceEl) sidebarWorkspaceEl.textContent = user.workspace;
       if (sidebarAvatar && user.avatar) { sidebarAvatar.src = user.avatar; sidebarAvatar.alt = user.name; }
 
-      Array.prototype.forEach.call(profileNameEls, function (el) { el.textContent = user.name; });
+      Array.prototype.forEach.call(profileNameEls, function (el) {
+        el.textContent = user.name + " (" + user.role + ")";
+      });
       Array.prototype.forEach.call(profileAvatarEls, function (img) { if (user.avatar) img.src = user.avatar; if (user.name) img.alt = user.name; });
     }
 

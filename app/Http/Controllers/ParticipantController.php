@@ -13,7 +13,7 @@ class ParticipantController extends Controller
      */
     public function index()
     {
-        $participants = Participant::paginate(10);
+        $participants = Participant::latest()->paginate(10);
         $events = Event::all();
         return view('backend.participants.list', compact('participants', 'events'));
     }
@@ -32,7 +32,7 @@ class ParticipantController extends Controller
      */
     public function store(Request $request)
     {
-         $validatedParticipant = $request->validate([
+        $validatedParticipant = $request->validate([
             'full_name' => 'required|string|max:255',
             'email' => 'required|email|unique:participants',
             'event_id' => 'required|exists:events,id',
@@ -41,7 +41,7 @@ class ParticipantController extends Controller
             'notes' => 'nullable|string',
         ]);
 
-        Participant::create($validatedParticipant );
+        Participant::create($validatedParticipant);
 
 
         return redirect()->route('participants.index')->with([
@@ -52,13 +52,18 @@ class ParticipantController extends Controller
     }
 
 
+     public function show(Participant $participant)
+    {
+        return view('backend.participants.view', compact('participant'));
+    }
     /**
      * Show the form for editing the specified resource.
      */
     public function edit(Participant $participant)
     {
-        $events = Event::all();
-        return view('backend.participants.edit', compact('participant', 'events'));
+        $participant = Participant::findOrFail($participant->id);
+        $event = Event::all();
+        return view('backend.participants.edit', compact('participant', 'event'));
     }
 
     /**
@@ -67,9 +72,11 @@ class ParticipantController extends Controller
     public function update(Request $request, Participant $participant)
     {
 
+        $participant = Participant::findOrFail($participant->id);
+
         $validatedParticipant = $request->validate([
             'full_name' => 'required|string|max:255',
-            'email' => 'required|email|unique:participants',
+            'email' => 'required|string|email|max:255|unique:participants,email,' . $participant->id,
             'event_id' => 'required|exists:events,id',
             'phone' => 'nullable|string|max:20',
             'address' => 'nullable|string|max:255',

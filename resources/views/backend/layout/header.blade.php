@@ -36,11 +36,11 @@
           <span class="nav-icon"><i class="bi bi-calendar2-event-fill" aria-hidden="true"></i></span>
           <span class="nav-text">Events</span>
         </a>
-        <a class="nav-link active " href="participants">
+        <a class="nav-link active " href="{{route('participants.index')}}">
           <span class="nav-icon"><i class="bi bi-people-fill" aria-hidden="true"></i></span>
           <span class="nav-text">Participants</span>
         </a>
-        <a class="nav-link active " href="tasks">
+        <a class="nav-link active " href="{{route('tasks.index')}}">
           <span class="nav-icon"><i class="bi bi-list-task" aria-hidden="true"></i></span>
           <span class="nav-text">Tasks</span>
         </a>
@@ -48,7 +48,7 @@
           <span class="nav-icon"><i class="bi bi-person-fill-gear" aria-hidden="true"></i></span>
           <span class="nav-text">Roles</span>
         </a>
-        <a class="nav-link active " href="permissions">
+        <a class="nav-link active " href="{{route('permissions.index')}}">
           <span class="nav-icon"><i class="bi bi-list-columns" aria-hidden="true"></i></span>
           <span class="nav-text">Permissions</span>
         </a>
@@ -129,7 +129,11 @@
                 aria-expanded="false">
                 <img class="avatar-img avatar-sm" src="{{ url('/backend/assets/images/avatar/avatar-2.jpg') }}"
                   alt="Super Admin">
-                <span class="profile-name d-none d-sm-inline">Super Admin</span>
+                <span class="profile-name d-none d-sm-inline">
+                  {{ auth()->user()->name }}
+                  <br>
+                  {{ auth()->user()->getRoleNames()->first() }}
+                </span>
               </button>
               <ul class="dropdown-menu dropdown-menu-end">
                 <li><a class="dropdown-item" href="profile">Profile</a></li>

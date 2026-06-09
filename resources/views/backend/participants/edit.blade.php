@@ -22,9 +22,9 @@
             <div class="modal-body"></div>
 
             <div class="px-2 px-md-3">
-                <form action="#" method="POST" class="needs-validation" novalidate>
+                <form action="{{ route('participants.update', $participant->id) }}" method="POST" class="needs-validation" novalidate>
                     @csrf
-                    @method('POST')
+                    @method('PUT')
 
                     <div class="row g-3">
 

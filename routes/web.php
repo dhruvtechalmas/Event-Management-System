@@ -2,7 +2,9 @@
 
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\ParticipantController;
+use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\TaskController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -10,38 +12,14 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/index', function () {
+Route::get('/event-dashboard', function () {
     return view('backend.index');
 })->middleware(['auth', 'verified'])->name('backend.index');
 
-Route::get('/charts', function () {
-    return view('backend.charts');
-});
-
-Route::get('/forms', function () {
-    return view('backend.forms');
-});
-
-Route::get('/login', function () {
-    return view('backend.login');
-});
-
-Route::get('/profile', function () {
-    return view('backend.profile');
-});
-
-Route::get('/register', function () {
-    return view('backend.register');
-});
 
 Route::get('/settings', function () {
     return view('backend.settings');
-});
-
-Route::get('/tables', function () {
-    return view('backend.tables');
-});
-
+}); 
 
 Route::get('/dashboard', function () {
     return view('dashboard');
@@ -59,26 +37,45 @@ Route::middleware('auth')->group(function () {
     Route::post('/users', [UserController::class, 'store'])->name('users.store');
     Route::get('/users/{user}', [UserController::class, 'show'])->name('users.show');
     Route::get('/users/{user}/edit', [UserController::class, 'edit'])->name('users.edit');
-    Route::post('/users/{user}', [UserController::class, 'update'])->name('users.update');
+    Route::put('/users/{user}', [UserController::class, 'update'])->name('users.update');
     Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
 
      //Events Routes
     Route::get('/events', [EventController::class, 'index'])->name('events.index');
     Route::get('/events/create', [EventController::class, 'create'])->name('events.create');
     Route::post('/events', [EventController::class, 'store'])->name('events.store');
+    Route::get('/events/{event}', [EventController::class, 'show'])->name('events.show');
     Route::get('/events/{event}/edit', [EventController::class, 'edit'])->name('events.edit');
-    Route::post('/events/{event}', [EventController::class, 'update'])->name('events.update');
+    Route::put('/events/{event}', [EventController::class, 'update'])->name('events.update');
     Route::delete('/events/{event}', [EventController::class, 'destroy'])->name('events.destroy');
 
     //Participants Routes
     Route::get('/participants', [ParticipantController::class, 'index'])->name('participants.index');
     Route::get('/participants/create', [ParticipantController::class, 'create'])->name('participants.create');
     Route::post('/participants', [ParticipantController::class, 'store'])->name('participants.store');
+    Route::get('/participants/{participant}', [ParticipantController::class, 'show'])->name('participants.show');
     Route::get('/participants/{participant}/edit', [ParticipantController::class, 'edit'])->name('participants.edit');
-    Route::post('/participants/{participant}', [ParticipantController::class, 'update'])->name('participants.update');
+    Route::put('/participants/{participant}', [ParticipantController::class, 'update'])->name('participants.update');
     Route::delete('/participants/{participant}', [ParticipantController::class, 'destroy'])->name('participants.destroy');
 
-    
+     //Tasks Routes
+    Route::get('/tasks', [TaskController::class, 'index'])->name('tasks.index');
+    Route::get('/tasks/create', [TaskController::class, 'create'])->name('tasks.create');
+    Route::post('/tasks', [TaskController::class, 'store'])->name('tasks.store');
+    Route::patch('/assigntask/{task}', [TaskController::class, 'assigntask'])->name('tasks.assigntask');
+    Route::get('/tasks/{task}', [TaskController::class, 'show'])->name('tasks.show');
+    Route::get('/tasks/{task}/edit', [TaskController::class, 'edit'])->name('tasks.edit');
+    Route::put('/tasks/{task}', [TaskController::class, 'update'])->name('tasks.update');
+    Route::delete('/tasks/{task}', [TaskController::class, 'destroy'])->name('tasks.destroy');
+
+     //Permissions Routes
+    Route::get('/permissions', [PermissionController::class, 'index'])->name('permissions.index');
+    Route::get('/permissions/create', [PermissionController::class, 'create'])->name('permissions.create');
+    Route::post('/permissions', [PermissionController::class, 'store'])->name('permissions.store');
+    // Route::get('/permissions/{permission}', [PermissionController::class, 'show'])->name('permissions.show');
+    // Route::get('/permissions/{permission}/edit', [PermissionController::class, 'edit'])->name('permissions.edit');
+    // Route::put('/permissions/{permission}', [PermissionController::class, 'update'])->name('permissions.update');
+    // Route::delete('/permissions/{permission}', [PermissionController::class, 'destroy'])->name('permissions.destroy');
 });
 
 require __DIR__.'/auth.php';

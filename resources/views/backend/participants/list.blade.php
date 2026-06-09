@@ -68,7 +68,7 @@
                       Edit
                     </button>
 
-                    <form action="#" method="POST" style="display: inline;">
+                    <form action="{{ route('participants.destroy', $participant->id) }}" method="POST" style="display: inline;">
                       @csrf
                       @method('DELETE')
                       <button type="submit" class="btn btn-danger btn-sm"
@@ -77,6 +77,7 @@
                       </button>
                     </form>
 
+                      <a class="btn btn-light btn-sm" href="{{ route('participants.show',$participant->id) }}">View</a>
                   </td>
                 </tr>
                 @include('backend.participants.edit', ['participant' => $participant])

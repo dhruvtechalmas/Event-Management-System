@@ -687,7 +687,7 @@ html[data-theme="dark"] .profile-button .avatar-sm {
 }
 
 .table tbody td {
-  min-width: 40px;
+  min-width: 37px;
   padding-top: 1rem;
   padding-bottom: 1rem;
 }

@@ -34,7 +34,11 @@ class UserController extends Controller
             'role_id' => 'required|exists:roles,id',
         ]);
         // Create a new user
-        User::create($validatedData);
+        $user = User::create($validatedData);
+
+        $role = Role::findById($request->role_id);
+
+        $user->assignRole($role->name);
 
         // Redirect to the users list with a success message Tostr message
         return redirect()->route('users.index')->with([
@@ -56,7 +60,7 @@ class UserController extends Controller
 
     public function update(Request $request, User $user)
     {
-        // Validate the request data
+        // Validate the request data    
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
@@ -67,8 +71,8 @@ class UserController extends Controller
 
         // Find the user and update their information
         $user->update($validatedData);
-
-        $user->syncRoles([$request->role]);
+        $role = Role::findById($request->role_id);
+        $user->syncRoles([$role->name]);
 
         // Redirect to the users list with a success message Tostr message
         return redirect()->route('users.index')->with([

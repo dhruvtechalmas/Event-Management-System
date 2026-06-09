@@ -102,6 +102,7 @@
                               </button>
                             </form>
 
+                              <a class="btn btn-light btn-sm" href="{{ route('events.show',$event->id) }}">View</a>
                           </td>
                         </tr>
                         @include('backend.events.edit', ['event' => $event])

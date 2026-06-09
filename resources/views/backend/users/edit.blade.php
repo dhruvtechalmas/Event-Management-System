@@ -16,7 +16,7 @@
                       method="POST">
 
                     @csrf
-                   @method('POST')
+                   @method('PUT')
 
                     <div class="mb-3">
                         <label class="form-label">Name</label>

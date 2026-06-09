@@ -187,7 +187,7 @@
                 </div>
               </div>
 
-              <div class="activity-item">
+              <div class="activity-item"> 
                 <span class="activity-dot bg-success"></span>
 
                 <div>

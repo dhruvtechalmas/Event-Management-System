@@ -10,6 +10,16 @@
 </div>
 </div>
 
+<script>
+  window.adminHMDUser = {
+    name: "{{ auth()->user()->name }}",
+    role: "{{ auth()->user()->getRoleNames()->first() }}",
+    workspace: "Active Workspace",
+    avatar: "{{ asset('backend/assets/images/avatar/avatar-2.jpg') }}"
+  };
+</script>
+
+<script src="{{ asset('backend/assets/js/app.js') }}"></script>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
