@@ -6,6 +6,7 @@ use App\Models\Task;
 use App\Models\Event;
 use App\Models\User;
 
+use App\Notifications\GeneralNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -46,7 +47,20 @@ class TaskController extends Controller
             'comment' => 'nullable|string',
         ]);
 
-        Task::create($validatedTask);
+        // After saving your task...
+        $task = Task::create($validatedTask);
+
+        if ($task->assigned_to) {
+            $assignedUser = User::find($task->assigned_to);
+
+            $title = "New Task Assigned 📋";
+            $message = "You have been assigned the task: " . $task->title;
+            $type = "task";
+
+            // Send the postcard to the assigned user
+            $assignedUser->notify(new  GeneralNotification($title, $message, $type));
+        }
+
 
         return redirect()->route('tasks.index')->with([
             'message' => 'Task Created successful!',

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\EventController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ParticipantController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\ProfileController;
@@ -21,6 +22,9 @@ Route::get('/event-dashboard', function () {
 Route::get('/settings', function () {
     return view('backend.settings');
 });
+
+
+
 
 Route::get('/dashboard', function () {
     return view('dashboard');
@@ -85,6 +89,16 @@ Route::middleware('auth')->group(function () {
     Route::put('/roles/{role}', [RoleController::class, 'update'])->name('roles.update');
     Route::delete('/roles/{role}', [RoleController::class, 'destroy'])->name('roles.destroy');
 
-}); 
+    //Event Calendar routes
+    Route::get('/calendar', [EventController::class, 'calendarindex'])->name('calendar.calendarindex');
+    Route::get('/api/events', [EventController::class, 'getEvents'])->name('calendar.events');
+
+    //Notification routes
+    Route::get('/notifications/mark-read/{id}', [NotificationController::class, 'markAsRead'])->name('notifications.markRead');
+    Route::get('/notifications/mark-all-read', [NotificationController::class, 'markAllAsRead'])->name('notifications.markAllRead');
+    Route::get('/notifications/history', [NotificationController::class, 'history'])->name('notifications.history');
+
+
+});
 
 require __DIR__ . '/auth.php';
