@@ -126,49 +126,58 @@
             <div class="dropdown">
               <button class="icon-button position-relative" type="button" data-bs-toggle="dropdown"
                 aria-expanded="false">
-
-                <!-- Red Badge Counter: Shows up only if you have unread items -->
-                @if(auth()->user()->unreadNotifications->count() > 0)
-                  <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
-                    style="font-size: 0.65rem;">
-                    {{ auth()->user()->unreadNotifications->count() }}
-                  </span>
-                @endif
-
+                <span id="notif-badge"
+                  class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger {{ auth()->user()->unreadNotifications->count() == 0 ? 'd-none' : '' }}">
+                  {{ auth()->user()->unreadNotifications->count() }}
+                </span>
                 <i class="bi bi-bell"></i>
               </button>
 
-              <div class="dropdown-menu dropdown-menu-end" style="min-width: 320px;">
-                <div class="dropdown-header d-flex justify-content-between align-items-center border-bottom pb-2">
-                  <span>Notifications ({{ auth()->user()->unreadNotifications->count() }} Unread)</span>
+              <div class="dropdown-menu dropdown-menu-end" style="min-width:320px;">
 
-                  @if(auth()->user()->unreadNotifications->count() > 0)
-                    <a href="{{ route('notifications.markAllRead') }}"
-                      class="btn btn-sm btn-link text-decoration-none p-0 text-primary">Mark all read</a>
-                  @endif
+                <div class="dropdown-header d-flex justify-content-between align-items-center border-bottom pb-2">
+
+                  <span id="notif-header-text">
+                    Notifications ({{ auth()->user()->unreadNotifications->count() }} Unread)
+                  </span>
+                  <a href="javascript:void(0);" id="mark-all-read-btn"
+                    class="btn btn-sm btn-link text-decoration-none p-0 text-primary">
+                    Mark all read
+                  </a>
                 </div>
 
-                <!-- Loop through only the unread notifications -->
-                @forelse(auth()->user()->unreadNotifications as $notification)
-                  <a class="dropdown-item d-flex flex-column py-2 border-bottom"
-                    href="{{ route('notifications.markRead', $notification->id) }}"
-                    style="background-color: #f4f7fa; border-left: 3px solid #0d6efd;">
-                    <span class="fw-bold text-dark" style="font-size: 0.85rem;">{{ $notification->data['title'] }}</span>
-                    <small class="text-secondary" style="font-size: 0.75rem;">{{ $notification->data['message'] }}</small>
-                    <span class="text-end text-muted"
-                      style="font-size: 0.65rem;">{{ $notification->created_at->diffForHumans() }}</span>
-                  </a>
-                @empty
-                  <div class="text-center py-4 text-muted" style="font-size: 0.85rem;">No new unread notifications</div>
-                @endforelse
+                <div id="notification-list-container">
+
+                  @forelse(auth()->user()->unreadNotifications as $notification)
+                    <a class="dropdown-item d-flex flex-column py-2 border-bottom notification-item"
+                      href="javascript:void(0);" data-id="{{ $notification->id }}"
+                      data-url="{{ $notification->data['action_url'] ?? '#' }}">
+                      <span class="fw-bold">
+                        {{ $notification->data['title'] }}
+                      </span>
+                      <small>
+                        {{ $notification->data['message'] }}
+                      </small>
+                      <span class="text-muted small">
+                        {{ $notification->created_at->diffForHumans() }}
+                      </span>
+                    </a>
+                  @empty
+                    <div id="no-notif-msg" class="text-center py-4 text-muted">
+                      No new unread notifications
+                    </div>
+                  @endforelse
+
+                </div>
 
                 <div class="text-center pt-2">
-                  <a href="{{ route('notifications.history') }}" class="dropdown-item text-primary fw-bold text-center"
-                    style="font-size: 0.8rem;">View All History Log</a>
+                  <a href="{{ route('notifications.history') }}" class="dropdown-item text-primary fw-bold text-center">
+                    View All History Log
+                  </a>
                 </div>
+                
               </div>
             </div>
-
 
             <div class="dropdown">
               <button class="profile-button dropdown-toggle" type="button" data-bs-toggle="dropdown"

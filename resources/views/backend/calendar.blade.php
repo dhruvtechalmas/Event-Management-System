@@ -208,14 +208,25 @@
                     right: 'dayGridMonth,timeGridWeek,timeGridDay'
                 },
 
-                buttonText: {
-                    today: 'Today',
-                    month: 'Month',
-                    week: 'Week',
-                    day: 'Day'
-                },
+                events: function (fetchInfo, successCallback, failureCallback) {
 
-                events: "{{ route('calendar.events') }}",
+                    fetch('/api/events')
+                        .then(response => response.json())
+                        .then(data => {
+
+                            console.log('Events Loaded:', data);
+
+                            successCallback(data);
+
+                        })
+                        .catch(error => {
+
+                            console.error('Event Error:', error);
+
+                            failureCallback(error);
+
+                        });
+                },
 
                 eventClick: function (info) {
 
@@ -224,6 +235,12 @@
                     if (info.event.url) {
                         window.location.href = info.event.url;
                     }
+
+                },
+
+                eventDidMount: function (info) {
+
+                    console.log('Rendered Event:', info.event.title);
 
                 }
 

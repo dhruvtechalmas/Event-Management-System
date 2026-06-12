@@ -54,7 +54,6 @@
                 <th class="text-dark">Event Type</th>
                 <th class="text-dark">Event Date</th>
                 <th class="text-dark">Event Time</th>
-                <th class="text-dark">Event Location</th>
                 <th class="text-dark">Event Status</th>
                 <th class="text-dark text-center">Action</th>
               </tr>
@@ -66,19 +65,18 @@
                           <td class="text-dark">{{ $event->event_name }}</td>
                           <td >{{ $event->event_type }}</td>
                           <!-- Date Only -->
-                          <td>
+                          <td style="white-space: nowrap;">
                             <i class="bi bi-calendar3 text-primary me-2"></i>
                             <span class="fw-bold">{{ \Carbon\Carbon::parse($event->event_date)->format('M d, Y') }}</span>
                           </td>
 
 
                           <!-- Time Only -->
-                          <td>
+                          <td style="white-space: nowrap;">
                             <i class="bi bi-clock text-secondary me-2"></i>
                             <span class="text-muted small">{{ \Carbon\Carbon::parse($event->event_time)->format('H:i:s') }}</span>
                           </td>
 
-                          <td>{{ $event->event_location }}</td>
                           <td>
                             <span class="badge
                                           {{ $event->status == 'Draft' ? 'bg-secondary' :
@@ -89,7 +87,7 @@
                             </span>
                           </td>
 
-                          <td>
+                          <td style="white-space: nowrap;">
                             @can('event.edit')
                             <button class="btn btn-success btn-sm" data-bs-toggle="modal"
                               data-bs-target="#editEventModal{{ $event->id }}">

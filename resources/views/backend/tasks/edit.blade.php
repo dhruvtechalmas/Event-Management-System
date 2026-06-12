@@ -1,5 +1,5 @@
 {{-- Show a validation error message --}}
-@if ($errors->any())
+{{-- @if ($errors->any())
     <div class="alert alert-danger">
         <ul class="mb-0">
             @foreach ($errors->all() as $error)
@@ -7,7 +7,7 @@
             @endforeach
         </ul>
     </div>
-@endif
+@endif --}}
 
 <div class="modal fade" id="editTaskModal{{ $task->id }}" tabindex="-1">
     <div class="modal-dialog modal-md modal-dialog-centered">

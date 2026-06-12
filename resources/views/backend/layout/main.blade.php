@@ -101,3 +101,135 @@
       }
    @endif
 </script>
+
+
+<script>
+   function loadNotifications() {
+      $.ajax({
+         url: "{{ route('notifications.latest') }}",
+         type: "GET",
+
+         success: function (data) {
+            // Badge Count
+            $('#notif-badge').text(data.count);
+
+            if (data.count > 0) {
+               $('#notif-badge').removeClass('d-none');
+            }
+            else {
+               $('#notif-badge').addClass('d-none');
+            }
+
+            // Header Text
+            $('#notif-header-text')
+               .text(`Notifications (${data.count} Unread)`);
+
+            // Notification List
+            let html = '';
+
+            if (data.notifications.length > 0) {
+               data.notifications.forEach(function (notification) {
+
+                  html += `
+                        <a class="dropdown-item d-flex flex-column py-2 border-bottom notification-item"
+                           href="${notification.url}"
+                           data-id="${notification.id}"
+                           data-url="${notification.url}"
+                           style="background-color:#f4f7fa;border-left:3px solid #0d6efd;">
+
+                            <span class="fw-bold text-dark"
+                                  style="font-size:0.85rem;">
+                                ${notification.title}
+                            </span>
+
+                            <small class="text-secondary"
+                                   style="font-size:0.75rem;">
+                                ${notification.message}
+                            </small>
+
+                            <span class="text-end text-muted"
+                                  style="font-size:0.65rem;">
+                                ${notification.time}
+                            </span>
+
+                        </a>
+                    `;
+               });
+            }
+            else {
+               html = `
+                    <div id="no-notif-msg"
+                         class="text-center py-4 text-muted"
+                         style="font-size:0.85rem;">
+                        No new unread notifications
+                    </div>
+                `;
+            }
+
+            $('#notification-list-container').html(html);
+         },
+
+         error: function (error) {
+            console.log(error);
+         }
+      });
+   }
+
+   // First Load
+   loadNotifications();
+
+   // Refresh Every 5 Seconds
+   setInterval(loadNotifications, 1000);
+
+</script>
+
+<script>
+
+$(document).on('click', '#mark-all-read-btn', function(e) {
+
+    e.preventDefault();
+
+    $.ajax({
+
+        url: "{{ route('notifications.markAllRead') }}",
+        type: "GET",
+
+        success: function(response) {
+
+            // Remove all notification items
+            $('#notification-list-container').html(`
+                <div id="no-notif-msg"
+                    class="text-center py-4 text-muted"
+                    style="font-size: 0.85rem;">
+                    No new unread notifications
+                </div>
+            `);
+
+            // Hide badge
+            $('#notif-badge')
+                .text('0')
+                .addClass('d-none');
+
+            // Update header text
+            $('#notif-header-text')
+                .text('Notifications (0 Unread)');
+
+            // Hide mark all read button
+            $('#mark-all-read-btn')
+                .addClass('d-none');
+
+        },
+
+        error: function(xhr) {
+
+            console.log(xhr);
+
+            alert('Something went wrong!');
+
+        }
+
+    });
+
+});
+
+</script>

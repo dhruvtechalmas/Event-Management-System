@@ -4,11 +4,24 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
 use Spatie\Permission\Models\Role;
 
 
-class UserController extends Controller
+class UserController extends Controller implements HasMiddleware
 {
+    public static  function middleware(): array
+    {
+        return [
+            new Middleware('permission:user.index', only: ['index']),
+            new Middleware('permission:user.create', only: ['create','store' ]),
+            new Middleware('permission:user.edit', only: ['edit', 'update']),
+            new Middleware('permission:user.delete', only: ['destroy']),
+            new Middleware('permission:user.view', only: ['show']),
+        ];
+    }
+
     public function index()
     {
         $users = User::latest()->paginate(5);

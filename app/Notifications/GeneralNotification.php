@@ -3,10 +3,11 @@
 namespace App\Notifications;
 
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class GeneralNotification extends Notification 
+class GeneralNotification extends Notification  implements ShouldQueue
 {
     use Queueable;
 
@@ -31,7 +32,7 @@ class GeneralNotification extends Notification
      */
     public function via(): array
     {
-        return ['database'];
+        return ['mail','database'];
     }
 
     /**

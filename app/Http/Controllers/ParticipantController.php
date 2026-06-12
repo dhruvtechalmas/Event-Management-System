@@ -4,17 +4,38 @@ namespace App\Http\Controllers;
 
 use App\Models\Event;
 use App\Models\Participant;
+use App\Models\Task;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
 
-class ParticipantController extends Controller
+class ParticipantController extends Controller implements HasMiddleware
 {
+    public static function middleware(): array
+    {
+        return [
+            new Middleware('permission:participant.index', only: ['index']),
+            new Middleware('permission:participant.create', only: ['create', 'store']),
+            new Middleware('permission:participant.edit', only: ['edit', 'update']),
+            new Middleware('permission:participant.delete', only: ['destroy']),
+            new Middleware('permission:participant.view', only: ['show']),
+        ];
+    }
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $participants = Participant::latest()->paginate(10);
+        if (auth()->user()->hasRole('SuperAdmin')) {
+            $participants = Participant::with('event')->latest()->paginate(10);
+        } else {
+            $eventIds = Task::where('assigned_to', auth()->id())->pluck('event_id');
+
+            $participants = Participant::with('event')->whereIn('event_id', $eventIds)->latest()->paginate(10);
+        }
+
         $events = Event::all();
+
         return view('backend.participants.list', compact('participants', 'events'));
     }
 
@@ -52,7 +73,7 @@ class ParticipantController extends Controller
     }
 
 
-     public function show(Participant $participant)
+    public function show(Participant $participant)
     {
         return view('backend.participants.view', compact('participant'));
     }

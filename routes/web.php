@@ -72,6 +72,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/tasks/{task}/edit', [TaskController::class, 'edit'])->name('tasks.edit');
     Route::put('/tasks/{task}', [TaskController::class, 'update'])->name('tasks.update');
     Route::delete('/tasks/{task}', [TaskController::class, 'destroy'])->name('tasks.destroy');
+    Route::get('/tasks/view-details/{id}', [TaskController::class, 'viewDetails'])->name('tasks.viewDetails');
+
 
     //Permissions Routes
     Route::get('/permissions', [PermissionController::class, 'index'])->name('permissions.index');
@@ -97,6 +99,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/notifications/mark-read/{id}', [NotificationController::class, 'markAsRead'])->name('notifications.markRead');
     Route::get('/notifications/mark-all-read', [NotificationController::class, 'markAllAsRead'])->name('notifications.markAllRead');
     Route::get('/notifications/history', [NotificationController::class, 'history'])->name('notifications.history');
+    Route::get('/notifications/latest',[NotificationController::class, 'latest'])->name('notifications.latest');
+
 
 
 });

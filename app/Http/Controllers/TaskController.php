@@ -5,21 +5,42 @@ namespace App\Http\Controllers;
 use App\Models\Task;
 use App\Models\Event;
 use App\Models\User;
-
 use App\Notifications\GeneralNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
 
-class TaskController extends Controller
+class TaskController extends Controller implements HasMiddleware
 {
+
+    public static function middleware(): array
+    {
+        return [
+            new Middleware('permission:task.index', only: ['index']),
+            new Middleware('permission:task.create', only: ['create', 'store']),
+            new Middleware('permission:task.edit', only: ['edit', 'update']),
+            new Middleware('permission:task.delete', only: ['destroy']),
+            new Middleware('permission:task.view', only: ['show']),
+            new Middleware('permission:task.assign', only: ['assigntask']),
+        ];
+    }
+
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $tasks = Task::with(['event', 'assignee'])->latest()->paginate(10);
+        if (auth()->user()->hasRole('SuperAdmin')) {
+            $tasks = Task::with(['event', 'assignee'])->latest()->paginate(10);
+        } else {
+            $tasks = Task::with(['event', 'assignee'])->where('assigned_to', auth()->id())->latest()->paginate(10);
+        }
+
         $events = Event::all();
+
         $users = User::withoutRole('SuperAdmin')->where('id', '!=', Auth::id())->get();
+
         return view('backend.tasks.list', compact('tasks', 'events', 'users'));
     }
 
@@ -42,25 +63,33 @@ class TaskController extends Controller
             'title' => 'required|string|max:255',
             'event_id' => 'required|exists:events,id',
             'assigned_to' => 'nullable|exists:users,id',
-            'due_date' => 'required|date|max:20',
+            'due_date' => 'required|date|max:10',
             'status' => 'required|in:pending,in_progress,completed',
             'comment' => 'nullable|string',
         ]);
 
-        // After saving your task...
         $task = Task::create($validatedTask);
 
-        if ($task->assigned_to) {
-            $assignedUser = User::find($task->assigned_to);
+        $assignedUser = User::find($task->assigned_to);
 
+        if ($assignedUser) {
             $title = "New Task Assigned 📋";
             $message = "You have been assigned the task: " . $task->title;
             $type = "task";
 
-            // Send the postcard to the assigned user
-            $assignedUser->notify(new  GeneralNotification($title, $message, $type));
-        }
+            $assignedUser->notify(new GeneralNotification($title, $message, $type));
 
+            if (auth()->id() != $task->user_id) {
+                auth()->user()->notify(
+                    new GeneralNotification(
+                        "Task Created Successfully ✔️",
+                        "You successfully Task: " . $task->title,
+                        'task'
+                    )
+                );
+            }
+
+        }
 
         return redirect()->route('tasks.index')->with([
             'message' => 'Task Created successful!',
@@ -135,4 +164,36 @@ class TaskController extends Controller
             'alert-type' => 'success'
         ]);
     }
+
+    public function viewDetails($id)
+    {
+        $task = Task::with(['event', 'assignee'])->findOrFail($id);
+
+        return response()->json([
+            'task' => [
+                'id' => $task->id,
+                'title' => $task->title,
+                'status' => $task->status,
+                'description' => $task->comment,
+                'due_date' => $task->due_date,
+                'created_at' => $task->created_at->format('d M Y'),
+            ],
+
+            'event' => $task->event ? [
+                'event_name' => $task->event->event_name,
+                'event_type' => $task->event->event_type,
+                'event_date' => $task->event->event_date,
+                'event_time' => $task->event->event_time,
+                'event_location' => $task->event->event_location,
+                'description' => $task->event->description,
+            ] : null,
+
+            'assignee' => $task->assignee ? [
+                'name' => $task->assignee->name,
+                'email' => $task->assignee->email,
+                'phone' => $task->assignee->phone,
+            ] : null,
+        ]);
+    }
+
 }
