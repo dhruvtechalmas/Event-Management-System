@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Mail\ReminderMail;
 use App\Models\Event;
 use App\Models\User;
 use App\Notifications\GeneralNotification;
@@ -9,6 +10,7 @@ use Carbon\Carbon;
 use Illuminate\Console\Attributes\Description;
 use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Mail;
 
 #[Signature('app:send-event-reminders')]
 #[Description('Live event time reminders processed successfully!')]
@@ -28,15 +30,16 @@ class SendEventReminders extends Command
             ->where('event_time', '<=', $targetTime->toTimeString())
             ->get();
 
-        $notifiedUserIds = [];
 
         foreach ($upcomingEvents as $event) {
+
+            $notifiedUserIds = [];
 
             $formattedTime = Carbon::parse($event->event_time)->format('h:i A');
 
             foreach ($event->tasks as $task) {
 
-                if ($task->assignee) {
+                if ($task->assignee && !in_array($task->assigned_to, $notifiedUserIds)) {
 
                     $task->assignee->notify(
                         new GeneralNotification(
@@ -45,6 +48,11 @@ class SendEventReminders extends Command
                             'reminder'
                         )
                     );
+
+                    if ($task->assignee->email) {
+                        Mail::to($task->assignee->email)
+                            ->send(new ReminderMail($task->assignee, $event));
+                    }
 
                     $notifiedUserIds[] = $task->assigned_to;
                 }
@@ -63,6 +71,11 @@ class SendEventReminders extends Command
                         'reminder'
                     )
                 );
+
+                if ($user->email) {
+                    Mail::to($user->email)
+                        ->send(new ReminderMail($user, $event));
+                }
             }
 
 

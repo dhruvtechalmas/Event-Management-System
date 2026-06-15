@@ -81,6 +81,7 @@ class EventController extends Controller implements HasMiddleware
                 'event_create'
             ));
 
+            
         return redirect()->route('events.index')->with([
             'message' => 'Event Created successful!',
             'alert-type' => 'success'

@@ -14,6 +14,7 @@ class GeneralNotification extends Notification  implements ShouldQueue
     public $title;
     public $message;
     public $type;
+    
 
     /**
      * Create a new notification instance.
@@ -32,7 +33,7 @@ class GeneralNotification extends Notification  implements ShouldQueue
      */
     public function via(): array
     {
-        return ['mail','database'];
+        return ['database'];
     }
 
     /**

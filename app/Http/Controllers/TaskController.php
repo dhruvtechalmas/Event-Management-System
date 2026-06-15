@@ -5,9 +5,11 @@ namespace App\Http\Controllers;
 use App\Models\Task;
 use App\Models\Event;
 use App\Models\User;
+use App\Mail\TaskAssignmentMail;
 use App\Notifications\GeneralNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
 
@@ -69,6 +71,7 @@ class TaskController extends Controller implements HasMiddleware
         ]);
 
         $task = Task::create($validatedTask);
+        // dd($task->assigned_to);
 
         $assignedUser = User::find($task->assigned_to);
 
@@ -78,6 +81,13 @@ class TaskController extends Controller implements HasMiddleware
             $type = "task";
 
             $assignedUser->notify(new GeneralNotification($title, $message, $type));
+
+            if ($assignedUser->email) {
+                Mail::to($assignedUser->email)
+                    ->send(new TaskAssignmentMail($task, $task->event, $assignedUser, auth()->user()));
+            }
+
+            // dd($assignedUser->email);
 
             if (auth()->id() != $task->user_id) {
                 auth()->user()->notify(

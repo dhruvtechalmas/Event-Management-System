@@ -8,6 +8,9 @@ use App\Models\Task;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\EventInvitationMail;
+use App\Mail\ParticipantRegistrationMail;
 
 class ParticipantController extends Controller implements HasMiddleware
 {
@@ -62,7 +65,17 @@ class ParticipantController extends Controller implements HasMiddleware
             'notes' => 'nullable|string',
         ]);
 
-        Participant::create($validatedParticipant);
+        $participant = Participant::create($validatedParticipant);
+
+        $event = Event::findOrFail($validatedParticipant['event_id']);
+
+        Mail::to($participant->email)
+            ->send(new EventInvitationMail($event, $participant));
+
+        Mail::to($participant->email)
+            ->send(new ParticipantRegistrationMail($participant, $event));
+
+            // dd($participant->email);
 
 
         return redirect()->route('participants.index')->with([

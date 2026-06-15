@@ -9,6 +9,8 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ReportController;
+
 
 Route::get('/', function () {
     return view('welcome');
@@ -99,7 +101,13 @@ Route::middleware('auth')->group(function () {
     Route::get('/notifications/mark-read/{id}', [NotificationController::class, 'markAsRead'])->name('notifications.markRead');
     Route::get('/notifications/mark-all-read', [NotificationController::class, 'markAllAsRead'])->name('notifications.markAllRead');
     Route::get('/notifications/history', [NotificationController::class, 'history'])->name('notifications.history');
-    Route::get('/notifications/latest',[NotificationController::class, 'latest'])->name('notifications.latest');
+    Route::get('/notifications/latest', [NotificationController::class, 'latest'])->name('notifications.latest');
+
+    //Pdf routes
+    Route::get('/events/{id}/pdf-summary', [ReportController::class, 'downloadEventSummary'])->name('pdf.event-summary');
+    Route::get('/events/{eventId}/pdf-participants', [ReportController::class, 'downloadParticipantList'])->name('pdf.participant-list');
+    Route::get('/reports/pdf-tasks', [ReportController::class, 'downloadTaskReport'])->name('pdf.task-report');
+
 
 
 

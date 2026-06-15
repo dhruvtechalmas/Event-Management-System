@@ -8,18 +8,18 @@ class NotificationController extends Controller
 {
     public function markAsRead($id)
     {
-        $notification = auth()->user()->notifications()->find($id);
+        $notification = auth()->user()->notifications()->where('id', $id)->first();
 
         if ($notification) {
             $notification->markAsRead();
 
-            $type = $notification->data['type'];
+            $type = $notification->data['type'] ?? '';
 
             if ($type == 'task') {
                 return redirect()->route('tasks.index');
             }
 
-            if ($type == 'event_create' || $type == 'event_update' || $type == 'reminder') {
+            if (in_array($type, ['event_create', 'event_update', 'reminder'])) {
                 return redirect()->route('events.index');
             }
         }

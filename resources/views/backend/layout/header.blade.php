@@ -150,8 +150,7 @@
 
                   @forelse(auth()->user()->unreadNotifications as $notification)
                     <a class="dropdown-item d-flex flex-column py-2 border-bottom notification-item"
-                      href="javascript:void(0);" data-id="{{ $notification->id }}"
-                      data-url="{{ $notification->data['action_url'] ?? '#' }}">
+                     href="{{ route('notifications.markRead', $notification->id) }}">
                       <span class="fw-bold">
                         {{ $notification->data['title'] }}
                       </span>

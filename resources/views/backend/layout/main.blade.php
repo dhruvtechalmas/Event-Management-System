@@ -178,23 +178,26 @@
    // First Load
    loadNotifications();
 
-   // Refresh Every 5 Seconds
-   setInterval(loadNotifications, 1000);
+   // $('#notificationDropdown').on('click', function () {
+   //    loadNotifications();
+   // });
+
+   // setInterval(loadNotifications, 30000);
 
 </script>
 
 <script>
 
-$(document).on('click', '#mark-all-read-btn', function(e) {
+   $(document).on('click', '#mark-all-read-btn', function (e) {
 
-    e.preventDefault();
+      e.preventDefault();
 
-    $.ajax({
+      $.ajax({
 
-        url: "{{ route('notifications.markAllRead') }}",
-        type: "GET",
+         url: "{{ route('notifications.markAllRead') }}",
+         type: "GET",
 
-        success: function(response) {
+         success: function (response) {
 
             // Remove all notification items
             $('#notification-list-container').html(`
@@ -207,29 +210,29 @@ $(document).on('click', '#mark-all-read-btn', function(e) {
 
             // Hide badge
             $('#notif-badge')
-                .text('0')
-                .addClass('d-none');
+               .text('0')
+               .addClass('d-none');
 
             // Update header text
             $('#notif-header-text')
-                .text('Notifications (0 Unread)');
+               .text('Notifications (0 Unread)');
 
             // Hide mark all read button
             $('#mark-all-read-btn')
-                .addClass('d-none');
+               .addClass('d-none');
 
-        },
+         },
 
-        error: function(xhr) {
+         error: function (xhr) {
 
             console.log(xhr);
 
             alert('Something went wrong!');
 
-        }
+         }
 
-    });
+      });
 
-});
+   });
 
 </script>

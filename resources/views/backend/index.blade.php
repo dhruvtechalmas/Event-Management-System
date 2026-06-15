@@ -19,6 +19,24 @@
             type="button"><i class="bi bi-file-earmark-plus" aria-hidden="true"></i> Create Report</button></div>
       </div>
 
+      {{-- <!-- Event Summary View Action Button -->
+      <a href="{{ route('pdf.event-summary', $event->id) }}"
+        class="inline-flex items-center px-4 py-2 bg-blue-600 text-white font-semibold rounded-md shadow hover:bg-blue-700">
+        📥 Export Event Summary
+      </a>
+
+      <!-- Participant Grid Toolbar Button -->
+      <a href="{{ route('pdf.participant-list', $event->id) }}"
+        class="inline-flex items-center px-4 py-2 bg-emerald-600 text-white font-semibold rounded-md shadow hover:bg-emerald-700">
+        📄 Export Registrants PDF
+      </a>
+
+      <!-- Analytics Section Control Button -->
+      <a href="{{ route('pdf.task-report') }}"
+        class="inline-flex items-center px-4 py-2 bg-slate-700 text-white font-semibold rounded-md shadow hover:bg-slate-800">
+        📊 Run Task Report View
+      </a> --}}
+
       <section class="row g-3 mt-1" aria-label="Dashboard metrics">
         <div class="col-12 col-sm-6 col-xl-3">
           <article class="metric-card metric-primary">
@@ -141,8 +159,8 @@
             </h2>
             <p class="text-muted mb-0">Latest account activity across the workspace.</p>
           </div>
-          @can('user.index')    
-          <a class="btn btn-outline-secondary btn-sm" href="users">Manage Users</a>
+          @can('user.index')
+            <a class="btn btn-outline-secondary btn-sm" href="users">Manage Users</a>
           @endcan
         </div>
         <div class="table-responsive">
@@ -160,69 +178,69 @@
             </thead>
             {{-- <tbody> --}}
               {{-- @if ($users->IsNotEmpty())
-                @foreach ($users as $user)
+              @foreach ($users as $user)
 
-                  @php
-                    $colors = [
-                      '#ef4444',
-                      '#3b82f6',
-                      '#10b981',
-                      '#f59e0b',
-                      '#8b5cf6',
-                      '#ec4899',
-                      '#14b8a6',
-                      '#f97316',
-                    ];
+              @php
+              $colors = [
+              '#ef4444',
+              '#3b82f6',
+              '#10b981',
+              '#f59e0b',
+              '#8b5cf6',
+              '#ec4899',
+              '#14b8a6',
+              '#f97316',
+              ];
 
-                    $color = $colors[ord(strtoupper(substr($user->email, 0, 1))) % count($colors)];
-                  @endphp
+              $color = $colors[ord(strtoupper(substr($user->email, 0, 1))) % count($colors)];
+              @endphp
 
-                  <tr>
-                    <td>{{ $user->id }}</td>
-                    <td>
-                      <div class="d-flex align-items-center gap-2">
+              <tr>
+                <td>{{ $user->id }}</td>
+                <td>
+                  <div class="d-flex align-items-center gap-2">
 
-                        <div class="avatar-circle" style="background-color: {{ $color }}">
-                          {{ strtoupper(substr($user->email, 0, 1)) }}
-                        </div>
+                    <div class="avatar-circle" style="background-color: {{ $color }}">
+                      {{ strtoupper(substr($user->email, 0, 1)) }}
+                    </div>
 
-                        <span class="fw-semibold">
-                          {{ $user->name }}
-                        </span>
+                    <span class="fw-semibold">
+                      {{ $user->name }}
+                    </span>
 
-                      </div>
-                    </td>
-                    <td>{{ $user->email }}</td>
-                    <td>{{ $user->phone }}</td>
-                    <td>{{ $user->role_id == 1 ? 'Super Admin' : ($user->role_id == 2 ? 'Event Manager' : 'Staff') }}</td>
-                    <td>{{ $user->created_at }}</td>
-                    <td class="text-dark">
-                      @can('user.edit')
-                        <button class="btn btn-success btn-sm" data-bs-toggle="modal"
-                          data-bs-target="#editUserModal{{ $user->id }}">
-                          Edit
-                        </button>
-                      @endcan
+                  </div>
+                </td>
+                <td>{{ $user->email }}</td>
+                <td>{{ $user->phone }}</td>
+                <td>{{ $user->role_id == 1 ? 'Super Admin' : ($user->role_id == 2 ? 'Event Manager' : 'Staff') }}</td>
+                <td>{{ $user->created_at }}</td>
+                <td class="text-dark">
+                  @can('user.edit')
+                  <button class="btn btn-success btn-sm" data-bs-toggle="modal"
+                    data-bs-target="#editUserModal{{ $user->id }}">
+                    Edit
+                  </button>
+                  @endcan
 
-                      @can('user.delete')
-                        <form action="{{ route('users.destroy', $user->id) }}" method="POST" style="display: inline;">
-                          @csrf
-                          @method('DELETE')
-                          <button type="submit" class="btn btn-danger btn-sm"
-                            onclick="return confirm('Are you sure you want to delete this user?')">
-                            Delete
-                          </button>
-                        </form>
-                      @endcan
+                  @can('user.delete')
+                  <form action="{{ route('users.destroy', $user->id) }}" method="POST" style="display: inline;">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="btn btn-danger btn-sm"
+                      onclick="return confirm('Are you sure you want to delete this user?')">
+                      Delete
+                    </button>
+                  </form>
+                  @endcan
 
-                      @can('user.view')
-                        <a class="btn btn-light btn-sm" href="{{ route('users.show', $user->id) }}">View</a>
-                      @endcan
-                    </td>
-                  </tr>
+                  @can('user.view')
+                  <a class="btn btn-light btn-sm" href="{{ route('users.show', $user->id) }}">View</a>
+                  @endcan
+                </td>
+              </tr>
 
-                  @include('backend.users.edit', ['user' => $user, 'roles' => $roles])
-                @endforeach
+              @include('backend.users.edit', ['user' => $user, 'roles' => $roles])
+              @endforeach
               @endif
             </tbody> --}}
           </table>
