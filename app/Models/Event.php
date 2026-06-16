@@ -18,6 +18,11 @@ class Event extends Model
 
     public function tasks()
     {
-        return $this->hasMany(Task::class , 'event_id');
+        return $this->hasMany(Task::class, 'event_id');
+    }
+
+    public function participants()
+    {
+        return $this->hasMany(Participant::class, 'event_id');
     }
 }

@@ -459,7 +459,7 @@ html[data-theme="dark"] .profile-button .avatar-sm {
 }
 
 .heading-actions {
-  display: flex;
+  display: block;
   flex-wrap: wrap;
   justify-content: flex-end;
   gap: 0.65rem;

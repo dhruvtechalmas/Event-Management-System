@@ -104,12 +104,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/notifications/latest', [NotificationController::class, 'latest'])->name('notifications.latest');
 
     //Pdf routes
-    Route::get('/events/{id}/pdf-summary', [ReportController::class, 'downloadEventSummary'])->name('pdf.event-summary');
-    Route::get('/events/{eventId}/pdf-participants', [ReportController::class, 'downloadParticipantList'])->name('pdf.participant-list');
-    Route::get('/reports/pdf-tasks', [ReportController::class, 'downloadTaskReport'])->name('pdf.task-report');
-
-
-
+    Route::get('/events/pdf/all', [ReportController::class, 'downloadAllEventsSummary'])->name('events.pdf.all');
+    Route::get('/events/{id}/pdf', [ReportController::class, 'downloadEventSummary'])->name('events.pdf.single');
+    Route::get('/tasks/pdf/all', [ReportController::class, 'downloadAllTasksReport'])->name('tasks.pdf.all');
+    Route::get('/tasks/{id}/pdf', [ReportController::class, 'downloadSingleTaskReport'])->name('tasks.pdf.single');
 
 });
 

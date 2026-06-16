@@ -36,7 +36,7 @@
               aria-hidden="true"></i> Export</a>
 
           @can('user.create')
-            <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#addUserModal">
+            <button class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#addUserModal">
               <i class="bi bi-person-plus" aria-hidden="true"></i> Add User
             </button>
           @endcan
@@ -104,9 +104,9 @@
 
       <section class="panel mt-3">
         <div class="panel-header">
-          <div>
+          {{-- <div>
             <h2 class="h5 mb-1 section-title"><i class="bi bi-table" aria-hidden="true"></i><span>User List</span></h2>
-          </div>
+          </div> --}}
           <div class="d-flex flex-wrap gap-2">
             <input class="form-control form-control-sm table-search" type="search" placeholder="Search users"
               data-table-search="usersTable" aria-label="Search users">
@@ -164,11 +164,11 @@
                     <td>{{ $user->phone }}</td>
                     <td>{{ $user->role_id == 1 ? 'Super Admin' : ($user->role_id == 2 ? 'Event Manager' : 'Staff') }}</td>
                     <td>{{ $user->created_at }}</td>
-                    <td class="text-dark">
+                    <td class="text-dark" style="white-space: nowrap;">
                       @can('user.edit')
-                        <button class="btn btn-success btn-sm" data-bs-toggle="modal"
-                          data-bs-target="#editUserModal{{ $user->id }}">
-                          Edit
+                        <button class="btn btn-outline-success btn-sm" data-bs-toggle="modal"
+                          data-bs-target="#editUserModal{{ $user->id }}" title="Edit User">
+                          <i class="bi bi-pencil-square" aria-hidden="true"></i>
                         </button>
                       @endcan
 
@@ -176,17 +176,20 @@
                         <form action="{{ route('users.destroy', $user->id) }}" method="POST" style="display: inline;">
                           @csrf
                           @method('DELETE')
-                          <button type="submit" class="btn btn-danger btn-sm"
-                            onclick="return confirm('Are you sure you want to delete this user?')">
-                            Delete
+                          <button type="submit" class="btn btn-outline-danger btn-sm"
+                            onclick="return confirm('Are you sure you want to delete this user?')" title="Delete User">
+                            <i class="bi bi-trash" aria-hidden="true"></i>
                           </button>
                         </form>
                       @endcan
 
                       @can('user.view')
-                        <a class="btn btn-light btn-sm" href="{{ route('users.show', $user->id) }}">View</a>
+                        <a class="btn btn-outline-info btn-sm" href="{{ route('users.show', $user->id) }}" title="View User">
+                          <i class="bi bi-eye" aria-hidden="true"></i>
+                        </a>
                       @endcan
                     </td>
+
                   </tr>
 
                   @include('backend.users.edit', ['user' => $user, 'roles' => $roles])

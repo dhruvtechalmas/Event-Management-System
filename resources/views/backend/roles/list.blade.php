@@ -30,10 +30,10 @@
         </div>
 
         @can('role.create')
-        <button class="btn btn-primary btn-sm d-flex justify-content-end" data-bs-toggle="modal"
-          data-bs-target="#rolesUserModal">
-          <i class="bi bi-person-plus" aria-hidden="true"></i> Add Role
-        </button>
+          <button class="btn btn-outline-primary btn-sm d-flex justify-content-end" data-bs-toggle="modal"
+            data-bs-target="#rolesUserModal">
+            <i class="bi bi-person-plus" aria-hidden="true"></i> Add Role
+          </button>
         @endcan
       </div>
 
@@ -69,28 +69,27 @@
                       </span>
                     @endforelse
                   </td>
-                  <td  style="white-space: nowrap;">{{ $role->created_at->format('d-m-Y') }} </td>
-                  <td style="white-space: nowrap;" >
+                  <td style="white-space: nowrap;">{{ $role->created_at->format('d-m-Y') }} </td>
+                  <td style="white-space: nowrap;">
+                    @can('role.edit')
+                      <button class="btn btn-outline-success btn-sm" data-bs-toggle="modal"
+                        data-bs-target="#editRoleModal{{ $role->id }}" title="Edit Role">
+                        <i class="bi bi-pencil-square" aria-hidden="true"></i>
+                      </button>
+                    @endcan
 
-                    @can('role.edit')   
-                    <button class="btn btn-success btn-sm" data-bs-toggle="modal"
-                    data-bs-target="#editRoleModal{{ $role->id }}">
-                    Edit
-                  </button>
-                  @endcan
-
-                  @can('role.delete')          
-                  <form action="{{ route('roles.destroy', $role->id) }}" method="POST" style="display: inline;">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit" class="btn btn-danger btn-sm"
-                    onclick="return confirm('Are you sure you want to delete this participant?')">
-                    Delete
-                  </button>
-                </form>
-                @endcan
-                
+                    @can('role.delete')
+                      <form action="{{ route('roles.destroy', $role->id) }}" method="POST" style="display: inline;">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-outline-danger btn-sm"
+                          onclick="return confirm('Are you sure you want to delete this role?')" title="Delete Role">
+                          <i class="bi bi-trash" aria-hidden="true"></i>
+                        </button>
+                      </form>
+                    @endcan
                   </td>
+
                 </tr>
                 @include('backend.roles.edit', ['role' => $role])
               @endforeach

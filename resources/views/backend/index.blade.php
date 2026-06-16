@@ -14,28 +14,10 @@
             <p class="text-muted mb-0">Monitor performance, sales, users, and support from one clean workspace.</p>
           </div>
         </div>
-        <div class="heading-actions"><button class="btn btn-outline-secondary btn-sm" type="button"><i
+        {{-- <div class="heading-actions"><button class="btn btn-outline-secondary btn-sm" type="button"><i
               class="bi bi-download" aria-hidden="true"></i> Export</button><button class="btn btn-primary btn-sm"
-            type="button"><i class="bi bi-file-earmark-plus" aria-hidden="true"></i> Create Report</button></div>
+            type="button"><i class="bi bi-file-earmark-plus" aria-hidden="true"></i> Create Report</button></div> --}}
       </div>
-
-      {{-- <!-- Event Summary View Action Button -->
-      <a href="{{ route('pdf.event-summary', $event->id) }}"
-        class="inline-flex items-center px-4 py-2 bg-blue-600 text-white font-semibold rounded-md shadow hover:bg-blue-700">
-        📥 Export Event Summary
-      </a>
-
-      <!-- Participant Grid Toolbar Button -->
-      <a href="{{ route('pdf.participant-list', $event->id) }}"
-        class="inline-flex items-center px-4 py-2 bg-emerald-600 text-white font-semibold rounded-md shadow hover:bg-emerald-700">
-        📄 Export Registrants PDF
-      </a>
-
-      <!-- Analytics Section Control Button -->
-      <a href="{{ route('pdf.task-report') }}"
-        class="inline-flex items-center px-4 py-2 bg-slate-700 text-white font-semibold rounded-md shadow hover:bg-slate-800">
-        📊 Run Task Report View
-      </a> --}}
 
       <section class="row g-3 mt-1" aria-label="Dashboard metrics">
         <div class="col-12 col-sm-6 col-xl-3">

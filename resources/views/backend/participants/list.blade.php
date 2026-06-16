@@ -30,11 +30,12 @@
         </div>
 
         @can('participant.create')
-        <button class="btn btn-primary btn-sm d-flex justify-content-end" data-bs-toggle="modal"
-          data-bs-target="#participantsUserModal">
-          <i class="bi bi-person-plus" aria-hidden="true"></i> Add Participant
-        </button>
+          <button class="btn btn-outline-primary btn-sm d-flex justify-content-end" data-bs-toggle="modal"
+            data-bs-target="#participantsUserModal">
+            <i class="bi bi-person-plus" aria-hidden="true"></i> Add Participant
+          </button>
         @endcan
+
       </div>
 
 
@@ -64,29 +65,35 @@
                   <td>{{ $participant->email }}</td>
                   <td>{{ $participant->event->event_name ?? 'No Event Selected' }}</td>
                   <td>{{ $participant->phone }}</td>
-                  <td>
+                  <td style="white-space: nowrap;">
                     @can('participant.edit')
-                    <button class="btn btn-success btn-sm" data-bs-toggle="modal"
-                      data-bs-target="#editParticipantModal{{ $participant->id }}">
-                      Edit
-                    </button>
+                      <button class="btn btn-outline-success btn-sm" data-bs-toggle="modal"
+                        data-bs-target="#editParticipantModal{{ $participant->id }}" title="Edit Participant">
+                        <i class="bi bi-pencil-square" aria-hidden="true"></i>
+                      </button>
                     @endcan
 
                     @can('participant.delete')
-                    <form action="{{ route('participants.destroy', $participant->id) }}" method="POST" style="display: inline;">
-                      @csrf
-                      @method('DELETE')
-                      <button type="submit" class="btn btn-danger btn-sm"
-                        onclick="return confirm('Are you sure you want to delete this participant?')">
-                        Delete
-                      </button>
-                    </form>
+                      <form action="{{ route('participants.destroy', $participant->id) }}" method="POST"
+                        style="display: inline;">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-outline-danger btn-sm"
+                          onclick="return confirm('Are you sure you want to delete this participant?')"
+                          title="Delete Participant">
+                          <i class="bi bi-trash" aria-hidden="true"></i>
+                        </button>
+                      </form>
                     @endcan
 
                     @can('participant.view')
-                      <a class="btn btn-light btn-sm" href="{{ route('participants.show',$participant->id) }}">View</a>
-                      @endcan
+                      <a class="btn btn-outline-info btn-sm" href="{{ route('participants.show', $participant->id) }}"
+                        title="View Participant">
+                        <i class="bi bi-eye" aria-hidden="true"></i>
+                      </a>
+                    @endcan
                   </td>
+
                 </tr>
                 @include('backend.participants.edit', ['participant' => $participant])
               @endforeach

@@ -57,7 +57,7 @@
                             </p>
 
                             <span class="badge
-                                        {{ $task->status == 'pending' ? 'bg-primary' :
+                                                {{ $task->status == 'pending' ? 'bg-primary' :
         ($task->status == 'in_progress' ? 'bg-success' :
             ($task->status == 'completed' ? 'bg-info' : 'bg-danger')) }}">
                                 {{ ucwords(str_replace('_', ' ', $task->status)) }}
@@ -121,9 +121,18 @@
                                 </p>
                             </div>
 
-                            <button type="button" class="btn btn-light view-task-btn" data-id="{{ $task->id }}">
-                                View Details
-                            </button>
+                            <div class="heading-actions">
+                                <!-- Single Task PDF Export Button -->
+                                <a href="{{ route('tasks.pdf.single', $task->id) }}"
+                                    class="btn btn-outline-secondary btn-sm">
+                                    <i class="bi bi-download" aria-hidden="true"></i> Export PDF
+                                </a>
+                                <button type="button" class="btn btn-light view-task-btn" data-id="{{ $task->id }}">
+                                    View Details
+                                </button>
+                            </div>
+
+
 
 
                         </div>
@@ -349,71 +358,71 @@
     </div>
 
     <script>
-document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', function () {
 
-    document.querySelector('.view-task-btn').addEventListener('click', function () {
+            document.querySelector('.view-task-btn').addEventListener('click', function () {
 
-        let taskId = this.dataset.id;
+                let taskId = this.dataset.id;
 
-        fetch(`/tasks/view-details/${taskId}`)
-        .then(response => response.json())
-        .then(data => {
+                fetch(`/tasks/view-details/${taskId}`)
+                    .then(response => response.json())
+                    .then(data => {
 
-            // Task
-            document.getElementById('task_title').innerText =
-                data.task.title ?? '-';
+                        // Task
+                        document.getElementById('task_title').innerText =
+                            data.task.title ?? '-';
 
-            document.getElementById('task_status').innerText =
-                data.task.status ?? '-';
+                        document.getElementById('task_status').innerText =
+                            data.task.status ?? '-';
 
-            document.getElementById('task_due_date').innerText =
-                data.task.due_date ?? '-';
+                        document.getElementById('task_due_date').innerText =
+                            data.task.due_date ?? '-';
 
-            document.getElementById('task_description').innerText =
-                data.task.description ?? '-';
+                        document.getElementById('task_description').innerText =
+                            data.task.description ?? '-';
 
-            document.getElementById('task_created_at').innerText =
-                data.task.created_at ?? '-';
+                        document.getElementById('task_created_at').innerText =
+                            data.task.created_at ?? '-';
 
-            // Event
-            document.getElementById('event_name').innerText =
-                data.event?.event_name ?? '-';
+                        // Event
+                        document.getElementById('event_name').innerText =
+                            data.event?.event_name ?? '-';
 
-            document.getElementById('event_type').innerText =
-                data.event?.event_type ?? '-';
+                        document.getElementById('event_type').innerText =
+                            data.event?.event_type ?? '-';
 
-            document.getElementById('event_date').innerText =
-                data.event?.event_date ?? '-';
+                        document.getElementById('event_date').innerText =
+                            data.event?.event_date ?? '-';
 
-            document.getElementById('event_time').innerText =
-                data.event?.event_time ?? '-';
+                        document.getElementById('event_time').innerText =
+                            data.event?.event_time ?? '-';
 
-            document.getElementById('event_location').innerText =
-                data.event?.event_location ?? '-';
+                        document.getElementById('event_location').innerText =
+                            data.event?.event_location ?? '-';
 
-            document.getElementById('event_description').innerText =
-                data.event?.description ?? '-';
+                        document.getElementById('event_description').innerText =
+                            data.event?.description ?? '-';
 
-            // User
-            document.getElementById('user_name').innerText =
-                data.assignee?.name ?? '-';
+                        // User
+                        document.getElementById('user_name').innerText =
+                            data.assignee?.name ?? '-';
 
-            document.getElementById('user_email').innerText =
-                data.assignee?.email ?? '-';
+                        document.getElementById('user_email').innerText =
+                            data.assignee?.email ?? '-';
 
-            document.getElementById('user_phone').innerText =
-                data.assignee?.phone ?? '-';
+                        document.getElementById('user_phone').innerText =
+                            data.assignee?.phone ?? '-';
 
-            let modal = new bootstrap.Modal(
-                document.getElementById('taskDetailModal')
-            );
+                        let modal = new bootstrap.Modal(
+                            document.getElementById('taskDetailModal')
+                        );
 
-            modal.show();
+                        modal.show();
+                    });
+            });
+
         });
-    });
-
-});
-</script>
+    </script>
 
 
 

@@ -30,10 +30,10 @@
         </div>
 
         @can('permission.create')
-        <button class="btn btn-primary btn-sm d-flex justify-content-end" data-bs-toggle="modal"
-          data-bs-target="#permissionsUserModal">
-          <i class="bi bi-person-plus" aria-hidden="true"></i> Add Permission
-        </button>
+          <button class="btn btn-outline-primary btn-sm d-flex justify-content-end" data-bs-toggle="modal"
+            data-bs-target="#permissionsUserModal">
+            <i class="bi bi-person-plus" aria-hidden="true"></i> Add Permission
+          </button>
         @endcan
       </div>
 
@@ -59,26 +59,29 @@
                 <tr>
                   <td class="fw-semibold">{{ $permission->id }}</td>
                   <td>{{ $permission->name }}</td>
-                   <td>{{ $permission->created_at->format('d-m-Y') }} </td>
-                  <td>
+                  <td>{{ $permission->created_at->format('d-m-Y') }} </td>
+                  <td style="white-space: nowrap;">
                     @can('permission.edit')
-                    <button class="btn btn-success btn-sm" data-bs-toggle="modal"
-                      data-bs-target="#editPermissionModal{{ $permission->id }}">
-                      Edit
-                    </button>
+                      <button class="btn btn-outline-success btn-sm" data-bs-toggle="modal"
+                        data-bs-target="#editPermissionModal{{ $permission->id }}" title="Edit Permission">
+                        <i class="bi bi-pencil-square" aria-hidden="true"></i>
+                      </button>
                     @endcan
 
                     @can('permission.delete')
-                    <form action="{{ route('permissions.destroy', $permission->id) }}" method="POST" style="display: inline;">
-                      @csrf
-                      @method('DELETE')
-                      <button type="submit" class="btn btn-danger btn-sm"
-                        onclick="return confirm('Are you sure you want to delete this participant?')">
-                        Delete
-                      </button>
-                    </form>
+                      <form action="{{ route('permissions.destroy', $permission->id) }}" method="POST"
+                        style="display: inline;">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-outline-danger btn-sm"
+                          onclick="return confirm('Are you sure you want to delete this permission?')"
+                          title="Delete Permission">
+                          <i class="bi bi-trash" aria-hidden="true"></i>
+                        </button>
+                      </form>
                     @endcan
                   </td>
+
                 </tr>
                 @include('backend.permissions.edit', ['permission' => $permission])
               @endforeach
@@ -86,7 +89,7 @@
           </table>
         </div>
 
-        
+
         <div class="d-flex justify-content-end mt-3">
           {{ $permissions->links('pagination::bootstrap-4') }}
         </div>

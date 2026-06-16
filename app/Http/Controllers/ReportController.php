@@ -10,27 +10,33 @@ use Illuminate\Http\Request;
 
 class ReportController extends Controller
 {
-    // 1. Event Summary PDF
+    public function downloadAllEventsSummary()
+    {
+        $events = Event::all();
+        $pdf = Pdf::loadView('backend.reports.all-events-summary', compact('events'));
+        return $pdf->download("all-events-summary.pdf");
+    }
+
     public function downloadEventSummary($id)
     {
-        $event = Event::findOrFail($id);
-        $pdf = Pdf::loadView('reports.event-summary', compact('event'));
+        $event = Event::with(['tasks', 'participants'])->findOrFail($id);
+        $pdf = Pdf::loadView('backend.reports.event-summary', compact('event'));
         return $pdf->download("event-summary-{$id}.pdf");
     }
 
-    // 2. Participant List PDF
-    public function downloadParticipantList($eventId)
-    {
-        $participants = Participant::where('event_id', $eventId)->get();
-        $pdf = Pdf::loadView('reports.participant-list', compact('participants'));
-        return $pdf->download("participants-event-{$eventId}.pdf");
-    }
 
-    // 3. Task Report PDF
-    public function downloadTaskReport()
+   public function downloadAllTasksReport()
     {
-        $tasks = Task::with('user')->get();
-        $pdf = Pdf::loadView('reports.task-report', compact('tasks'));
+        $tasks = Task::with(['assignee', 'event'])->get();
+        $pdf = Pdf::loadView('backend.reports.task-report', compact('tasks'));
         return $pdf->download("global-task-report.pdf");
     }
+
+    public function downloadSingleTaskReport($id)
+    {
+        $task = Task::with(['assignee', 'event'])->findOrFail($id);
+        $pdf = Pdf::loadView('backend.reports.single-task-report', compact('task'));
+        return $pdf->download("task-report-{$id}.pdf");
+    }
 }
+
