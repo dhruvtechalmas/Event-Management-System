@@ -21,11 +21,13 @@
             </div>
 
             <div class="col-md-12">
-                <label class="form-label" for="event_id">Event</label>
+                <label class="form-label">Event</label>
                 <select class="form-control" id="event_id" name="event_id" required>
                     <option value="">Select an Event</option>
-                    @foreach ($events as $event)
-                        <option value="{{ $event->id }}">{{ $event->event_name }}</option>
+                    @foreach($events as $event)
+                        <option value="{{ $event->id }}" data-date="{{ $event->event_date }}">
+                            {{ $event->event_name }}
+                        </option>
                     @endforeach
                 </select>
                 <div class="invalid-feedback">Please select an event.</div>
@@ -43,10 +45,17 @@
             </div>
 
             <div class="col-md-12">
-                <label class="form-label" for="due_date">Due Date</label>
-                <input class="form-control" id="due_date" name="due_date" type="date" placeholder="Enter Phone"
-                    required>
-                <div class="invalid-feedback">Due Date is required.</div>
+                <label class="form-label">Event Date</label>
+
+                <input type="date" id="event_date" class="form-control" readonly>
+            </div>
+
+            <div class="col-md-12">
+                <label class="form-label">Due Date</label>
+                <input type="date" id="due_date" name="due_date" class="form-control" required>
+                <div class="invalid-feedback">
+                    Due Date cannot be after Event Date.
+                </div>
             </div>
 
             <div class="col-md-12">
@@ -80,3 +89,19 @@
 
     </form>
 </div>
+
+
+<script>
+    document.getElementById('event_id').addEventListener('change', function () {
+
+        let selectedOption = this.options[this.selectedIndex];
+        let eventDate = selectedOption.getAttribute('data-date');
+
+        document.getElementById('event_date').value = eventDate || '';
+
+        let dueDate = document.getElementById('due_date');
+
+        dueDate.value = '';
+        dueDate.max = eventDate;
+    });
+</script>

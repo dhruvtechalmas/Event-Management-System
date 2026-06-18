@@ -9,11 +9,25 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
+
 class DashboardController extends Controller
 {
     public function index()
     {
 
+        Event::whereDate('event_date', '<', now()->toDateString())
+            ->whereIn('status', ['Ongoing', 'Completed'])
+            ->update([
+                'status' => 'Completed'
+            ]);
+
+        Event::whereDate('event_date', '<', now()->toDateString())
+            ->whereIn('status', ['Draft', 'Upcoming'])
+            ->update([
+                'status' => 'Cancelled'
+            ]);
+
+            
         $totalEvents = Event::count();
 
         $upcomingEvents = Event::whereDate(
@@ -37,7 +51,7 @@ class DashboardController extends Controller
             'event_date',
             '>=',
             now()
-        )->orderBy( 'event_date')
+        )->orderBy('event_date')
             ->take(5)
             ->get();
 

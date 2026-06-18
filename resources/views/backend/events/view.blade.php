@@ -90,6 +90,11 @@
                                 <strong>{{ $event->event_location }}</strong>
                             </div>
 
+                            {{-- <div>
+                                <span>Total Participants</span>
+                                <strong>{{ $event->participants_count }}</strong>
+                            </div> --}}
+
                             <div>
                                 <span>Status</span>
                                 <strong>{{ $event->status }}</strong>
@@ -119,24 +124,31 @@
 
                         <div class="row g-3">
 
-                            <div class="col-md-4">
+                            <div class="col-md-3">
                                 <div class="mini-card">
                                     <span>Status</span>
                                     <strong>{{ $event->status }}</strong>
                                 </div>
                             </div>
 
-                            <div class="col-md-4">
+                            <div class="col-md-3">
                                 <div class="mini-card">
                                     <span>Event ID</span>
                                     <strong>#{{ $event->id }}</strong>
                                 </div>
                             </div>
 
-                            <div class="col-md-4">
+                            <div class="col-md-3">
                                 <div class="mini-card">
                                     <span>Date</span>
                                     <strong>{{ $event->event_date }}</strong>
+                                </div>
+                            </div>
+
+                            <div class="col-md-3">
+                                <div class="mini-card">
+                                    <span>Participants</span>
+                                    <strong>{{ $event->participants_count }}</strong>
                                 </div>
                             </div>
 

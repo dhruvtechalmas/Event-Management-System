@@ -7,7 +7,7 @@
       <div class="modal-content">
 
         <div class="modal-header">
-          <h5 class="modal-title btn btn-outline-dark">Add Task</h5>
+          <h5 class="modal-title btn btn-outline-secondary">Add Task</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
         </div>
 
@@ -30,19 +30,44 @@
         </div>
 
         @can('task.create')
-        <button class="btn btn-outline-primary btn-sm d-flex justify-content-end" data-bs-toggle="modal"
-          data-bs-target="#tasksUserModal">
-          <i class="bi bi-person-plus" aria-hidden="true"></i> Add Task
-        </button>
+          <button class="btn btn-outline-primary btn-sm d-flex justify-content-end" data-bs-toggle="modal"
+            data-bs-target="#tasksUserModal">
+            <i class="bi bi-person-plus" aria-hidden="true"></i> Add Task
+          </button>
         @endcan
       </div>
 
 
       <section class="panel">
-        <div class="panel-header"><input class="form-control form-control-sm table-search" type="search"
-            placeholder="Search tasks" data-table-search="tasksTable" aria-label="Search tasks">
-       <a href="{{ route('tasks.pdf.all') }}" class="btn btn-outline-secondary btn-sm">
-            <i class="bi bi-download" aria-hidden="true"></i> Export PDF
+        <div class="panel-header">
+
+          <div class="d-flex align-items-center gap-3">
+            <input class="form-control form-control-sm table-search" type="search" placeholder="Search tasks"
+              data-table-search="tasksTable" aria-label="Search tasks">
+
+            <form method="GET" action="{{ route('tasks.index') }}" class="m-0">
+              <select name="status" class="form-select form-select-sm" onchange="this.form.submit()"
+                style="width: 180px;">
+                <option value="">Filter Status</option>
+
+                <option value="pending" {{ request('status') == 'pending' ? 'selected' : '' }}>
+                  Pending
+                </option>
+
+                <option value="in_progress" {{ request('status') == 'in_progress' ? 'selected' : '' }}>
+                  In Progress
+                </option>
+
+                <option value="completed" {{ request('status') == 'completed' ? 'selected' : '' }}>
+                  Completed
+                </option>
+              </select>
+            </form>
+          </div>
+
+          <a href="{{ route('tasks.pdf.all') }}" class="btn btn-outline-secondary btn-sm">
+            <i class="bi bi-download" aria-hidden="true"></i>
+            Export PDF
           </a>
 
         </div>
@@ -70,7 +95,7 @@
                           <td>{{ $task->due_date }}</td>
                           <td>
                             <span class="badge        
-                                                                       {{ $task->status == 'pending' ? 'bg-primary' :
+                                                                                                                       {{ $task->status == 'pending' ? 'bg-primary' :
                 ($task->status == 'in_progress' ? 'bg-success' :
                   ($task->status == 'completed' ? 'bg-info' : 'bg-danger')) }}">
 
@@ -85,7 +110,7 @@
                                 <i class="bi bi-person-plus" aria-hidden="true"></i>
                               </button>
                             @endcan
-                            
+
                             @can('task.edit')
                               <button class="btn btn-outline-success btn-sm" data-bs-toggle="modal"
                                 data-bs-target="#editTaskModal{{ $task->id }}" title="Edit Task">
@@ -104,12 +129,12 @@
                               </form>
                             @endcan
 
-                            @can('task.view')                             
+                            @can('task.view')
                               <a class="btn btn-outline-info btn-sm" href="{{ route('tasks.show', $task->id) }}" title="View Task">
                                 <i class="bi bi-eye" aria-hidden="true"></i>
                               </a>
                             @endcan
-                        </td>
+                          </td>
 
                         </tr>
                         @include('backend.tasks.edit', ['task' => $task])

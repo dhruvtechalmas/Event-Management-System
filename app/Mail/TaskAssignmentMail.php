@@ -14,6 +14,8 @@ class TaskAssignmentMail extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
 
+    // public $afterCommit = true; 
+
     public $task;
     public $event;
     public $assignee;

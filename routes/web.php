@@ -17,6 +17,9 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/pusher', function () {
+    return view('pusher');
+});
 // Route::get('/event-dashboard', function () {
 //     return view('backend.index');
 // })->middleware(['auth', 'verified'])->name('backend.index');
@@ -102,7 +105,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/notifications/mark-read/{id}', [NotificationController::class, 'markAsRead'])->name('notifications.markRead');
     Route::get('/notifications/mark-all-read', [NotificationController::class, 'markAllAsRead'])->name('notifications.markAllRead');
     Route::get('/notifications/history', [NotificationController::class, 'history'])->name('notifications.history');
-    Route::get('/notifications/latest', [NotificationController::class, 'latest'])->name('notifications.latest');
 
     //Pdf routes
     Route::get('/events/pdf/all', [ReportController::class, 'downloadAllEventsSummary'])->name('events.pdf.all');

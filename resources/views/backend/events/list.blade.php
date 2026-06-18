@@ -8,7 +8,7 @@
       <div class="modal-content">
 
         <div class="modal-header">
-          <h5 class="modal-title btn btn-outline-dark">Add Event</h5>
+          <h5 class="modal-title btn btn-outline-secondary">Add Event</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
         </div>
 
@@ -41,13 +41,26 @@
 
 
       <section class="panel">
-        <div class="panel-header ">
-          <input class="form-control form-control-sm table-search" type="search" placeholder="Search events"
-            data-table-search="eventsTable" aria-label="Search events">
+        <div class="panel-header">
 
-          <!-- Single Event PDF Export Button -->
+          <div class="d-flex align-items-center gap-3">
+            <input class="form-control form-control-sm table-search" type="search" placeholder="Search events"
+              data-table-search="eventsTable" aria-label="Search events">
+
+            <form action="{{ route('events.index') }}" method="GET" class="m-0">
+              <select name="status" class="form-select form-select-sm" onchange="this.form.submit()" style="width:180px;">
+                <option value="">Filter Status</option>
+                <option value="Draft" {{ request('status') == 'Draft' ? 'selected' : '' }}>Draft</option>
+                <option value="Upcoming" {{ request('status') == 'Upcoming' ? 'selected' : '' }}>Upcoming</option>
+                <option value="Ongoing" {{ request('status') == 'Ongoing' ? 'selected' : '' }}>Ongoing</option>
+                <option value="Completed" {{ request('status') == 'Completed' ? 'selected' : '' }}>Completed</option>
+                <option value="Cancelled" {{ request('status') == 'Cancelled' ? 'selected' : '' }}>Cancelled</option>
+              </select>
+            </form>
+          </div>
+
           <a href="{{ route('events.pdf.all') }}" class="btn btn-outline-secondary btn-sm">
-            <i class="bi bi-download" aria-hidden="true"></i> Export PDF
+            <i class="bi bi-download"></i> Export PDF
           </a>
 
         </div>
@@ -86,7 +99,7 @@
 
                           <td>
                             <span class="badge
-                                                                                          {{ $event->status == 'Draft' ? 'bg-secondary' :
+                                                                                                                              {{ $event->status == 'Draft' ? 'bg-secondary' :
                 ($event->status == 'Upcoming' ? 'bg-primary' :
                   ($event->status == 'Ongoing' ? 'bg-success' :
                     ($event->status == 'Completed' ? 'bg-info' : 'bg-danger'))) }}">
@@ -94,31 +107,32 @@
                             </span>
                           </td>
 
-                         <td style="white-space: nowrap;">
-                          @can('event.edit')
-                            <button class="btn btn-outline-success btn-sm" data-bs-toggle="modal"
-                              data-bs-target="#editEventModal{{ $event->id }}" title="Edit Event">
-                              <i class="bi bi-pencil-square" aria-hidden="true"></i>
-                            </button>
-                          @endcan
-
-                          @can('event.delete')
-                            <form action="{{ route('events.destroy', $event->id) }}" method="POST" style="display: inline;">
-                              @csrf
-                              @method('DELETE')
-                              <button type="submit" class="btn btn-outline-danger btn-sm"
-                                onclick="return confirm('Are you sure you want to delete this event?')" title="Delete Event">
-                                <i class="bi bi-trash" aria-hidden="true"></i>
+                          <td style="white-space: nowrap;">
+                            @can('event.edit')
+                              <button class="btn btn-outline-success btn-sm" data-bs-toggle="modal"
+                                data-bs-target="#editEventModal{{ $event->id }}" title="Edit Event">
+                                <i class="bi bi-pencil-square" aria-hidden="true"></i>
                               </button>
-                            </form>
-                          @endcan
+                            @endcan
 
-                          @can('event.view')
-                            <a class="btn btn-outline-info btn-sm" href="{{ route('events.show', $event->id) }}" title="View Details">
-                              <i class="bi bi-eye" aria-hidden="true"></i>
-                            </a>
-                          @endcan
-                      </td>
+                            @can('event.delete')
+                              <form action="{{ route('events.destroy', $event->id) }}" method="POST" style="display: inline;">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-outline-danger btn-sm"
+                                  onclick="return confirm('Are you sure you want to delete this event?')" title="Delete Event">
+                                  <i class="bi bi-trash" aria-hidden="true"></i>
+                                </button>
+                              </form>
+                            @endcan
+
+                            @can('event.view')
+                              <a class="btn btn-outline-info btn-sm" href="{{ route('events.show', $event->id) }}"
+                                title="View Details">
+                                <i class="bi bi-eye" aria-hidden="true"></i>
+                              </a>
+                            @endcan
+                          </td>
                         </tr>
                         @include('backend.events.edit', ['event' => $event])
               @endforeach

@@ -41,6 +41,18 @@ class TaskController extends Controller implements HasMiddleware
             $tasks = Task::with(['event', 'assignee'])->where('assigned_to', auth()->id())->latest()->paginate(10);
         }
 
+        $query = Task::with(['event', 'assignee']);
+
+        if (!auth()->user()->hasRole('SuperAdmin')) {
+            $query->where('assigned_to', auth()->id());
+        }
+
+        if (request()->filled('status')) {
+            $query->where('status', request('status'));
+        }
+
+        $tasks = $query->latest()->paginate(10)->withQueryString();
+
         $events = Event::all();
 
         $users = User::withoutRole('SuperAdmin')->where('id', '!=', Auth::id())->get();
@@ -64,7 +76,15 @@ class TaskController extends Controller implements HasMiddleware
     public function store(StoreTaskRequest $request)
     {
         $task = Task::create($request->validated());
-        // dd($task->assigned_to);
+
+        $event = Event::findOrFail($request->event_id);
+        if ($request->due_date > $event->event_date) {
+            return back()->withInput()->withErrors([
+                'due_date' => 'Due Date cannot be after Event Date.'
+            ]);
+        }
+
+        $task->load('event');
 
         $assignedUser = User::find($task->assigned_to);
 
@@ -79,8 +99,9 @@ class TaskController extends Controller implements HasMiddleware
             );
 
             if ($assignedUser->email) {
+                $creator = auth()->user() ?? null;
                 Mail::to($assignedUser->email)
-                    ->send(new TaskAssignmentMail($task, $task->event, $assignedUser, auth()->user()));
+                    ->send(new TaskAssignmentMail($task, $task->event, $assignedUser, $creator));
             }
 
             // dd($assignedUser->email);
@@ -145,6 +166,13 @@ class TaskController extends Controller implements HasMiddleware
 
     public function show(Task $task)
     {
+        if (
+            !auth()->user()->hasRole('SuperAdmin') &&
+            $task->assigned_to != auth()->id()
+        ) {
+            abort(403, 'Unauthorized access.');
+        }
+
         return view('backend.tasks.view', compact('task'));
     }
     /**
@@ -163,6 +191,16 @@ class TaskController extends Controller implements HasMiddleware
     public function viewDetails(string $id)
     {
         $task = Task::with(['event', 'assignee'])->findOrFail($id);
+
+        if (
+            !auth()->user()->hasRole('SuperAdmin') &&
+            $task->assigned_to != auth()->id()
+        ) {
+            return redirect()->route('tasks.index')->with([
+                'message' => 'You are not authorized to view this task.',
+                'alert-type' => 'error',
+            ]);
+        }
 
         return response()->json([
             'task' => [

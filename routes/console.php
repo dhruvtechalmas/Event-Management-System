@@ -10,3 +10,5 @@ Artisan::command('inspire', function () {
 
 // Automatically runs your reminder command every day at 8:00 AM
 Schedule::command('app:send-event-reminders')->everyMinute();
+
+Schedule::command('app:update-event-status')->daily();

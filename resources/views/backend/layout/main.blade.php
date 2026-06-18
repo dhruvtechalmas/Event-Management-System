@@ -99,89 +99,75 @@
 </script>
 
 
-{{-- loadnotification --}}
 <script>
-   function loadNotifications() {
-      $.ajax({
-         url: "{{ route('notifications.latest') }}",
-         type: "GET",
-
-         success: function (data) {
-            // Badge Count
-            $('#notif-badge').text(data.count);
-
-            if (data.count > 0) {
-               $('#notif-badge').removeClass('d-none');
-            }
-            else {
-               $('#notif-badge').addClass('d-none');
-            }
-
-            // Header Text
-            $('#notif-header-text')
-               .text(`Notifications (${data.count} Unread)`);
-
-            // Notification List
-            let html = '';
-
-            if (data.notifications.length > 0) {
-               data.notifications.forEach(function (notification) {
-
-                  html += `
-                        <a class="dropdown-item d-flex flex-column py-2 border-bottom notification-item"
-                           href="${notification.url}"
-                           data-id="${notification.id}"
-                           data-url="${notification.url}"
-                           style="background-color:#f4f7fa;border-left:3px solid #0d6efd;">
-
-                            <span class="fw-bold text-dark"
-                                  style="font-size:0.85rem;">
-                                ${notification.title}
-                            </span>
-
-                            <small class="text-secondary"
-                                   style="font-size:0.75rem;">
-                                ${notification.message}
-                            </small>
-
-                            <span class="text-end text-muted"
-                                  style="font-size:0.65rem;">
-                                ${notification.time}
-                            </span>
-
-                        </a>
-                    `;
-               });
-            }
-            else {
-               html = `
-                    <div id="no-notif-msg"
-                         class="text-center py-4 text-muted"
-                         style="font-size:0.85rem;">
-                        No new unread notifications
-                    </div>
-                `;
-            }
-
-            $('#notification-list-container').html(html);
-         },
-
-         error: function (error) {
-            console.log(error);
-         }
-      });
-   }
-
-   // First Load
-   loadNotifications();
-
-   // $('#notificationDropdown').on('click', function () {
-   //    loadNotifications();
-   // });
-
-   // setInterval(loadNotifications, 30000);
-
+    window.userId = {{ auth()->id() }};
 </script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+
+    if (!window.userId || !window.Echo) {
+        return;
+    }
+
+    window.Echo
+        .private(`App.Models.User.${window.userId}`)
+        .notification((notification) => {
+
+            console.log('Realtime Notification:', notification);
+
+            updateNotification(notification);
+
+        });
+
+});
+</script>
+
+<script>
+function updateNotification(notification)
+{
+    let badge = $('#notif-badge');
+
+    let count = parseInt(badge.text()) || 0;
+
+    count++;
+
+    badge
+        .text(count)
+        .removeClass('d-none');
+
+    $('#notif-header-text')
+        .text(`Notifications (${count} Unread)`);
+
+    $('#no-notif-msg').remove();
+
+    let html = `
+        <a 
+        class="dropdown-item d-flex flex-column py-2 border-bottom">
+
+            <span class="fw-bold">
+                ${notification.title}
+            </span>
+
+            <small>
+                ${notification.message}
+            </small>
+
+            <span class="text-muted small">
+                Just now
+            </span>
+
+        </a>
+    `;
+
+    $('#notification-list-container')
+        .prepend(html);
+
+    toastr.success(notification.message);
+}
+</script>
+
+
 
 <script>
 

@@ -51,6 +51,7 @@ class Event extends Model
         return $this->hasMany(Task::class, 'event_id');
     }
 
+
     public function participants()
     {
         return $this->hasMany(Participant::class, 'event_id');

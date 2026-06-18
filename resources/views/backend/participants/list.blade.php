@@ -7,7 +7,7 @@
       <div class="modal-content">
 
         <div class="modal-header">
-          <h5 class="modal-title btn btn-outline-dark">Add Participant</h5>
+          <h5 class="modal-title btn btn-outline-secondary">Add Participant</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
         </div>
 

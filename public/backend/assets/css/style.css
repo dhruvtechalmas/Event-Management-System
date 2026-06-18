@@ -1636,3 +1636,31 @@ html[data-theme="dark"] {
   border-top-color: var(--admin-sidebar-border);
   color: var(--admin-sidebar-text);
 }
+
+
+/* =========================
+   GLOBAL DARK MODE SUPPORT
+========================= */
+
+html[data-theme="dark"] .card,
+html[data-theme="dark"] .card-header,
+html[data-theme="dark"] .card-body {
+    background: #1e293b !important;
+    color: #ffffff !important;
+    border-color: #334155 !important;
+}
+
+html[data-theme="dark"] .list-group-item {
+    background: #1e293b !important;
+    color: #ffffff !important;
+    border-color: #334155 !important;
+}
+
+html[data-theme="dark"] .text-muted {
+    color: #cbd5e1 !important;
+}
+
+html[data-theme="dark"] .badge.bg-light {
+    background: #334155 !important;
+    color: #ffffff !important;
+}

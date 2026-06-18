@@ -50,7 +50,7 @@
 
     /* Day Header */
     .fc-col-header-cell {
-        background: #f8f9fa;
+        background: var(--fc-header-bg, #f8f9fa);
         padding: 12px 0;
         font-weight: 700;
         font-size: 14px;
@@ -62,7 +62,7 @@
     }
 
     .fc-day-today {
-        background: #eef5ff !important;
+        background: var(--fc-today-bg, #eef5ff) !important;
     }
 
     /* Events */
@@ -115,6 +115,78 @@
         border-radius: 4px;
         margin-right: 8px;
     }
+
+    /* ======================
+   CALENDAR DARK MODE
+====================== */
+
+html[data-theme="dark"] .fc {
+    background: #1e293b !important;
+    color: #ffffff !important;
+}
+
+html[data-theme="dark"] .fc-toolbar-title,
+html[data-theme="dark"] .fc-col-header-cell-cushion,
+html[data-theme="dark"] .fc-daygrid-day-number {
+    color: #ffffff !important;
+}
+
+html[data-theme="dark"] .fc-col-header-cell {
+    background: #0f172a !important;
+}
+
+html[data-theme="dark"] .fc-day-today {
+    background: #334155 !important;
+}
+
+html[data-theme="dark"] .fc-theme-standard td,
+html[data-theme="dark"] .fc-theme-standard th,
+html[data-theme="dark"] .fc-scrollgrid {
+    border-color: #475569 !important;
+}
+
+html[data-theme="dark"] .fc-button {
+    background: #334155 !important;
+    border-color: #475569 !important;
+    color: #ffffff !important;
+}
+
+html[data-theme="dark"] .fc-button:hover {
+    background: #475569 !important;
+}
+
+html[data-theme="dark"] .fc-button-active {
+    background: #2563eb !important;
+    border-color: #2563eb !important;
+}
+
+
+/* FullCalendar Popover Dark Mode */
+html[data-theme="dark"] .fc-theme-standard .fc-popover {
+    background: #1e293b !important;
+    border: 1px solid #334155 !important;
+    color: #ffffff !important;
+}
+
+html[data-theme="dark"] .fc-popover-header {
+    background: #0f172a !important;
+    color: #ffffff !important;
+    border-bottom: 1px solid #334155 !important;
+}
+
+html[data-theme="dark"] .fc-popover-title {
+    color: #ffffff !important;
+}
+
+html[data-theme="dark"] .fc-popover-close {
+    color: #ffffff !important;
+    opacity: 0.8 !important;
+}
+
+html[data-theme="dark"] .fc-popover .fc-event {
+    color: #ffffff !important;
+}
+    
 </style>
 
 <div class="container-fluid py-4">

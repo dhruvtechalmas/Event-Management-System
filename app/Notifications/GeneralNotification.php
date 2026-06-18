@@ -6,6 +6,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
+use Illuminate\Notifications\Messages\BroadcastMessage;
 
 class GeneralNotification extends Notification implements ShouldQueue
 {
@@ -25,7 +26,7 @@ class GeneralNotification extends Notification implements ShouldQueue
      */
     public function via(): array
     {
-        return ['database'];
+        return ['database', 'broadcast'];
     }
 
     /**
@@ -66,14 +67,16 @@ class GeneralNotification extends Notification implements ShouldQueue
             ],
 
             'task_create' => [
-                'title' => 'New Task Assigned 📋', 
-                'message' => 'You have been assigned the task: ' . $this->data['task_title'], 
-                'type' => $this->type,],
-            
+                'title' => 'New Task Assigned 📋',
+                'message' => 'You have been assigned the task: ' . $this->data['task_title'],
+                'type' => $this->type,
+            ],
+
             'task_created_by_you' => [
-                'title' => 'Task Created Successfully ✔️', 
-                'message' => 'You successfully created the task: ' . $this->data['task_title'], 
-                'type' => $this->type,],
+                'title' => 'Task Created Successfully ✔️',
+                'message' => 'You successfully created the task: ' . $this->data['task_title'],
+                'type' => $this->type,
+            ],
 
             default => [
                 'title' => 'Notification',
@@ -81,6 +84,13 @@ class GeneralNotification extends Notification implements ShouldQueue
                 'type' => $this->type,
             ],
         };
+    }
+
+    public function toBroadcast($notifiable)
+    {
+        return new BroadcastMessage(
+            $this->toArray($notifiable)
+        );
     }
 
 }

@@ -10,6 +10,7 @@
   <link rel="stylesheet" href="{{ url('/backend/assets/css/bootstrap.min.css') }}">
   <link rel="stylesheet" href="{{ url('/backend/assets/vendors/bootstrap-icons/bootstrap-icons.css') }}">
   <link rel="stylesheet" href="{{ url('/backend/assets/css/style.css') }}">
+  @vite(['resources/js/app.js'])
 </head>
 
 <body>

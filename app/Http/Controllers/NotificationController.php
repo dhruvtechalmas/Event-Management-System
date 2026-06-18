@@ -44,28 +44,6 @@ class NotificationController extends Controller
         return view('backend.notifications.history', compact('notifications'));
     }
 
-    public function latest()
-    {
-        $notifications = auth()->user()
-            ->unreadNotifications
-            ->take(10)
-            ->map(function ($notification) {
 
-
-                return [
-                    'id' => $notification->id,
-                    'title' => $notification->data['title'] ?? '',
-                    'message' => $notification->data['message'] ?? '',
-                    'time' => $notification->created_at->diffForHumans(),
-                    'url' => $notification->data['action_url'] ?? '#',
-                ];
-            });
-
-        return response()->json([
-            'count' => auth()->user()->unreadNotifications()->count(),
-            'notifications' => $notifications->values(),
-        ]);
-
-    }
 
 }

@@ -29,7 +29,26 @@ class EventController extends Controller implements HasMiddleware
      */
     public function index()
     {
-        $events = Event::latest()->paginate(25);
+        Event::whereDate('event_date', '<', today())
+            ->whereIn('status', ['Ongoing', 'Completed'])
+            ->update([
+                'status' => 'Completed'
+            ]);
+
+        Event::whereDate('event_date', '<', today())
+            ->whereIn('status', ['Draft', 'Upcoming'])
+            ->update([
+                'status' => 'Cancelled'
+            ]);
+
+        $query = Event::query();
+
+        if (request()->filled('status')) {
+            $query->where('status', request('status'));
+        }
+
+        $events = $query->latest()->paginate(25)->withQueryString();
+
         return view('backend.events.list', compact('events'));
     }
 
@@ -78,6 +97,7 @@ class EventController extends Controller implements HasMiddleware
 
     public function show(Event $event)
     {
+        $event->loadCount('participants');
         return view('backend.events.view', compact('event'));
     }
 
