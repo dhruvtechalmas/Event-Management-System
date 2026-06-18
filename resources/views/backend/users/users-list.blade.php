@@ -44,63 +44,69 @@
         </div>
       </div>
 
-      {{-- <section class="row g-3 mt-1" aria-label="User summary">
+      <!-- 📊 TOP ROLE SUMMARY METRIC CARDS SECTION -->
+      {{-- <section class="row g-3 mb-4" aria-label="User role summary">
+        <!-- Card 1: Total Global Users Roster -->
         <div class="col-12 col-sm-6 col-xl-3">
           <article class="metric-card metric-primary">
             <div class="metric-top">
               <span class="metric-label">Total Users</span>
               <span class="metric-icon"><i class="bi bi-people" aria-hidden="true"></i></span>
             </div>
-            <div class="metric-value">8,742</div>
+            <div class="metric-value">{{ number_format($totalUsers ?? 0) }}</div>
             <div class="metric-meta">
-              <span class="text-success">+5.1%</span>
-              <span>this month</span>
+              <span class="text-primary">Master</span>
+              <span>system directory</span>
             </div>
           </article>
         </div>
 
-        <div class="col-12 col-sm-6 col-xl-3">
-          <article class="metric-card metric-success">
-            <div class="metric-top">
-              <span class="metric-label">Active</span>
-              <span class="metric-icon"><i class="bi bi-check2-circle" aria-hidden="true"></i></span>
-            </div>
-            <div class="metric-value">7,980</div>
-            <div class="metric-meta">
-              <span class="text-success">91%</span>
-              <span>healthy accounts</span>
-            </div>
-          </article>
-        </div>
-
-        <div class="col-12 col-sm-6 col-xl-3">
-          <article class="metric-card metric-warning">
-            <div class="metric-top">
-              <span class="metric-label">Pending</span>
-              <span class="metric-icon"><i class="bi bi-hourglass-split" aria-hidden="true"></i></span>
-            </div>
-            <div class="metric-value">184</div>
-            <div class="metric-meta">
-              <span class="text-warning">12</span>
-              <span>need approval</span>
-            </div>
-          </article>
-        </div>
-
+        <!-- Card 2: Super Admin Access Pool -->
         <div class="col-12 col-sm-6 col-xl-3">
           <article class="metric-card metric-danger">
             <div class="metric-top">
-              <span class="metric-label">Suspended</span>
-              <span class="metric-icon"><i class="bi bi-slash-circle" aria-hidden="true"></i></span>
+              <span class="metric-label">Super Admins</span>
+              <span class="metric-icon"><i class="bi bi-shield-lock" aria-hidden="true"></i></span>
             </div>
-            <div class="metric-value">38</div>
+            <div class="metric-value">{{ number_format($superAdminsCount ?? 0) }}</div>
             <div class="metric-meta">
-              <span class="text-danger">4</span>
-              <span>flagged today</span>
+              <span class="text-danger">Root</span>
+              <span>access controls</span>
+            </div>
+          </article>
+        </div>
+
+        <!-- Card 3: Event Manager Operational Group -->
+        <div class="col-12 col-sm-6 col-xl-3">
+          <article class="metric-card metric-warning">
+            <div class="metric-top">
+              <span class="metric-label">Event Managers</span>
+              <span class="metric-icon"><i class="bi bi-calendar-event" aria-hidden="true"></i></span>
+            </div>
+            <div class="metric-value">{{ number_format($eventManagersCount ?? 0) }}</div>
+            <div class="metric-meta">
+              <span class="text-warning">Operations</span>
+              <span>coordinators</span>
+            </div>
+          </article>
+        </div>
+
+        <!-- Card 4: Frontline Staff Team Count -->
+        <div class="col-12 col-sm-6 col-xl-3">
+          <article class="metric-card metric-success">
+            <div class="metric-top">
+              <span class="metric-label">Staff Members</span>
+              <span class="metric-icon"><i class="bi bi-person-workspace" aria-hidden="true"></i></span>
+            </div>
+            <div class="metric-value">{{ number_format($staffCount ?? 0) }}</div>
+            <div class="metric-meta">
+              <span class="text-success">Execution</span>
+              <span>operators roster</span>
             </div>
           </article>
         </div>
       </section> --}}
+
 
       <section class="panel mt-3">
         <div class="panel-header">
@@ -123,7 +129,7 @@
                 <th scope="col">Phone</th>
                 <th scope="col">Role</th>
                 <th scope="col">Joined</th>
-                <th scope="col" class="text-dark">Action</th>
+                <th scope="col">Action</th>
               </tr>
             </thead>
             <tbody>
@@ -164,7 +170,7 @@
                     <td>{{ $user->phone }}</td>
                     <td>{{ $user->role_id == 1 ? 'Super Admin' : ($user->role_id == 2 ? 'Event Manager' : 'Staff') }}</td>
                     <td>{{ $user->created_at }}</td>
-                    <td class="text-dark" style="white-space: nowrap;">
+                    <td style="white-space: nowrap;">
                       @can('user.edit')
                         <button class="btn btn-outline-success btn-sm" data-bs-toggle="modal"
                           data-bs-target="#editUserModal{{ $user->id }}" title="Edit User">

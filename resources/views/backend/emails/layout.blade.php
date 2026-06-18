@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
@@ -7,102 +7,128 @@
     <title>{{ config('app.name') }}</title>
 </head>
 
-<body style="
-    margin:0;
-    padding:0;
-    background:#f4f7fc;
-    font-family:Arial, Helvetica, sans-serif;
-    color:#374151;
-">
+<body style="margin:0;padding:0;background-color:#f1f5f9;font-family:Arial,Helvetica,sans-serif;">
 
-    <table width="100%" cellpadding="0" cellspacing="0" border="0" style="padding:40px 15px;background:#f4f7fc;">
+    <table width="100%" cellpadding="0" cellspacing="0" border="0"
+        style="background-color:#f1f5f9;padding:40px 15px;">
 
         <tr>
             <td align="center">
 
-                <table width="650" cellpadding="0" cellspacing="0" border="0" style="
-                    background:#ffffff;
-                    border-radius:20px;
-                    overflow:hidden;
-                    box-shadow:0 10px 35px rgba(0,0,0,0.08);
-                ">
+                <!-- Email Card -->
+                <table width="100%" cellpadding="0" cellspacing="0" border="0"
+                    style="max-width:650px;background:#ffffff;border-radius:24px;overflow:hidden;border:1px solid #e2e8f0;">
 
                     <!-- Header -->
                     <tr>
-                        <td align="center" style="
-                            background:linear-gradient(135deg,#6366f1,#818cf8);
-                            padding:40px;
-                        ">
+                        <td align="center"
+                            style="background:#0f172a;padding:50px 35px;">
 
                             <!-- Logo -->
-                            <img src="{{ url('images/logo.png') }}" width="75" alt="{{ config('app.name') }}" style="
-                                display:block;
-                                margin:auto;
-                                margin-bottom:20px;
-                                background:#fff;
-                                padding:15px;
-                                border-radius:20px;
-                            ">
+                            {{-- <div style="
+                                width:80px;
+                                height:80px;
+                                line-height:80px;
+                                border-radius:50%;
+                                background:#14b8a6;
+                                color:#ffffff;
+                                font-size:32px;
+                                font-weight:700;
+                                text-align:center;
+                                margin:0 auto 25px auto;">
+                                {{ substr(config('app.name'), 0, 1) }}
+                            </div> --}}
 
                             <h1 style="
-                            margin:0;
-                            color:#ffffff;
-                            font-size:30px;
-                            font-weight:700;
-                        ">
-                                {{ config('app.name') }}
+                                margin:0;
+                                color:#ffffff;
+                                font-size:32px;
+                                font-weight:700;
+                                letter-spacing:1px;">
+                                Dhruv
                             </h1>
 
                             <p style="
-                            margin-top:10px;
-                            color:#eef2ff;
-                            font-size:15px;
-                        ">
+                                margin:12px 0 0;
+                                color:#94a3b8;
+                                font-size:15px;
+                                letter-spacing:2px;
+                                text-transform:uppercase;">
                                 Event Management System
                             </p>
 
                         </td>
                     </tr>
 
-                    <!-- Dynamic Content -->
+                    <!-- Content -->
                     <tr>
-                        <td style="
-                        padding:45px;
-                        font-size:15px;
-                        line-height:1.8;
-                    ">
-                            @yield('content')
+                        <td style="padding:50px 40px;">
+
+                            {{-- <div style="height:35px;"></div> --}}
+
+                            <!-- Information Box -->
+                            <table width="100%" cellpadding="0" cellspacing="0"
+                                style="
+                                background:#f8fafc;
+                                border:1px solid #e2e8f0;
+                                border-radius:14px;">
+
+                                <tr>
+                                    <td style="padding:25px;">
+                                        @yield('content')
+                                    </td>
+                                </tr>
+
+                            </table>
+
+                            {{-- <div style="height:35px;"></div> --}}
+
+                        </td>
+                    </tr>
+
+                    <!-- Divider -->
+                    <tr>
+                        <td style="padding:0 40px;">
+                            <hr style="
+                                border:none;
+                                border-top:1px solid #e2e8f0;
+                                margin:0;">
                         </td>
                     </tr>
 
                     <!-- Footer -->
                     <tr>
-                        <td style="
-                        background:#fafbfc;
-                        border-top:1px solid #e5e7eb;
-                        padding:30px;
-                        text-align:center;
-                    ">
+                        <td align="center"
+                            style="
+                            background:#ffffff;
+                            padding:35px;">
 
                             <p style="
-                            margin:0;
-                            color:#6b7280;
-                            font-size:14px;
-                        ">
-                                Thank you for using
-                                <strong style="color:#4f46e5;">
-                                    {{ config('app.name') }}
-                                </strong>
+                                margin:0;
+                                color:#1e293b;
+                                font-size:15px;
+                                font-weight:600;">
+                                Thank you for choosing
+                                <span style="color:#14b8a6;">
+                                    {{ $event->event_name }}
+                                </span>
                             </p>
 
                             <p style="
-                            margin-top:12px;
-                            color:#9ca3af;
-                            font-size:13px;
-                        ">
+                                margin:18px 0 0;
+                                color:#64748b;
+                                font-size:13px;
+                                line-height:24px;">
+                                This is an automated email notification.<br>
+                                Please do not reply to this email.
+                            </p>
+
+                            <p style="
+                                margin:20px 0 0;
+                                color:#94a3b8;
+                                font-size:12px;">
                                 © {{ date('Y') }}
-                                {{ config('app.name') }}
-                                <br>
+                                {{ config('app.name') }}.
                                 All Rights Reserved.
                             </p>
 

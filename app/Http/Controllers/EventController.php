@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreEventRequest;
+use App\Http\Requests\UpdateEventRequest;
 use App\Models\Event;
 use App\Models\User;
 use App\Notifications\GeneralNotification;
@@ -43,50 +45,35 @@ class EventController extends Controller implements HasMiddleware
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreEventRequest $request)
     {
-        // dd($request->all());
-        $validatedEvent = $request->validate([
-            'event_name' => 'required|string|max:255',
-            'event_type' => 'nullable|string|max:255',
-            'event_date' => 'required|date',
-            'event_time' => 'nullable|date_format:H:i',
-            'event_location' => 'nullable|string|max:255',
-            'description' => 'nullable|string',
-            'status' => 'required|in:Draft,Upcoming,Ongoing,Completed,Cancelled',
-        ]);
 
-        if (!empty($validatedEvent['event_time'])) {
-            $validatedEvent['event_time'] .= ':00';
-        }
-
-        $event = Event::create($validatedEvent);
+        $event = Event::create($request->validated());
 
         $users = User::whereHas('tasks', function ($query) use ($event) {
             $query->where('event_id', $event->id);
         })->get();
 
-        foreach ($users as $user)
-            $user->notify(new GeneralNotification(
-                "New Event Assigned 🎉",
-                "You have been assigned to: " . $event->event_name,
-                'event_create'
-            ));
+        foreach ($users as $user) {
+            $user->notify(
+                new GeneralNotification('event_create', [
+                    'event_name' => $event->event_name,
+                ])
+            );
+        }
 
-        // 2. Notify the creator (jo bana rha hein usko) if he is not the assignee
-        if (auth()->id() != $event->user_id)
-            auth()->user()->notify(new GeneralNotification(
-                "Event Created Successfully ✔️",
-                "You successfully created: " . $event->event_name,
-                'event_create'
-            ));
+        if (auth()->id() != $event->user_id) {
+            auth()->user()->notify(
+                new GeneralNotification('event_created_by_you', [
+                    'event_name' => $event->event_name,
+                ])
+            );
+        }
 
-            
         return redirect()->route('events.index')->with([
             'message' => 'Event Created successful!',
             'alert-type' => 'success'
         ]);
-
     }
 
     public function show(Event $event)
@@ -107,51 +94,31 @@ class EventController extends Controller implements HasMiddleware
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Event $event)
+    public function update(UpdateEventRequest $request, Event $event)
     {
-        $event = Event::findOrFail($event->id);
-
-        $validatedEvent = $request->validate([
-            'event_name' => 'required|string|max:255',
-            'event_type' => 'nullable|string|max:255',
-            'event_date' => 'required|date',
-            'event_time' => 'nullable',
-            'date_format:H:i,H:i:s',
-            'event_location' => 'nullable|string|max:255',
-            'description' => 'nullable|string',
-            'status' => 'required|in:Draft,Upcoming,Ongoing,Completed,Cancelled',
-        ]);
-
-
-        if (!empty($validatedEvent['event_time'])) {
-            if (substr_count($validatedEvent['event_time'], ':') == 1) {
-                $validatedEvent['event_time'] .= ':00';
-            }
-        }
-
-        $event->update($validatedEvent);
+        $event->update($request->validated());
 
         $assignedUsers = User::whereHas('tasks', function ($query) use ($event) {
-
             $query->where('event_id', $event->id);
-
         })->get();
 
         foreach ($assignedUsers as $user) {
-            $title = "Event Updated: " . $event->event_name . " 🔄";
-            $message = "The schedule has been updated to " . $event->event_date;
-            $type = "event_create";
-
-            $user->notify(new GeneralNotification($title, $message, $type));
+            $user->notify(
+                new GeneralNotification('event_update', [
+                    'event_name' => $event->event_name,
+                    'event_date' => $event->event_date,
+                ])
+            );
         }
 
-        //jo user ne update kiya hein usko notification jayegi
-        if (auth()->id() != $event->user_id)
-            auth()->user()->notify(new GeneralNotification(
-                "Event Updated Successfully ✔️",
-                "You successfully Updated: " . $event->event_name,
-                'event_update'
-            ));
+        if (auth()->id() != $event->user_id) {
+            auth()->user()->notify(
+                new GeneralNotification('event_update', [
+                    'event_name' => $event->event_name,
+                    'event_date' => $event->event_date,
+                ])
+            );
+        }
 
         return redirect()->route('events.index')->with([
             'message' => 'Event Updated successful!',

@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreTaskRequest;
+use App\Http\Requests\UpdateTaskRequest;
 use App\Models\Task;
 use App\Models\Event;
 use App\Models\User;
@@ -59,28 +61,22 @@ class TaskController extends Controller implements HasMiddleware
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreTaskRequest $request)
     {
-        $validatedTask = $request->validate([
-            'title' => 'required|string|max:255',
-            'event_id' => 'required|exists:events,id',
-            'assigned_to' => 'nullable|exists:users,id',
-            'due_date' => 'required|date|max:10',
-            'status' => 'required|in:pending,in_progress,completed',
-            'comment' => 'nullable|string',
-        ]);
-
-        $task = Task::create($validatedTask);
+        $task = Task::create($request->validated());
         // dd($task->assigned_to);
 
         $assignedUser = User::find($task->assigned_to);
 
         if ($assignedUser) {
-            $title = "New Task Assigned 📋";
-            $message = "You have been assigned the task: " . $task->title;
-            $type = "task";
-
-            $assignedUser->notify(new GeneralNotification($title, $message, $type));
+            $assignedUser->notify(
+                new GeneralNotification(
+                    'task_create',
+                    [
+                        'task_title' => $task->title,
+                    ]
+                )
+            );
 
             if ($assignedUser->email) {
                 Mail::to($assignedUser->email)
@@ -88,16 +84,14 @@ class TaskController extends Controller implements HasMiddleware
             }
 
             // dd($assignedUser->email);
-
-            if (auth()->id() != $task->user_id) {
-                auth()->user()->notify(
-                    new GeneralNotification(
-                        "Task Created Successfully ✔️",
-                        "You successfully Task: " . $task->title,
-                        'task'
-                    )
-                );
-            }
+            auth()->user()->notify(
+                new GeneralNotification(
+                    'task_created_by_you',
+                    [
+                        'task_title' => $task->title,
+                    ]
+                )
+            );
 
         }
 
@@ -137,20 +131,11 @@ class TaskController extends Controller implements HasMiddleware
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Task $task)
+    public function update(UpdateTaskRequest $request, Task $task)
     {
         $task = Task::findOrFail($task->id);
 
-        $validatedTask = $request->validate([
-            'title' => 'required|string|max:255',
-            'event_id' => 'required|exists:events,id',
-            'assigned_to' => 'exists:users,id',
-            'due_date' => 'required|date|max:20',
-            'status' => 'required|in:pending,in_progress,completed',
-            'comment' => 'nullable|string',
-        ]);
-
-        $task->update($validatedTask);
+        $task->update($request->validated());
 
         return redirect()->route('tasks.index')->with([
             'message' => 'Task Created successful!',
@@ -175,7 +160,7 @@ class TaskController extends Controller implements HasMiddleware
         ]);
     }
 
-    public function viewDetails($id)
+    public function viewDetails(string $id)
     {
         $task = Task::with(['event', 'assignee'])->findOrFail($id);
 

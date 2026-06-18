@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ParticipantController;
@@ -16,9 +17,9 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/event-dashboard', function () {
-    return view('backend.index');
-})->middleware(['auth', 'verified'])->name('backend.index');
+// Route::get('/event-dashboard', function () {
+//     return view('backend.index');
+// })->middleware(['auth', 'verified'])->name('backend.index');
 
 
 Route::get('/settings', function () {
@@ -108,6 +109,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/events/{id}/pdf', [ReportController::class, 'downloadEventSummary'])->name('events.pdf.single');
     Route::get('/tasks/pdf/all', [ReportController::class, 'downloadAllTasksReport'])->name('tasks.pdf.all');
     Route::get('/tasks/{id}/pdf', [ReportController::class, 'downloadSingleTaskReport'])->name('tasks.pdf.single');
+
+    Route::get('/event-dashboard', [DashboardController::class, 'index'])->name('backend.index');
+   
 
 });
 

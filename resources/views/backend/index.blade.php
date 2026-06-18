@@ -11,7 +11,7 @@
           <div>
             <p class="eyebrow mb-1">Overview</p>
             <h1 class="h3 mb-1">Dashboard</h1>
-            <p class="text-muted mb-0">Monitor performance, sales, users, and support from one clean workspace.</p>
+            <p class="text-muted mb-0">Recent Events, Upcoming Events, Participants, and Task from one clean workspace.</p>
           </div>
         </div>
         {{-- <div class="heading-actions"><button class="btn btn-outline-secondary btn-sm" type="button"><i
@@ -20,64 +20,312 @@
       </div>
 
       <section class="row g-3 mt-1" aria-label="Dashboard metrics">
-        <div class="col-12 col-sm-6 col-xl-3">
+        <div class="col-12 col-sm-6 col-lg">
           <article class="metric-card metric-primary">
             <div class="metric-top">
-              <span class="metric-label">Revenue</span>
-              <span class="metric-icon"><i class="bi bi-currency-dollar" aria-hidden="true"></i></span>
+              <span class="metric-label">Total Events</span>
+              <span class="metric-icon"><i class="bi-calendar-event" aria-hidden="true"></i></span>
             </div>
-            <div class="metric-value">$48,240</div>
+            <div class="metric-value">{{ $totalEvents }}</div>
             <div class="metric-meta">
-              <span class="text-success">+12.5%</span>
-              <span>from last month</span>
+              <span>Total Events</span>
             </div>
           </article>
         </div>
 
-        <div class="col-12 col-sm-6 col-xl-3">
+        <div class="col-12 col-sm-6 col-lg">
           <article class="metric-card metric-success">
             <div class="metric-top">
-              <span class="metric-label">Orders</span>
-              <span class="metric-icon"><i class="bi bi-bag-check" aria-hidden="true"></i></span>
+              <span class="metric-label">Upcoming Events</span>
+              <span class="metric-icon"><i class="bi-calendar2-week" aria-hidden="true"></i></span>
             </div>
-            <div class="metric-value">1,284</div>
+            <div class="metric-value">{{ $upcomingEvents }}</div>
             <div class="metric-meta">
-              <span class="text-success">+8.2%</span>
-              <span>new orders</span>
+              <span>Upcoming Events</span>
             </div>
           </article>
         </div>
 
-        <div class="col-12 col-sm-6 col-xl-3">
+        <div class="col-12 col-sm-6 col-lg">
           <article class="metric-card metric-warning">
             <div class="metric-top">
-              <span class="metric-label">Customers</span>
-              <span class="metric-icon"><i class="bi bi-people" aria-hidden="true"></i></span>
+              <span class="metric-label">Total Participants</span>
+              <span class="metric-icon"><i class="bi-people" aria-hidden="true"></i></span>
             </div>
-            <div class="metric-value">8,742</div>
+            <div class="metric-value">{{ $totalParticipants }}</div>
             <div class="metric-meta">
-              <span class="text-success">+5.1%</span>
-              <span>active users</span>
+              <span>Total Participants</span>
             </div>
           </article>
         </div>
 
-        <div class="col-12 col-sm-6 col-xl-3">
+        <div class="col-12 col-sm-6 col-lg">
           <article class="metric-card metric-danger">
             <div class="metric-top">
-              <span class="metric-label">Tickets</span>
-              <span class="metric-icon"><i class="bi bi-life-preserver" aria-hidden="true"></i></span>
+              <span class="metric-label">Total Tasks</span>
+              <span class="metric-icon"><i class="bi-list-task" aria-hidden="true"></i></span>
             </div>
-            <div class="metric-value">36</div>
+            <div class="metric-value">{{ $totalTasks }}</div>
             <div class="metric-meta">
-              <span class="text-danger">3 urgent</span>
-              <span>need review</span>
+              <span>Total Tasks</span>
+            </div>
+          </article>
+        </div>
+
+        <div class="col-12 col-sm-6 col-lg">
+          <article class="metric-card metric-info">
+            <div class="metric-top">
+              <span class="metric-label">Completed Tasks</span>
+              <span class="metric-icon"><i class="bi-check-circle" aria-hidden="true"></i></span>
+            </div>
+            <div class="metric-value">{{ $completedTasks }}</div>
+            <div class="metric-meta">
+              <span>Completed Tasks</span>
             </div>
           </article>
         </div>
       </section>
 
-      <section class="row g-3 mt-1">
+      <!-- ================= Row 2 ================= -->
+
+<section class="row g-3 mt-3">
+
+<!-- Recent Events -->
+<div class="col-12 col-xl-6">
+    <div class="panel h-100">
+
+        <div class="panel-header">
+            <div>
+                <h2 class="h5 mb-1 section-title">
+                    <i class="bi bi-calendar-event me-2"></i>
+                    <span>Recent Events</span>
+                </h2>
+
+                <p class="text-muted mb-0">
+                    Latest created events in the system.
+                </p>
+            </div>
+
+            <a href="{{ route('events.index') }}"
+               class="btn btn-light btn-sm">
+                View All
+            </a>
+        </div>
+
+        <div class="activity-list">
+
+            @forelse($recentEvents as $event)
+
+                <div class="activity-item">
+
+                    <span class="activity-dot bg-primary"></span>
+
+                    <div>
+                        <p class="mb-1 fw-semibold">
+                            {{ $event->event_name }}
+                        </p>
+
+                        <p class="text-muted small mb-0">
+                            {{ \Carbon\Carbon::parse($event->event_date)->format('d M Y') }}
+                            •
+                            {{ $event->status }}
+                        </p>
+                    </div>
+
+                </div>
+
+            @empty
+
+                <p class="text-center text-muted py-4">
+                    No recent events found.
+                </p>
+
+            @endforelse
+
+        </div>
+
+    </div>
+</div>
+
+<!-- Upcoming Events -->
+<div class="col-12 col-xl-6">
+    <div class="panel h-100">
+
+        <div class="panel-header">
+            <div>
+                <h2 class="h5 mb-1 section-title">
+                    <i class="bi bi-calendar2-week me-2"></i>
+                    <span>Upcoming Events</span>
+                </h2>
+
+                <p class="text-muted mb-0">
+                    Events scheduled for upcoming days.
+                </p>
+            </div>
+
+            <a href="{{ route('events.index') }}"
+               class="btn btn-light btn-sm">
+                View All
+            </a>
+        </div>
+
+        <div class="activity-list">
+
+            @forelse($upcomingEventList as $event)
+
+                <div class="activity-item">
+
+                    <span class="activity-dot bg-success"></span>
+
+                    <div>
+                        <p class="mb-1 fw-semibold">
+                            {{ $event->event_name }}
+                        </p>
+
+                        <p class="text-muted small mb-0">
+                            {{ \Carbon\Carbon::parse($event->event_date)->format('d M Y') }}
+                            @if($event->event_time)
+                                • {{ \Carbon\Carbon::parse($event->event_time)->format('h:i A') }}
+                            @endif
+                        </p>
+                    </div>
+
+                </div>
+
+            @empty
+
+                <p class="text-center text-muted py-4">
+                    No upcoming events found.
+                </p>
+
+            @endforelse
+
+        </div>
+
+    </div>
+</div>
+
+</section>
+
+<!-- ================= Row 3 ================= -->
+
+<section class="row g-3 mt-3">
+
+<!-- Pending Tasks -->
+<div class="col-12 col-xl-6">
+    <div class="panel h-100">
+
+        <div class="panel-header">
+            <div>
+                <h2 class="h5 mb-1 section-title">
+                    <i class="bi bi-list-task me-2"></i>
+                    <span>Pending Tasks</span>
+                </h2>
+
+                <p class="text-muted mb-0">
+                    Tasks waiting for completion.
+                </p>
+            </div>
+
+            <a href="{{ route('tasks.index') }}"
+               class="btn btn-light btn-sm">
+                View All
+            </a>
+        </div>
+
+        <div class="activity-list">
+
+            @forelse($pendingTasks as $task)
+
+                <div class="activity-item">
+
+                    <span class="activity-dot bg-warning"></span>
+
+                    <div>
+                        <p class="mb-1 fw-semibold">
+                            {{ $task->title }}
+                        </p>
+
+                        <p class="text-muted small mb-0">
+                            Due:
+                            {{ \Carbon\Carbon::parse($task->due_date)->format('d M Y') }}
+                        </p>
+                    </div>
+
+                </div>
+
+            @empty
+
+                <p class="text-center text-muted py-4">
+                    No pending tasks found.
+                </p>
+
+            @endforelse
+
+        </div>
+
+    </div>
+</div>
+
+<!-- Recent Notifications -->
+<div class="col-12 col-xl-6">
+    <div class="panel h-100">
+
+        <div class="panel-header">
+            <div>
+                <h2 class="h5 mb-1 section-title">
+                    <i class="bi bi-bell me-2"></i>
+                    <span>Recent Notifications</span>
+                </h2>
+
+                <p class="text-muted mb-0">
+                    Latest activities and updates.
+                </p>
+            </div>
+
+            <a href="{{ route('notifications.history') }}"
+               class="btn btn-light btn-sm">
+                View All
+            </a>
+        </div>
+
+        <div class="activity-list">
+
+            @forelse($notifications as $notification)
+
+                <div class="activity-item">
+
+                    <span class="activity-dot bg-danger"></span>
+
+                    <div>
+                        <p class="mb-1 fw-semibold">
+                            {{ $notification->data['message'] ?? 'Notification' }}
+                        </p>
+
+                        <p class="text-muted small mb-0">
+                            {{ $notification->created_at->diffForHumans() }}
+                        </p>
+                    </div>
+
+                </div>
+
+            @empty
+
+                <p class="text-center text-muted py-4">
+                    No notifications found.
+                </p>
+
+            @endforelse
+
+        </div>
+
+    </div>
+</div>
+
+</section>
+
+
+      {{-- <section class="row g-3 mt-1">
         <div class="col-12 col-xl-8">
           <div class="panel">
             <div class="panel-header">
@@ -132,9 +380,9 @@
             </div>
           </div>
         </div>
-      </section>
+      </section> --}}
 
-      <section class="panel mt-3">
+      {{-- <section class="panel mt-3">
         <div class="panel-header">
           <div>
             <h2 class="h5 mb-1 section-title"><i class="bi bi-people" aria-hidden="true"></i><span>Recent Users</span>
@@ -158,76 +406,9 @@
                 <th scope="col" class="text-dark">Action</th>
               </tr>
             </thead>
-            {{-- <tbody> --}}
-              {{-- @if ($users->IsNotEmpty())
-              @foreach ($users as $user)
-
-              @php
-              $colors = [
-              '#ef4444',
-              '#3b82f6',
-              '#10b981',
-              '#f59e0b',
-              '#8b5cf6',
-              '#ec4899',
-              '#14b8a6',
-              '#f97316',
-              ];
-
-              $color = $colors[ord(strtoupper(substr($user->email, 0, 1))) % count($colors)];
-              @endphp
-
-              <tr>
-                <td>{{ $user->id }}</td>
-                <td>
-                  <div class="d-flex align-items-center gap-2">
-
-                    <div class="avatar-circle" style="background-color: {{ $color }}">
-                      {{ strtoupper(substr($user->email, 0, 1)) }}
-                    </div>
-
-                    <span class="fw-semibold">
-                      {{ $user->name }}
-                    </span>
-
-                  </div>
-                </td>
-                <td>{{ $user->email }}</td>
-                <td>{{ $user->phone }}</td>
-                <td>{{ $user->role_id == 1 ? 'Super Admin' : ($user->role_id == 2 ? 'Event Manager' : 'Staff') }}</td>
-                <td>{{ $user->created_at }}</td>
-                <td class="text-dark">
-                  @can('user.edit')
-                  <button class="btn btn-success btn-sm" data-bs-toggle="modal"
-                    data-bs-target="#editUserModal{{ $user->id }}">
-                    Edit
-                  </button>
-                  @endcan
-
-                  @can('user.delete')
-                  <form action="{{ route('users.destroy', $user->id) }}" method="POST" style="display: inline;">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit" class="btn btn-danger btn-sm"
-                      onclick="return confirm('Are you sure you want to delete this user?')">
-                      Delete
-                    </button>
-                  </form>
-                  @endcan
-
-                  @can('user.view')
-                  <a class="btn btn-light btn-sm" href="{{ route('users.show', $user->id) }}">View</a>
-                  @endcan
-                </td>
-              </tr>
-
-              @include('backend.users.edit', ['user' => $user, 'roles' => $roles])
-              @endforeach
-              @endif
-            </tbody> --}}
           </table>
         </div>
-      </section>
+      </section> --}}
     </div>
   </main>
 

@@ -59,8 +59,8 @@
 
   onReady(function () {
     var body = document.body;
-    var sidebarToggle = document.querySelector("[data-sidebar-toggle]");
-    var themeToggles = document.querySelectorAll("[data-theme-toggle]");
+    var sidebarToggle = document.querySelector(".sidebar-toggle, [data-sidebar-toggle]");
+    var themeToggles = document.querySelectorAll(".theme-toggle, [data-theme-toggle]");
     var themeIcons = document.querySelectorAll("[data-theme-icon]");
     var closeButtons = document.querySelectorAll("[data-sidebar-close]");
     var sidebarLinks = document.querySelectorAll(".sidebar-nav .nav-link");
@@ -240,5 +240,8 @@
     } else if (mediaQuery.addListener) {
       mediaQuery.addListener(handleBreakpointChange);
     }
+
+
+    
   });
 })();

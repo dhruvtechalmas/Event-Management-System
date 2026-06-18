@@ -2,15 +2,11 @@
 @yield('content')
 @include('backend.layout.footer')
 
-<script src="{{ url('backend/assets/js/bootstrap.bundle.min.js') }}"></script>
-<script src="{{ url('backend/assets/js/main.js') }}"></script>
 
 {{-- Todtr message --}}
 
-<!-- Put this in the <head> section -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
 
-<!-- Put these before the closing </body> tag -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
@@ -103,6 +99,7 @@
 </script>
 
 
+{{-- loadnotification --}}
 <script>
    function loadNotifications() {
       $.ajax({

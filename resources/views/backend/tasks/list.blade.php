@@ -51,13 +51,13 @@
           <table class="table align-middle mb-0" id="tasksTable" data-searchable-table>
             <thead>
               <tr>
-                <th class="text-dark">#</th>
-                <th class="text-dark">Task Title </th>
-                <th class="text-dark">Event Name</th>
-                <th class="text-dark">Assign Task</th>
-                <th class="text-dark">Due Date</th>
-                <th class="text-dark">Status</th>
-                <th class="text-dark ">Action</th>
+                <th>#</th>
+                <th>Task Title </th>
+                <th>Event Name</th>
+                <th>Assign Task</th>
+                <th>Due Date</th>
+                <th>Status</th>
+                <th>Action</th>
               </tr>
             </thead>
             <tbody class="table-border-bottom-0">

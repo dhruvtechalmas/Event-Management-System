@@ -56,20 +56,20 @@
           <table class="table align-middle mb-0" id="eventsTable" data-searchable-table>
             <thead>
               <tr>
-                <th class="text-dark">#</th>
-                <th class="text-dark">Event Name</th>
-                <th class="text-dark">Event Type</th>
-                <th class="text-dark">Event Date</th>
-                <th class="text-dark">Event Time</th>
-                <th class="text-dark">Event Status</th>
-                <th class="text-dark ">Action</th>
+                <th>#</th>
+                <th>Event Name</th>
+                <th>Event Type</th>
+                <th>Event Date</th>
+                <th>Event Time</th>
+                <th>Event Status</th>
+                <th>Action</th>
               </tr>
             </thead>
             <tbody>
               @foreach ($events as $event)
                         <tr>
                           <td class="fw-semibold">{{ $event->id }}</td>
-                          <td class="text-dark">{{ $event->event_name }}</td>
+                          <td>{{ $event->event_name }}</td>
                           <td>{{ $event->event_type }}</td>
                           <!-- Date Only -->
                           <td style="white-space: nowrap;">

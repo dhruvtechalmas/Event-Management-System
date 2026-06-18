@@ -2,178 +2,171 @@
 
 @section('content')
 
-    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.css" rel="stylesheet">
 
-    <style>
-        .calendar-card {
-            border: none;
-            border-radius: 15px;
-            overflow: hidden;
-        }
+<style>
+    .calendar-card {
+        border: none;
+        border-radius: 15px;
+        overflow: hidden;
+    }
 
-        #calendar {
-            width: 100%;
-        }
+    #calendar {
+        width: 100%;
+        min-height: 800px;
+    }
 
-        /* Toolbar */
-        .fc .fc-toolbar {
-            margin-bottom: 20px !important;
-        }
+    /* Header */
+    .fc .fc-toolbar {
+        margin-bottom: 20px !important;
+    }
 
-        .fc .fc-toolbar-title {
-            font-size: 24px !important;
-            font-weight: 700 !important;
-            color: #212529;
-        }
+    .fc .fc-toolbar-title {
+        font-size: 24px !important;
+        font-weight: 700 !important;
+        color: #212529;
+    }
 
-        /* Buttons */
-        .fc .fc-button {
-            background: #fff !important;
-            border: 1px solid #dee2e6 !important;
-            color: #495057 !important;
-            padding: 8px 16px !important;
-            margin: 0 4px !important;
-            border-radius: 8px !important;
-            font-weight: 600 !important;
-        }
+    /* Buttons */
+    .fc .fc-button {
+        background: #fff !important;
+        border: 1px solid #dee2e6 !important;
+        color: #495057 !important;
+        padding: 8px 16px !important;
+        margin: 0 4px !important;
+        border-radius: 8px !important;
+        font-weight: 600 !important;
+    }
 
-        .fc .fc-button:hover {
-            background: #f8f9fa !important;
-        }
+    .fc .fc-button:hover {
+        background: #f8f9fa !important;
+    }
 
-        .fc .fc-button-active {
-            background: #0d6efd !important;
-            color: #fff !important;
-            border-color: #0d6efd !important;
-        }
+    .fc .fc-button-active {
+        background: #0d6efd !important;
+        color: #fff !important;
+        border-color: #0d6efd !important;
+    }
 
-        /* Day Header */
-        .fc-col-header-cell {
-            background: #f8f9fa;
-            padding: 10px 0;
-            font-weight: 700;
-            font-size: 14px;
-        }
+    /* Day Header */
+    .fc-col-header-cell {
+        background: #f8f9fa;
+        padding: 12px 0;
+        font-weight: 700;
+        font-size: 14px;
+    }
 
-        /* Calendar Days */
-        .fc-daygrid-day {
-            min-height: 120px !important;
-        }
+    /* Days */
+    .fc-daygrid-day {
+        min-height: 130px !important;
+    }
 
-        .fc-day-today {
-            background: #eef5ff !important;
-        }
+    .fc-day-today {
+        background: #eef5ff !important;
+    }
 
-        /* Events */
-        .fc-event {
-            border: none !important;
-            border-radius: 6px !important;
-            padding: 4px 8px !important;
-            font-size: 12px !important;
-            font-weight: 700 !important;
-            color: #fff !important;
-            min-height: 24px !important;
-            line-height: 16px !important;
-            cursor: pointer;
-        }
+    /* Events */
+    .fc-event {
+        border: none !important;
+        border-radius: 6px !important;
+        padding: 4px 8px !important;
+        font-size: 12px !important;
+        font-weight: 600 !important;
+        color: #fff !important;
+        cursor: pointer;
+    }
 
-        .fc-event:hover {
-            opacity: .9;
-        }
+    .fc-event:hover {
+        opacity: .9;
+    }
 
-        .fc-event-title {
-            color: #fff !important;
-            font-weight: 700 !important;
-        }
+    .fc-event-title,
+    .fc-event-time {
+        color: #fff !important;
+        font-weight: 600 !important;
+    }
 
-        .fc-event-time {
-            color: #fff !important;
-            font-weight: 700 !important;
-        }
+    .fc-theme-standard .fc-scrollgrid {
+        border-radius: 10px;
+        overflow: hidden;
+        border: 1px solid #dee2e6;
+    }
 
-        .fc-daygrid-event-dot {
-            display: none !important;
-        }
+    /* Status Row */
+    .status-list {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 25px;
+        margin-top: 12px;
+    }
 
-        .fc-theme-standard .fc-scrollgrid {
-            border-radius: 10px;
-            overflow: hidden;
-            border: 1px solid #dee2e6;
-        }
+    .status-item {
+        display: flex;
+        align-items: center;
+        font-size: 14px;
+        font-weight: 600;
+        color: #495057;
+    }
 
-        /* Status Box */
-        .legend-box {
-            width: 16px;
-            height: 16px;
-            border-radius: 4px;
-            display: inline-block;
-            margin-right: 8px;
-        }
-    </style>
+    .legend-box {
+        width: 15px;
+        height: 15px;
+        border-radius: 4px;
+        margin-right: 8px;
+    }
+</style>
 
-    <div class="container-fluid py-4">
+<div class="container-fluid py-4">
 
-        <div class="row">
+    <div class="row">
 
-            <div class="col-lg-9">
+        <div class="col-12">
 
-                <div class="card shadow-sm calendar-card">
+            <div class="card shadow-sm calendar-card">
 
-                    <div class="card-header bg-white">
-                        <h4 class="mb-0 fw-bold">
-                            <i class="bi bi-calendar-event"></i>
-                            Event Calendar
-                        </h4>
-                    </div>
+                <div class="card-header bg-white">
 
-                    <div class="card-body">
+                    <h4 class="mb-0 fw-bold">
+                        <i class="bi bi-calendar-event"></i>
+                        Event Calendar
+                    </h4>
 
-                        <div id="calendar"></div>
+                    <!-- Horizontal Status Row -->
+                    <div class="status-list">
+
+                        <div class="status-item">
+                            <span class="legend-box bg-secondary"></span>
+                            Draft
+                        </div>
+
+                        <div class="status-item">
+                            <span class="legend-box bg-primary"></span>
+                            Upcoming
+                        </div>
+
+                        <div class="status-item">
+                            <span class="legend-box bg-success"></span>
+                            Ongoing
+                        </div>
+
+                        <div class="status-item">
+                            <span class="legend-box bg-info"></span>
+                            Completed
+                        </div>
+
+                        <div class="status-item">
+                            <span class="legend-box bg-danger"></span>
+                            Cancelled
+                        </div>
 
                     </div>
 
                 </div>
 
-            </div>
+                <div class="card-body p-4">
 
-            <div class="col-lg-3">
-
-                <div class="card shadow-sm border-0">
-
-                    <div class="card-header bg-white">
-                        <h5 class="mb-0 fw-bold">
-                            Event Status
-                        </h5>
-                    </div>
-
-                    <div class="card-body">
-
-                        <p>
-                            <span class="legend-box bg-secondary"></span>
-                            Draft
-                        </p>
-
-                        <p>
-                            <span class="legend-box bg-primary"></span>
-                            Upcoming
-                        </p>
-
-                        <p>
-                            <span class="legend-box bg-success"></span>
-                            Ongoing
-                        </p>
-
-                        <p>
-                            <span class="legend-box bg-info"></span>
-                            Completed
-                        </p>
-
-                        <p>
-                            <span class="legend-box bg-danger"></span>
-                            Cancelled
-                        </p>
-
-                    </div>
+                    <div id="calendar"></div>
 
                 </div>
 
@@ -183,72 +176,57 @@
 
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js"></script>
+</div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js"></script>
 
-            let calendarEl = document.getElementById('calendar');
+<script>
+document.addEventListener('DOMContentLoaded', function () {
 
-            let calendar = new FullCalendar.Calendar(calendarEl, {
+    let calendarEl = document.getElementById('calendar');
 
-                initialView: 'dayGridMonth',
+    let calendar = new FullCalendar.Calendar(calendarEl, {
 
-                height: 750,
+        initialView: 'dayGridMonth',
 
-                dayMaxEvents: false,
+        height: 850,
 
-                displayEventTime: true,
+        dayMaxEvents: true,
 
-                eventDisplay: 'block',
+        displayEventTime: true,
 
-                headerToolbar: {
-                    left: 'prev,next today',
-                    center: 'title',
-                    right: 'dayGridMonth,timeGridWeek,timeGridDay'
-                },
+        eventDisplay: 'block',
 
-                events: function (fetchInfo, successCallback, failureCallback) {
+        headerToolbar: {
+            left: 'prev,next today',
+            center: 'title',
+            right: 'dayGridMonth,timeGridWeek,timeGridDay'
+        },
 
-                    fetch('/api/events')
-                        .then(response => response.json())
-                        .then(data => {
+        buttonText: {
+            today: 'Today',
+            month: 'Month',
+            week: 'Week',
+            day: 'Day'
+        },
 
-                            console.log('Events Loaded:', data);
+        events: "{{ route('calendar.events') }}",
 
-                            successCallback(data);
+        eventClick: function(info) {
 
-                        })
-                        .catch(error => {
+            info.jsEvent.preventDefault();
 
-                            console.error('Event Error:', error);
+            if (info.event.url) {
+                window.location.href = info.event.url;
+            }
 
-                            failureCallback(error);
+        }
 
-                        });
-                },
+    });
 
-                eventClick: function (info) {
+    calendar.render();
 
-                    info.jsEvent.preventDefault();
-
-                    if (info.event.url) {
-                        window.location.href = info.event.url;
-                    }
-
-                },
-
-                eventDidMount: function (info) {
-
-                    console.log('Rendered Event:', info.event.title);
-
-                }
-
-            });
-
-            calendar.render();
-
-        });
-    </script>
+});
+</script>
 
 @endsection

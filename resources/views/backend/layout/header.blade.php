@@ -87,18 +87,17 @@
       </nav>
 
 
-      <div class="sidebar-user">
+      {{-- <div class="sidebar-user">
         <img class="avatar-img avatar-md sidebar-user-avatar"
           src="{{ url('/backend/assets/images/avatar/avatar-2.jpg') }}" alt="Admin Hasan">
         <strong>Super Admin</strong>
         <small>Active Workspace</small>
       </div>
-
-
       <div class="sidebar-footer">
         <span class="status-dot"></span>
         <span class="sidebar-footer-text">System running smoothly</span>
-      </div>
+      </div> --}}
+
     </aside>
 
     <div class="admin-main">
@@ -111,10 +110,10 @@
             <span></span>
           </button>
 
-          <form class="d-none d-md-flex ms-3 flex-grow-1" role="search">
+          {{-- <form class="d-none d-md-flex ms-3 flex-grow-1" role="search">
             <input class="form-control search-input" type="search" placeholder="Search users, orders, reports"
               aria-label="Search">
-          </form>
+          </form> --}}
 
           <div class="navbar-actions ms-auto">
             <button class="icon-button theme-toggle" type="button" data-theme-toggle aria-label="Switch color theme"

@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreParticipantRequest;
+use App\Http\Requests\UpdateParticipantRequest;
 use App\Models\Event;
 use App\Models\Participant;
 use App\Models\Task;
@@ -54,20 +56,12 @@ class ParticipantController extends Controller implements HasMiddleware
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreParticipantRequest $request)
     {
-        $validatedParticipant = $request->validate([
-            'full_name' => 'required|string|max:255',
-            'email' => 'required|email|unique:participants',
-            'event_id' => 'required|exists:events,id',
-            'phone' => 'nullable|string|max:20',
-            'address' => 'nullable|string|max:255',
-            'notes' => 'nullable|string',
-        ]);
 
-        $participant = Participant::create($validatedParticipant);
+        $participant = Participant::create($request->validated());
 
-        $event = Event::findOrFail($validatedParticipant['event_id']);
+        $event = Event::findOrFail($participant->event_id);
 
         Mail::to($participant->email)
             ->send(new EventInvitationMail($event, $participant));
@@ -75,14 +69,13 @@ class ParticipantController extends Controller implements HasMiddleware
         Mail::to($participant->email)
             ->send(new ParticipantRegistrationMail($participant, $event));
 
-            // dd($participant->email);
+        // dd($participant->email);
 
 
         return redirect()->route('participants.index')->with([
             'message' => 'Participant Created successful!',
             'alert-type' => 'success'
         ]);
-
     }
 
 
@@ -103,27 +96,17 @@ class ParticipantController extends Controller implements HasMiddleware
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Participant $participant)
+    public function update(UpdateParticipantRequest $request, Participant $participant)
     {
 
         $participant = Participant::findOrFail($participant->id);
 
-        $validatedParticipant = $request->validate([
-            'full_name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:participants,email,' . $participant->id,
-            'event_id' => 'required|exists:events,id',
-            'phone' => 'nullable|string|max:20',
-            'address' => 'nullable|string|max:255',
-            'notes' => 'nullable|string',
-        ]);
-
-        $participant->update($validatedParticipant);
+        $participant->update($request->validated());
 
         return redirect()->route('participants.index')->with([
             'message' => 'Participant Updated successful!',
             'alert-type' => 'success'
         ]);
-
     }
 
     /**

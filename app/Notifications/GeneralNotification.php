@@ -7,29 +7,21 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class GeneralNotification extends Notification  implements ShouldQueue
+class GeneralNotification extends Notification implements ShouldQueue
 {
     use Queueable;
 
-    public $title;
-    public $message;
-    public $type;
-    
+    protected $type;
+    protected $data;
 
-    /**
-     * Create a new notification instance.
-     */
-    public function __construct($title,$message,$type)
+    public function __construct($type, $data = [])
     {
-        $this->title = $title;
-        $this->message = $message;
         $this->type = $type;
+        $this->data = $data;
     }
 
     /**
      * Get the notification's delivery channels.
-     *
-     * @return array<int, string>
      */
     public function via(): array
     {
@@ -42,22 +34,53 @@ class GeneralNotification extends Notification  implements ShouldQueue
     public function toMail(): MailMessage
     {
         return (new MailMessage)
-            ->line('The introduction to the notification.')
-            ->action('Notification Action', url('/'))
+            ->line('You have a new notification.')
+            ->action('View', url('/'))
             ->line('Thank you for using our application!');
     }
 
     /**
      * Get the array representation of the notification.
-     *
-     * @return array<string, mixed>
      */
-    public function toArray(): array
+    public function toArray($notifiable)
     {
-        return [
-            'title' => $this->title,
-            'message' => $this->message,
-            'type' => $this->type,
-        ];
+        return match ($this->type) {
+
+            'event_create' => [
+                'title' => 'New Event Assigned 🎉',
+                'message' => 'You have been assigned to: ' . $this->data['event_name'],
+                'type' => $this->type,
+            ],
+
+            'event_update' => [
+                'title' => 'Event Updated 🔄',
+                'message' => 'The event "' . $this->data['event_name'] .
+                    '" has been updated to ' . $this->data['event_date'],
+                'type' => $this->type,
+            ],
+
+            'event_created_by_you' => [
+                'title' => 'Event Created Successfully ✔️',
+                'message' => 'You successfully created: ' . $this->data['event_name'],
+                'type' => $this->type,
+            ],
+
+            'task_create' => [
+                'title' => 'New Task Assigned 📋', 
+                'message' => 'You have been assigned the task: ' . $this->data['task_title'], 
+                'type' => $this->type,],
+            
+            'task_created_by_you' => [
+                'title' => 'Task Created Successfully ✔️', 
+                'message' => 'You successfully created the task: ' . $this->data['task_title'], 
+                'type' => $this->type,],
+
+            default => [
+                'title' => 'Notification',
+                'message' => 'You have a new notification.',
+                'type' => $this->type,
+            ],
+        };
     }
+
 }

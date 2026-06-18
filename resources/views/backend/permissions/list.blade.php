@@ -48,10 +48,10 @@
           <table class="table align-middle mb-0" id="permissionsTable" data-searchable-table>
             <thead>
               <tr>
-                <th class="text-dark">#</th>
-                <th class="text-dark">Permission Name</th>
-                <th class="text-dark">Created</th>
-                <th class="text-dark text-right">Action</th>
+                <th>#</th>
+                <th>Permission Name</th>
+                <th>Created</th>
+                <th class="text-right">Action</th>
               </tr>
             </thead>
             <tbody class="table-border-bottom-0">

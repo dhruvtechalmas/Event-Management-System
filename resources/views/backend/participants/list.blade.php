@@ -49,12 +49,12 @@
           <table class="table align-middle mb-0" id="participantsTable" data-searchable-table>
             <thead>
               <tr>
-                <th class="text-dark">#</th>
-                <th class="text-dark">Participant Name</th>
-                <th class="text-dark">Email</th>
-                <th class="text-dark">Event Name</th>
-                <th class="text-dark">Phone</th>
-                <th class="text-dark text-right">Action</th>
+                <th>#</th>
+                <th>Participant Name</th>
+                <th>Email</th>
+                <th>Event Name</th>
+                <th>Phone</th>
+                <th class="text-right">Action</th>
               </tr>
             </thead>
             <tbody class="table-border-bottom-0">

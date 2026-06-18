@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreUserRequest;
+use App\Http\Requests\UpdateUserRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controllers\HasMiddleware;
@@ -36,18 +38,10 @@ class UserController extends Controller implements HasMiddleware
         return view('backend.users.add-user', compact('roles'));
     }
 
-    public function store(Request $request)
+    public function store(StoreUserRequest $request)
     {
-        // Validate the request data
-        $validatedData = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'phone' => 'required|string|max:20',
-            'password' => 'required|string|min:8',
-            'role_id' => 'required|exists:roles,id',
-        ]);
         // Create a new user
-        $user = User::create($validatedData);
+        $user = User::create($request->validated());
 
         $role = Role::findById($request->role_id);
 
@@ -71,20 +65,12 @@ class UserController extends Controller implements HasMiddleware
         return view('backend.users.edit', compact('user', 'roles'));
     }
 
-    public function update(Request $request, User $user)
+    public function update(UpdateUserRequest $request, User $user)
     {
-        // Validate the request data    
-        $validatedData = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
-            'phone' => 'required|string|max:20',
-            'password' => 'nullable|string|min:8',
-            'role_id' => 'required|exists:roles,id',
-        ]);
+        $user->update($request->validated());
 
-        // Find the user and update their information
-        $user->update($validatedData);
         $role = Role::findById($request->role_id);
+
         $user->syncRoles([$role->name]);
 
         // Redirect to the users list with a success message Tostr message
