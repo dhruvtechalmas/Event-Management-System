@@ -7,6 +7,7 @@ use App\Http\Requests\UpdateEventRequest;
 use App\Models\Event;
 use App\Models\User;
 use App\Notifications\GeneralNotification;
+use App\Services\GoogleCalendarService;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
@@ -69,6 +70,8 @@ class EventController extends Controller implements HasMiddleware
 
         $event = Event::create($request->validated());
 
+        GoogleCalendarService::createEvent($event);
+
         $users = User::whereHas('tasks', function ($query) use ($event) {
             $query->where('event_id', $event->id);
         })->get();
@@ -118,6 +121,8 @@ class EventController extends Controller implements HasMiddleware
     {
         $event->update($request->validated());
 
+        GoogleCalendarService::updateEvent($event);
+
         $assignedUsers = User::whereHas('tasks', function ($query) use ($event) {
             $query->where('event_id', $event->id);
         })->get();
@@ -151,14 +156,23 @@ class EventController extends Controller implements HasMiddleware
      */
     public function destroy(Event $event)
     {
+
+        GoogleCalendarService::deleteEvent($event);
+
+        $event->tasks()->delete();
+
+        $event->participants()->delete();
+
         $event->delete();
 
         // Redirect to the events list with a success message
         return redirect()->route('events.index')->with([
-            'message' => 'Event Deleted successful!',
+            'message' => 'Event moved to Recycle Bin successfully!',
             'alert-type' => 'success'
         ]);
     }
+
+
 
     // Render the calendar backend view
     public function calendarindex()

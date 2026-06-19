@@ -55,7 +55,7 @@ use Spatie\Permission\Traits\HasRoles;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User withoutTeam($teams)
  * @mixin \Eloquent
  */
-#[Fillable(['name', 'email', 'password', 'phone', 'role_id'])]
+#[Fillable(['name', 'email', 'password', 'phone', 'role_id' , 'google_id','google_token', 'google_refresh_token',  'google_token_expires_at',])]
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable
 {

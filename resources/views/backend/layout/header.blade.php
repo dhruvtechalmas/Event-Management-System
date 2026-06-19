@@ -75,10 +75,14 @@
           </a>
         @endcan
 
-
         <a class="nav-link active" href="{{route('calendar.calendarindex')}}">
           <span class="nav-icon"><i class="bi bi-calendar" aria-hidden="true"></i></span>
           <span class="nav-text">Calendar</span>
+        </a>
+
+        <a class="nav-link active" href="{{ route('recycle-bin.index') }}">
+          <span class="nav-icon"><i class="bi bi-trash" aria-hidden="true"></i></span>
+          <span class="nav-text">Recycle Bin</span>
         </a>
 
         <a class="nav-link active" href="settings">
@@ -150,7 +154,7 @@
 
                   @forelse(auth()->user()->unreadNotifications as $notification)
                     <a class="dropdown-item d-flex flex-column py-2 border-bottom notification-item"
-                     href="{{ route('notifications.markRead', $notification->id) }}">
+                      href="{{ route('notifications.markRead', $notification->id) }}">
                       <span class="fw-bold">
                         {{ $notification->data['title'] }}
                       </span>
@@ -174,7 +178,7 @@
                     View All History Log
                   </a>
                 </div>
-                
+
               </div>
             </div>
 
@@ -191,6 +195,10 @@
               </button>
               <ul class="dropdown-menu dropdown-menu-end">
                 <li><a class="dropdown-item" href="profile">Profile</a></li>
+                <a class="dropdown-item" href="{{ route('google.login') }}">
+                  <i class="bi bi-google"></i>
+                  Connect Google Calendar
+                </a>
                 <li><a class="dropdown-item" href="settings">Account settings</a></li>
                 <li>
                   <hr class="dropdown-divider">

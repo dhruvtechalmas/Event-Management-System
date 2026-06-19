@@ -183,7 +183,7 @@ class TaskController extends Controller implements HasMiddleware
         $task->delete();
 
         return redirect()->route('tasks.index')->with([
-            'message' => 'Task Deleted successful!',
+            'message' => 'Task moved to Recycle Bin successfully!',
             'alert-type' => 'success'
         ]);
     }

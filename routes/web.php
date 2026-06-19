@@ -2,10 +2,12 @@
 
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EventController;
+use App\Http\Controllers\GoogleController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ParticipantController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\RecycleBinController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\UserController;
@@ -113,7 +115,20 @@ Route::middleware('auth')->group(function () {
     Route::get('/tasks/{id}/pdf', [ReportController::class, 'downloadSingleTaskReport'])->name('tasks.pdf.single');
 
     Route::get('/event-dashboard', [DashboardController::class, 'index'])->name('backend.index');
-   
+
+    //google calendar integration
+    Route::get('/auth/google', [GoogleController::class, 'redirect'])->name('google.login');
+    Route::get('/auth/google/callback', [GoogleController::class, 'callback'])->name('google.callback');
+
+
+    Route::get('/recycle-bin', [RecycleBinController::class, 'index'])->name('recycle-bin.index');
+    Route::patch('/recycle-bin/events/{id}/restore', [RecycleBinController::class, 'restoreEvent'])->name('recycle.events.restore');
+    Route::delete('/recycle-bin/events/{id}/force-delete', [RecycleBinController::class, 'forceDeleteEvent'])->name('recycle.events.force-delete');
+    Route::patch('/recycle-bin/tasks/{id}/restore', [RecycleBinController::class, 'restoreTask'])->name('recycle.tasks.restore');
+    Route::delete('/recycle-bin/tasks/{id}/force-delete', [RecycleBinController::class, 'forceDeleteTask'])->name('recycle.tasks.force-delete');
+    Route::patch('/recycle-bin/participants/{id}/restore', [RecycleBinController::class, 'restoreParticipant'])->name('recycle.participants.restore');
+    Route::delete('/recycle-bin/participants/{id}/force-delete', [RecycleBinController::class, 'forceDeleteParticipant'])->name('recycle.participants.force-delete');
+
 
 });
 

@@ -2,7 +2,9 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * @property int $id
@@ -32,8 +34,9 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Task extends Model
 {
-   protected $fillable = [
-       'title',
+    use HasFactory, SoftDeletes;
+    protected $fillable = [
+        'title',
         'event_id',
         'assigned_to',
         'due_date',
@@ -43,10 +46,10 @@ class Task extends Model
 
     public function event()
     {
-        return $this->belongsTo(Event::class, 'event_id');
+        return $this->belongsTo(Event::class)
+            ->withTrashed();
     }
-
-     public function assignee()
+    public function assignee()
     {
         return $this->belongsTo(User::class, 'assigned_to');
     }

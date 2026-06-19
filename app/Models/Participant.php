@@ -2,7 +2,9 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * @property int $id
@@ -31,6 +33,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Participant extends Model
 {
+    use HasFactory, SoftDeletes;
     protected $fillable = [
         'full_name',
         'email',
@@ -42,6 +45,7 @@ class Participant extends Model
 
     public function event()
     {
-        return $this->belongsTo(Event::class, 'event_id');
+        return $this->belongsTo(Event::class)
+            ->withTrashed();
     }
 }

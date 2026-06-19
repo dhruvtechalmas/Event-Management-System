@@ -117,7 +117,7 @@ class ParticipantController extends Controller implements HasMiddleware
         $participant->delete();
 
         return redirect()->route('participants.index')->with([
-            'message' => 'Participant Deleted successful!',
+            'message' => 'Participant moved to Recycle Bin successfully!',
             'alert-type' => 'success'
         ]);
     }

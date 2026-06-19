@@ -2,7 +2,9 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * @property int $id
@@ -36,6 +38,9 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Event extends Model
 {
+
+        use HasFactory, SoftDeletes;
+
     protected $fillable = [
         'event_name',
         'event_type',
@@ -44,6 +49,7 @@ class Event extends Model
         'event_location',
         'description',
         'status',
+        'google_event_id',
     ];
 
     public function tasks()
