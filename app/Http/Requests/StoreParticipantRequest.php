@@ -17,7 +17,7 @@ class StoreParticipantRequest extends FormRequest
             'full_name' => 'required|string|max:255',
             'email' => 'required|email|max:255|unique:participants,email',
             'event_id' => 'required|exists:events,id',
-            'phone' => 'nullable|string|max:20',
+            'phone' => 'required|digits_between:10,11',
             'address' => 'nullable|string|max:255',
             'notes' => 'nullable|string',
         ];
@@ -32,6 +32,8 @@ class StoreParticipantRequest extends FormRequest
             'email.unique' => 'This email is already registered.',
             'event_id.required' => 'Please select an event.',
             'event_id.exists' => 'Selected event does not exist.',
+            'phone.required' => 'Phone number is required.',
+            'phone.digits_between' => 'Phone number must be between 10 and 11 digits.',
         ];
     }
 }

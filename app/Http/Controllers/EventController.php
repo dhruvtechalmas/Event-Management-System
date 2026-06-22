@@ -11,6 +11,7 @@ use App\Services\GoogleCalendarService;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
+use Illuminate\Support\Facades\Storage;
 
 class EventController extends Controller implements HasMiddleware
 {
@@ -68,7 +69,16 @@ class EventController extends Controller implements HasMiddleware
     public function store(StoreEventRequest $request)
     {
 
-        $event = Event::create($request->validated());
+        $data = $request->validated();
+
+        if ($request->hasFile('event_image')) {
+            $data['event_image'] = $request
+                ->file('event_image')
+                ->store('events', 'public');
+        }
+
+        $event = Event::create($data);
+
 
         GoogleCalendarService::createEvent($event);
 
@@ -119,7 +129,20 @@ class EventController extends Controller implements HasMiddleware
      */
     public function update(UpdateEventRequest $request, Event $event)
     {
-        $event->update($request->validated());
+        $data = $request->validated();
+
+        if ($request->hasFile('event_image')) {
+
+            if ($event->event_image) {
+                Storage::disk('public')->delete($event->event_image);
+            }
+
+            $data['event_image'] = $request
+                ->file('event_image')
+                ->store('events', 'public');
+        }
+
+        $event->update($data);
 
         GoogleCalendarService::updateEvent($event);
 

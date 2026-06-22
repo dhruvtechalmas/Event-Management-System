@@ -152,7 +152,7 @@
                   @endphp
 
                   <tr>
-                    <td>{{ $user->id }}</td>
+                    <td>{{ $loop->iteration }}</td>
                     <td>
                       <div class="d-flex align-items-center gap-2">
 

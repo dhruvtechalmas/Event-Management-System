@@ -70,6 +70,7 @@
             <thead>
               <tr>
                 <th>#</th>
+                <th>Event Image</th>
                 <th>Event Name</th>
                 <th>Event Type</th>
                 <th>Event Date</th>
@@ -81,7 +82,16 @@
             <tbody>
               @foreach ($events as $event)
                         <tr>
-                          <td class="fw-semibold">{{ $event->id }}</td>
+                          <td class="fw-semibold">{{ $loop->iteration }}</td>
+                          <td>
+                            @if ($event->event_image)
+                              <img src="{{ asset('storage/' . $event->event_image) }}" width="100" height="60"
+                                class="rounded object-fit-cover" alt="{{ $event->event_name }}">
+                            @else
+                              <img src="{{ asset('images/event-banner.jpg') }}" width="100" height="60"
+                                class="rounded object-fit-cover" alt="No Image">
+                            @endif
+                          </td>
                           <td>{{ $event->event_name }}</td>
                           <td>{{ $event->event_type }}</td>
                           <!-- Date Only -->
@@ -99,7 +109,7 @@
 
                           <td>
                             <span class="badge
-                                                                                                                              {{ $event->status == 'Draft' ? 'bg-secondary' :
+                                                                                                                                                      {{ $event->status == 'Draft' ? 'bg-secondary' :
                 ($event->status == 'Upcoming' ? 'bg-primary' :
                   ($event->status == 'Ongoing' ? 'bg-success' :
                     ($event->status == 'Completed' ? 'bg-info' : 'bg-danger'))) }}">

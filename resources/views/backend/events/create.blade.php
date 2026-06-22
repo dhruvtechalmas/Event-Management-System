@@ -1,4 +1,4 @@
-{{-- Show a validation error message  --}}
+{{-- Show a validation error message --}}
 @if ($errors->any())
     <div class="alert alert-danger">
         <ul class="mb-0">
@@ -10,49 +10,59 @@
 @endif
 
 <div class="px-2 px-md-3">
-    <form action="{{ route('events.store') }}" method="POST" class="needs-validation" novalidate>
+    <form action="{{ route('events.store') }}" method="POST" class="needs-validation" novalidate
+        enctype="multipart/form-data">
         @csrf
 
         <div class="row g-3">
 
             <div class="col-md-12">
+              <label class="form-label" for="EventName">Event Name</label>
+
+                <input type="file"  id="event_image" name="event_image" class="form-control" accept=".jpg,.jpeg,.png,.webp">
+
+                <div class="form-text">
+                    Allowed: JPG, PNG, JPEG, WEBP
+                </div>
+            </div>
+            <div class="col-md-12">
                 <label class="form-label" for="EventName">Event Name</label>
-                <input class="form-control" id="event_name" name="event_name" type="text" placeholder="Enter Event Name"
+                <input class="form-control" id="event_name" name="event_name"  value="{{ old('event_name') }}" type="text" placeholder="Enter Event Name"
                     required>
                 <div class="invalid-feedback">Event name is required.</div>
             </div>
 
             <div class="col-md-12">
                 <label class="form-label" for="eventType">Event Type</label>
-                <input class="form-control" id="event_type" name="event_type" type="text" placeholder="Enter Event Type"
+                <input class="form-control" id="event_type" name="event_type"  value="{{ old('event_type') }} type="text" placeholder="Enter Event Type"
                     required>
                 <div class="invalid-feedback">Enter a valid event type.</div>
             </div>
 
             <div class="col-md-12">
                 <label class="form-label" for="eventDate">Event Date</label>
-                <input class="form-control" id="event_date" name="event_date" type="date" placeholder="Enter Event Date"
+                <input class="form-control" id="event_date" name="event_date"  value="{{ old('event_date') }}  type="date" placeholder="Enter Event Date"
                     required>
                 <div class="invalid-feedback">Event date is required.</div>
             </div>
 
             <div class="col-md-12">
                 <label class="form-label" for="eventTime">Event Time</label>
-                <input class="form-control" id="event_time" name="event_time" type="time" placeholder="Enter Event Time"
+                <input class="form-control" id="event_time" name="event_time" value="{{ old('event_time') }} type="time" placeholder="Enter Event Time"
                     required>
                 <div class="invalid-feedback">Event time is required.</div>
             </div>
 
             <div class="col-md-12">
                 <label class="form-label" for="eventLocation">Event Location</label>
-                <input class="form-control" id="event_location" name="event_location" type="text"
+                <input class="form-control" id="event_location" name="event_location" value="{{ old('event_location') }} type="text"
                     placeholder="Enter Event Location" required>
                 <div class="invalid-feedback">Event location is required.</div>
             </div>
 
             <div class="col-md-12">
                 <label class="form-label" for="description">Description</label>
-                <textarea class="form-control" id="description" name="description" rows="3"
+                <textarea class="form-control" id="description" name="description"  rows="3"
                     placeholder="Enter Event Description (Optional)"></textarea>
             </div>
 
@@ -66,6 +76,7 @@
                     <option value="Completed">Completed</option>
                     <option value="Cancelled">Cancelled</option>
                 </select>
+                <div class="invalid-feedback">Event Status is required.</div>
             </div>
 
         </div>

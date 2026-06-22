@@ -74,6 +74,7 @@
                                     <option value="in_progress"{{ $task->status == 'in_progress' ? 'selected' : '' }}>In Progress</option>
                                     <option value="completed" {{ $task->status == 'completed' ? 'selected' : '' }}>Completed</option>
                                 </select>
+                                <div class="invalid-feedback">Task Status is required.</div>
                             </div>
 
                             <div class="col-md-12">

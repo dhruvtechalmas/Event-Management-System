@@ -88,7 +88,7 @@
             <tbody class="table-border-bottom-0">
               @foreach ($tasks as $task)
                         <tr>
-                          <td class="fw-semibold">{{ $task->id }}</td>
+                          <td class="fw-semibold">{{ $loop->iteration }}</td>
                           <td>{{ $task->title }}</td>
                           <td>{{ $task->event->event_name ?? 'No Event Selected' }}</td>
                           <td>{{ $task->assignee->name ?? '-' }}</td>

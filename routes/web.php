@@ -11,13 +11,18 @@ use App\Http\Controllers\RecycleBinController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\UserController;
+use App\Models\Event;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ReportController;
 
 
 Route::get('/', function () {
-    return view('welcome');
+   $events = Event::where('status', 'Upcoming')->latest()->get();
+    return view('welcome', compact('events'));
 });
+
+Route::post('/event-register', [ParticipantController::class, 'eventRegister'])->name('participants.eventRegister');
+
 
 Route::get('/pusher', function () {
     return view('pusher');
@@ -71,6 +76,7 @@ Route::middleware('auth')->group(function () {
     Route::put('/participants/{participant}', [ParticipantController::class, 'update'])->name('participants.update');
     Route::delete('/participants/{participant}', [ParticipantController::class, 'destroy'])->name('participants.destroy');
 
+
     //Tasks Routes
     Route::get('/tasks', [TaskController::class, 'index'])->name('tasks.index');
     Route::get('/tasks/create', [TaskController::class, 'create'])->name('tasks.create');
@@ -95,6 +101,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/roles', [RoleController::class, 'index'])->name('roles.index');
     Route::get('/roles/create', [RoleController::class, 'create'])->name('roles.create');
     Route::post('/roles', [RoleController::class, 'store'])->name('roles.store');
+    Route::get('/roles/{role}', [RoleController::class, 'show'])->name('roles.show');
     Route::get('/roles/{role}/edit', [RoleController::class, 'edit'])->name('roles.edit');
     Route::put('/roles/{role}', [RoleController::class, 'update'])->name('roles.update');
     Route::delete('/roles/{role}', [RoleController::class, 'destroy'])->name('roles.destroy');

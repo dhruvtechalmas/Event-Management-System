@@ -1,12 +1,12 @@
 {{-- Show a validation error message --}}
 @if ($errors->any())
-<div class="alert alert-danger">
-    <ul class="mb-0">
-        @foreach ($errors->all() as $error)
-        <li>{{ $error }}</li>
-        @endforeach
-    </ul>
-</div>
+    <div class="alert alert-danger">
+        <ul class="mb-0">
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
 @endif
 
 <div class="modal fade" id="editEventModal{{ $event->id }}" tabindex="-1">
@@ -23,10 +23,23 @@
 
                 <div class="px-2 px-md-3">
                     <form action="{{ route('events.update', $event->id) }}" method="POST" class="needs-validation"
-                        novalidate>
+                        novalidate enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
                         <div class="row g-3">
+
+                            <div class="col-md-12">
+                                <label class="form-label">
+                                    Event Image
+                                </label>
+
+                                <input type="file" name="event_image" class="form-control"
+                                    accept=".jpg,.jpeg,.png,.webp">
+
+                                <div class="form-text">
+                                    Allowed: JPG, PNG, JPEG, WEBP
+                                </div>
+                            </div>
 
                             <div class="col-md-12">
                                 <label class="form-label" for="EventName">Event Name</label>
@@ -37,7 +50,7 @@
                             </div>
 
                             {{-- @error('event_name')
-                                <div class="text-danger small mt-1">{{ $message }}</div>
+                            <div class="text-danger small mt-1">{{ $message }}</div>
                             @enderror --}}
 
                             <div class="col-md-12">
@@ -49,7 +62,7 @@
                             </div>
 
                             {{-- @error('event_type')
-                                <div class="text-danger small mt-1">{{ $message }}</div>
+                            <div class="text-danger small mt-1">{{ $message }}</div>
                             @enderror --}}
 
                             <div class="col-md-12">
@@ -61,7 +74,7 @@
                             </div>
 
                             {{-- @error('event_date')
-                                <div class="text-danger small mt-1">{{ $message }}</div>
+                            <div class="text-danger small mt-1">{{ $message }}</div>
                             @enderror --}}
 
                             <div class="col-md-12">
@@ -73,7 +86,7 @@
                             </div>
 
                             {{-- @error('event_time')
-                                <div class="text-danger small mt-1">{{ $message }}</div>
+                            <div class="text-danger small mt-1">{{ $message }}</div>
                             @enderror --}}
 
                             <div class="col-md-12">
@@ -85,7 +98,7 @@
                             </div>
 
                             {{-- @error('event_location')
-                                <div class="text-danger small mt-1">{{ $message }}</div>
+                            <div class="text-danger small mt-1">{{ $message }}</div>
                             @enderror --}}
 
                             <div class="col-md-12">
@@ -108,6 +121,7 @@
                                     <option value="Cancelled" {{ $event->status == 'Cancelled' ? 'selected' : '' }}>
                                         Cancelled</option>
                                 </select>
+                                <div class="invalid-feedback">Event Status is required.</div>
                             </div>
 
                         </div>

@@ -30,6 +30,7 @@ class StoreEventRequest extends FormRequest
             'event_location' => 'nullable|string|max:255',
             'description'    => 'nullable|string',
             'status'         => 'required|in:Draft,Upcoming,Ongoing,Completed,Cancelled',
+            'event_image'    => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
         ];
     }
 
@@ -39,6 +40,8 @@ class StoreEventRequest extends FormRequest
             'event_name.required' => 'Event name is required.',
             'event_date.required' => 'Event date is required.',
             'event_time.date_format' => 'Event time must be in HH:MM:SS format.',
+            'event_image.image' => 'The file must be an image.', 
+            'event_image.mimes' => 'Allowed formats are jpeg, png, jpg, and webp.', 
             'status.in' => 'Invalid status selected.',
         ];
     }

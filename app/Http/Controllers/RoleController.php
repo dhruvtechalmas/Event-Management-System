@@ -10,11 +10,11 @@ use Spatie\Permission\Models\Role;
 
 class RoleController extends Controller implements HasMiddleware
 {
-    public static  function middleware(): array
+    public static function middleware(): array
     {
         return [
             new Middleware('permission:role.index', only: ['index']),
-            new Middleware('permission:role.create', only: ['create','store' ]),
+            new Middleware('permission:role.create', only: ['create', 'store']),
             new Middleware('permission:role.edit', only: ['edit', 'update']),
             new Middleware('permission:role.delete', only: ['destroy']),
         ];
@@ -62,9 +62,11 @@ class RoleController extends Controller implements HasMiddleware
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Role $role)
     {
-        //
+        $role->load('permissions');
+
+        return view('backend.roles.show', compact('role'));
     }
 
     /**

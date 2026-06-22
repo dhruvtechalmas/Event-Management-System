@@ -121,4 +121,23 @@ class ParticipantController extends Controller implements HasMiddleware
             'alert-type' => 'success'
         ]);
     }
+
+
+    public function eventRegister(StoreParticipantRequest $request)
+    {
+        $participant = Participant::create($request->validated());
+
+        $event = Event::findOrFail($participant->event_id);
+
+        Mail::to($participant->email)
+            ->send(new EventInvitationMail($event, $participant));
+
+        Mail::to($participant->email)
+            ->send(new ParticipantRegistrationMail($participant, $event));
+
+        return redirect('/')
+            ->with('success', 'You are registered for the event successfully!');
+
+    }
+
 }

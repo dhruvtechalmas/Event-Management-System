@@ -39,7 +39,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Event extends Model
 {
 
-        use HasFactory, SoftDeletes;
+    use HasFactory, SoftDeletes;
 
     protected $fillable = [
         'event_name',
@@ -48,18 +48,21 @@ class Event extends Model
         'event_time',
         'event_location',
         'description',
+        'event_image',
         'status',
         'google_event_id',
     ];
 
     public function tasks()
     {
-        return $this->hasMany(Task::class, 'event_id');
+        return $this->hasMany(Task::class, 'event_id')->withTrashed();
+
     }
 
 
     public function participants()
     {
-        return $this->hasMany(Participant::class, 'event_id');
+        return $this->hasMany(Participant::class, 'event_id')->withTrashed();
+
     }
 }

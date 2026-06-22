@@ -60,7 +60,7 @@
             <tbody class="table-border-bottom-0">
               @foreach ($participants as $participant)
                 <tr>
-                  <td class="fw-semibold">{{ $participant->id }}</td>
+                  <td class="fw-semibold">{{ $loop->iteration }}</td>
                   <td>{{ $participant->full_name }}</td>
                   <td>{{ $participant->email }}</td>
                   <td>{{ $participant->event->event_name ?? 'No Event Selected' }}</td>

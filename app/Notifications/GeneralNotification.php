@@ -32,13 +32,13 @@ class GeneralNotification extends Notification implements ShouldQueue
     /**
      * Get the mail representation of the notification.
      */
-    public function toMail(): MailMessage
-    {
-        return (new MailMessage)
-            ->line('You have a new notification.')
-            ->action('View', url('/'))
-            ->line('Thank you for using our application!');
-    }
+    // public function toMail(): MailMessage
+    // {
+    //     return (new MailMessage)
+    //         ->line('You have a new notification.')
+    //         ->action('View', url('/'))
+    //         ->line('Thank you for using our application!');
+    // }
 
     /**
      * Get the array representation of the notification.

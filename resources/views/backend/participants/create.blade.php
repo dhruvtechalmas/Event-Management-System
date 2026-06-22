@@ -17,20 +17,20 @@
 
             <div class="col-md-12">
                 <label class="form-label" for="ParticipantName">Participant Name</label>
-                <input class="form-control" id="full_name" name="full_name" type="text"
+                <input class="form-control" id="full_name" name="full_name" value="{{ old('full_name') }}" type="text"
                     placeholder="Enter Participant Name" required>
                 <div class="invalid-feedback">Participant name is required.</div>
             </div>
 
             <div class="col-md-12">
                 <label class="form-label" for="email">Email</label>
-                <input class="form-control" id="email" name="email" type="email" placeholder="Enter Email" required>
+                <input class="form-control" id="email" name="email" value="{{ old('email') }} type="email" placeholder="Enter Email" required>
                 <div class="invalid-feedback">Enter a valid email.</div>
             </div>
 
              <div class="col-md-12">
                 <label class="form-label" for="event_id">Event</label>
-                <select class="form-control" id="event_id" name="event_id" required>
+                <select class="form-control" id="event_id" name="event_id" value="{{ old('event_id') }} required>
                     <option value="">Select an Event</option>
                     @foreach ($events as $event)
                         <option value="{{ $event->id }}">{{ $event->event_name }}</option>
@@ -41,13 +41,14 @@
 
             <div class="col-md-12">
                 <label class="form-label" for="phone">Phone</label>
-                <input class="form-control" id="phone" name="phone" type="text" placeholder="Enter Phone" required>
+                <input class="form-control" id="phone" name="phone" value="{{ old('phone') }} type="text" placeholder="Enter Phone" 
+                 maxlength="10"  oninput="this.value=this.value.replace(/[^0-9]/g,'')" required>
                 <div class="invalid-feedback">Phone number is required.</div>
             </div>
 
             <div class="col-md-12">
                 <label class="form-label" for="address">Address</label>
-                <input class="form-control" id="address" name="address" type="text" placeholder="Enter Address" required>
+                <input class="form-control" id="address" name="address" value="{{ old('address') }} type="text" placeholder="Enter Address" required>
                 <div class="invalid-feedback">Address is required.</div>
             </div>
 

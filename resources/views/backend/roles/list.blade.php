@@ -48,29 +48,22 @@
               <tr>
                 <th>#</th>
                 <th>Role Name</th>
-                <th>Permissions Name</th>
-                <th>Created</th>
+                <th>Created</th>  
                 <th class="text-right">Action</th>
               </tr>
             </thead>
             <tbody class="table-border-bottom-0">
               @foreach ($roles as $role)
                 <tr>
-                  <td class="fw-semibold">{{ $role->id }}</td>
+                  <td class="fw-semibold">{{ $loop->iteration }}</td>
                   <td>{{ $role->name }}</td>
-                  <td>
-                    @forelse($role->permissions as $permission)
-                      <span class="badge bg-info me-1">
-                        {{ $permission->name }}
-                      </span>
-                    @empty
-                      <span class="badge bg-secondary">
-                        No Permission
-                      </span>
-                    @endforelse
-                  </td>
-                  <td style="white-space: nowrap;">{{ $role->created_at->format('d-m-Y') }} </td>
+                  <td>{{ $role->created_at->format('d-m-Y') }} </td>
+
                   <td style="white-space: nowrap;">
+                    <button class="btn btn-outline-info btn-sm" data-bs-toggle="modal"
+                      data-bs-target="#viewPermissionRoleModal{{ $role->id }}" title="View Role">
+                      <i class="bi bi-eye"></i>
+                    </button>
                     @can('role.edit')
                       <button class="btn btn-outline-success btn-sm" data-bs-toggle="modal"
                         data-bs-target="#editRoleModal{{ $role->id }}" title="Edit Role">
@@ -91,6 +84,7 @@
                   </td>
 
                 </tr>
+                @include('backend.roles.view', ['role' => $role])
                 @include('backend.roles.edit', ['role' => $role])
               @endforeach
             </tbody>

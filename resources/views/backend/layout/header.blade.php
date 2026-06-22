@@ -195,15 +195,20 @@
               </button>
               <ul class="dropdown-menu dropdown-menu-end">
                 <li><a class="dropdown-item" href="profile">Profile</a></li>
+                <li><a class="dropdown-item" href="settings">Account settings</a></li>
                 <a class="dropdown-item" href="{{ route('google.login') }}">
                   <i class="bi bi-google"></i>
                   Connect Google Calendar
                 </a>
-                <li><a class="dropdown-item" href="settings">Account settings</a></li>
                 <li>
                   <hr class="dropdown-divider">
                 </li>
-                <li><a class="dropdown-item" href="logout">Sign out</a></li>
+                <li>  <form method="POST" action="{{ route('logout') }}">
+        @csrf
+        <button type="submit" class="dropdown-item">
+            Sign out
+        </button>
+    </form></li>
               </ul>
             </div>
           </div>

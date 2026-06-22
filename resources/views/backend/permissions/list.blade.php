@@ -57,7 +57,7 @@
             <tbody class="table-border-bottom-0">
               @foreach ($permissions as $permission)
                 <tr>
-                  <td class="fw-semibold">{{ $permission->id }}</td>
+                  <td class="fw-semibold">{{ $loop->iteration }}</td>
                   <td>{{ $permission->name }}</td>
                   <td>{{ $permission->created_at->format('d-m-Y') }} </td>
                   <td style="white-space: nowrap;">

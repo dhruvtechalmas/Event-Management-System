@@ -10,130 +10,74 @@ class RecycleBinController extends Controller
 {
     public function index()
     {
-        $events = Event::onlyTrashed()
-            ->with([
-                'tasks' => function ($query) {
-                    $query->withTrashed();
-                },
-                'participants' => function ($query) {
-                    $query->withTrashed();
-                },
-            ])
-            ->latest()
-            ->get();
+        $events = Event::onlyTrashed()->with(['tasks' => fn($q) => $q->withTrashed(), 'participants' => fn($q) => $q->withTrashed(),])->latest()->get();
 
-        $tasks = Task::onlyTrashed()
-            ->with('event')
-            ->latest()
-            ->get();
+        $deletedEventIds = Event::onlyTrashed()->pluck('id');
 
-        $participants = Participant::onlyTrashed()
-            ->with('event')
-            ->latest()
-            ->get();
+        $tasks = Task::onlyTrashed()->whereNotIn('event_id', $deletedEventIds)->with('event')->latest()->get();
 
-        return view(
-            'backend.recycle-bin',
-            compact(
-                'events',
-                'tasks',
-                'participants'
-            )
-        );
+        $participants = Participant::onlyTrashed()->whereNotIn('event_id', $deletedEventIds)->with('event')->latest()->get();
+
+        return view('backend.recycle-bin', compact('events', 'tasks', 'participants'));
     }
-    
     public function restoreEvent($id)
     {
-        $event = Event::withTrashed()
-            ->findOrFail($id);
+        $event = Event::onlyTrashed()->with(['tasks' => fn($q) => $q->withTrashed(), 'participants' => fn($q) => $q->withTrashed()])->findOrFail($id);
 
         $event->restore();
 
-        $event->tasks()
-            ->withTrashed()
-            ->restore();
+        $event->tasks()->onlyTrashed()->restore();
+        
+        $event->participants()->onlyTrashed()->restore();
 
-        $event->participants()
-            ->withTrashed()
-            ->restore();
-
-        return back()
-            ->with(
-                'success',
-                'Event restored successfully.'
-            );
+        return back()->with('success', 'Event restored successfully.');
     }
 
     public function restoreTask($id)
     {
-        $task = Task::withTrashed()
-            ->findOrFail($id);
+        $task = Task::withTrashed()->findOrFail($id);
 
         $task->restore();
 
-        return back()->with(
-            'success',
-            'Task restored successfully.'
-        );
+        return back()->with('success', 'Task restored successfully.');
     }
 
     public function restoreParticipant($id)
     {
-        $participant = Participant::withTrashed()
-            ->findOrFail($id);
+        $participant = Participant::withTrashed()->findOrFail($id);
 
         $participant->restore();
 
-        return back()->with(
-            'success',
-            'Participant restored successfully.'
-        );
+        return back()->with('success', 'Participant restored successfully.');
     }
     public function forceDeleteEvent($id)
     {
-        $event = Event::withTrashed()
-            ->findOrFail($id);
+        $event = Event::withTrashed()->findOrFail($id);
 
-        $event->tasks()
-            ->withTrashed()
-            ->forceDelete();
+        $event->tasks()->withTrashed()->forceDelete();
 
-        $event->participants()
-            ->withTrashed()
-            ->forceDelete();
+        $event->participants()->withTrashed()->forceDelete();
 
         $event->forceDelete();
 
-        return back()
-            ->with(
-                'success',
-                'Event permanently deleted.'
-            );
+        return back()->with('success', 'Event permanently deleted.');
     }
 
     public function forceDeleteTask($id)
     {
-        $task = Task::withTrashed()
-            ->findOrFail($id);
+        $task = Task::withTrashed()->findOrFail($id);
 
         $task->forceDelete();
 
-        return back()->with(
-            'success',
-            'Task permanently deleted.'
-        );
+        return back()->with('success', 'Task permanently deleted.');
     }
 
     public function forceDeleteParticipant($id)
     {
-        $participant = Participant::withTrashed()
-            ->findOrFail($id);
+        $participant = Participant::withTrashed()->findOrFail($id);
 
         $participant->forceDelete();
 
-        return back()->with(
-            'success',
-            'Participant permanently deleted.'
-        );
+        return back()->with('success', 'Participant permanently deleted.');
     }
 }
