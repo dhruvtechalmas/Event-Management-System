@@ -41,14 +41,16 @@
 
                     <div class="panel h-100 text-center profile-card">
 
-                        <div class="profile-cover"></div>
-
                         <div class="profile-hero">
 
-                            <div class="profile-avatar" style="background-color: {{ $color }}">
-                                {{ strtoupper(substr($event->event_name, 0, 1)) }}
-                            </div>
-
+                            @if ($event->event_image)
+                              <img src="{{ asset('storage/' . $event->event_image) }}" width="200" height="150"
+                                class="rounded object-fit-cover" alt="{{ $event->event_name }}">
+                            @else
+                              <img src="{{ asset('images/event-banner.jpg') }}" width="100" height="60"
+                                class="rounded object-fit-cover" alt="No Image">
+                            @endif
+                      
                             <h2 class="h5 mt-3 mb-1">
                                 {{ $event->event_name }}
                             </h2>

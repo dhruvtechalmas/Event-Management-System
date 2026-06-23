@@ -17,7 +17,7 @@ use App\Http\Controllers\ReportController;
 
 
 Route::get('/', function () {
-   $events = Event::where('status', 'Upcoming')->latest()->get();
+  $events = Event::where('status', 'Upcoming')->withCount('participants')->get();
     return view('welcome', compact('events'));
 });
 

@@ -10,8 +10,6 @@
 
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
-
     {{-- CSS Style code --}}
     <style>
         body {
@@ -221,6 +219,10 @@
             padding: 30px;
         }
 
+        .swal2-container {
+            z-index: 999999 !important;
+        }
+
         @media (max-width: 768px) {
 
             .event-card {
@@ -337,9 +339,21 @@
 
                             <br>
 
-                            <button class="btn register-btn registerBtn" data-id="{{ $event->id }}">
-                                Register
-                            </button>
+                            @if($event->participants_count >= $event->capacity)
+
+                                <button class="btn btn-danger" disabled>
+                                    Sold Out
+                                </button>
+
+                            @else
+
+                                <button class="btn register-btn registerBtn" data-id="{{ $event->id }}"
+                                    data-name="{{ $event->event_name }}" data-capacity="{{ $event->capacity }}"
+                                    data-registered="{{ $event->participants_count }}">
+                                    Register
+                                </button>
+
+                            @endif
 
                         </div>
 
@@ -361,7 +375,7 @@
 
     @if ($errors->any())
         <div class="alert alert-danger">
-            <ul class="mb-0">
+            <ul>
                 @foreach ($errors->all() as $error)
                     <li>{{ $error }}</li>
                 @endforeach
@@ -379,88 +393,84 @@
                         <i class="fa-solid fa-user-plus me-2"></i>
                         Register For Event
                     </h5>
-
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal">
-                    </button>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                 </div>
 
                 <div class="modal-body">
 
+                    {{-- CRUCIAL: Display validation errors inside the modal --}}
+                    @if ($errors->any())
+                        <div class="alert alert-danger py-2 mb-3">
+                            <ul class="mb-0 sm-text" style="padding-left: 20px;">
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
+
+                    <h6 id="modalEventName"></h6>
+
+                    <div class="event-meta">
+                        Registered:
+                        <span id="registeredCount">0</span>
+
+                        <br>
+
+                        Remaining:
+                        <span id="remainingCount">0</span>
+                    </div>
+
+                    <div id="soldOutSection" class="mt-3"></div>
+
                     <form action="{{ route('participants.eventRegister') }}" method="POST" class="needs-validation"
                         novalidate>
-
                         @csrf
 
+                        {{-- CRUCIAL: Added value="{{ old('event_id') }}" so the event context isn't lost on validation
+                        failure --}}
                         <input type="hidden" name="event_id" id="modal_event_id">
 
                         <div class="mb-3">
-                            <label class="form-label">
-                                Full Name
-                            </label>
-
+                            <label class="form-label">Full Name</label>
                             <input type="text" name="full_name" value="{{ old('full_name') }}"
                                 class="form-control form-control-sm" placeholder="Enter Full Name" required>
-
-                            <div class="invalid-feedback">
-                                Participant name is required.
-                            </div>
+                            <div class="invalid-feedback">Participant name is required.</div>
                         </div>
 
                         <div class="mb-3">
-                            <label class="form-label">
-                                Email Address
-                            </label>
-
+                            <label class="form-label">Email Address</label>
                             <input type="email" name="email" value="{{ old('email') }}"
                                 class="form-control form-control-sm" placeholder="Enter Email" required>
-
-                            <div class="invalid-feedback">
-                                Enter a valid email.
-                            </div>
+                            <div class="invalid-feedback">Enter a valid email.</div>
                         </div>
 
                         <div class="mb-3">
-                            <label class="form-label">
-                                Phone Number
-                            </label>
-
+                            <label class="form-label">Phone Number</label>
                             <input type="text" name="phone" value="{{ old('phone') }}" maxlength="10"
                                 oninput="this.value=this.value.replace(/[^0-9]/g,'')"
                                 class="form-control form-control-sm" placeholder="Enter Phone Number" required>
-
-                            <div class="invalid-feedback">
-                                Phone number is required.
-                            </div>
+                            <div class="invalid-feedback">Phone number is required.</div>
                         </div>
 
                         <div class="mb-3">
-                            <label class="form-label">
-                                Address
-                            </label>
-
+                            <label class="form-label">Address</label>
                             <input type="text" name="address" value="{{ old('address') }}"
                                 class="form-control form-control-sm text-light" placeholder="Enter Address" required>
-
-                            <div class="invalid-feedback">
-                                Address is required.
-                            </div>
+                            <div class="invalid-feedback">Address is required.</div>
                         </div>
-
 
                         <button class="btn btn-register w-100">
                             <i class="fa-solid fa-user-check me-2"></i>
                             Register Now
                         </button>
-
                     </form>
-
                 </div>
-
             </div>
         </div>
     </div>
 
-    </div>
+
 
 
     {{-- Event Model Details --}}
@@ -522,16 +532,52 @@
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script>
-        $('.registerBtn').click(function () {
+        $(document).on('click', '.registerBtn', function () {
 
             let eventId = $(this).data('id');
+            let eventName = $(this).data('name');
+            let capacity = parseInt($(this).data('capacity')) || 0;
+            let registered = parseInt($(this).data('registered')) || 0;
+            let remaining = Math.max(capacity - registered, 0);
 
+            // Target modal form
+            let $form = $('#participantsUserModal').find('form');
+
+            // Clear previous form values
+            $form.find('input[name="full_name"]').val('');
+            $form.find('input[name="email"]').val('');
+            $form.find('input[name="phone"]').val('');
+            $form.find('input[name="address"]').val('');
+
+            // Set hidden event id
             $('#modal_event_id').val(eventId);
 
+            // Set event information
+            $('#modalEventName').text(eventName);
+            $('#registeredCount').text(registered);
+            $('#remainingCount').text(remaining);
+
+            // Remove previous validation errors
+            $('#participantsUserModal').find('.alert-danger').remove();
+            $form.removeClass('was-validated');
+
+            // Show Sold Out button
+            if (registered >= capacity) {
+                $('#soldOutSection').html(`
+                <button type="button"
+                        class="btn btn-danger w-100"
+                        disabled>
+                    Sold Out
+                </button>`);
+            } else {
+                $('#soldOutSection').html('');
+            }
+
+            // Open modal
             $('#participantsUserModal').modal('show');
         });
     </script>
@@ -569,26 +615,37 @@
         });
     </script>
 
-    @if(session('success'))
-        <script>
-            toastr.options = {
-                closeButton: true,
-                progressBar: true,
-                positionClass: "toast-top-right",
-                timeOut: 3000
-            };
 
-            toastr.success("{{ session('success') }}");
+    @if(session()->has('message'))
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                Swal.fire({
+                    toast: true,
+                    position: 'top-end',
+                    icon: "{{ session('alert-type', 'success') }}",
+                    title: "{{ session('message') }}",
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true
+                });
+            });
         </script>
     @endif
 
     @if ($errors->any())
         <script>
-            $(document).ready(function () {
-                $('#participantsUserModal').modal('show');
+            document.addEventListener("DOMContentLoaded", function () {
+                // Targets your registration modal wrapper element
+                var registrationModalEl = document.getElementById('participantsUserModal');
+
+                if (registrationModalEl) {
+                    var registrationModal = new bootstrap.Modal(registrationModalEl);
+                    registrationModal.show();
+                }
             });
         </script>
     @endif
+
 
 </body>
 

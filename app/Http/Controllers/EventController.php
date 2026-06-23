@@ -48,8 +48,15 @@ class EventController extends Controller implements HasMiddleware
         if (request()->filled('status')) {
             $query->where('status', request('status'));
         }
+        
+        if (request()->filled('event_date')) {
+            $query->whereDate('event_date', request()->event_date);
+        }
 
-        $events = $query->latest()->paginate(25)->withQueryString();
+        // 3. Get the results (ordered by newest or upcoming date)
+        $events = $query->orderBy('event_date', 'asc')->get();
+
+        $events = $query->withCount('participants')->latest()->paginate(25)->withQueryString();
 
         return view('backend.events.list', compact('events'));
     }

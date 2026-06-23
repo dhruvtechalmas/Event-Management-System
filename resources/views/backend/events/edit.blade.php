@@ -89,6 +89,22 @@
                             <div class="text-danger small mt-1">{{ $message }}</div>
                             @enderror --}}
 
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">
+                                    Event Capacity
+                                </label>
+
+                                <input type="number" name="capacity"
+                                    class="form-control @error('capacity') is-invalid @enderror"
+                                    value="{{ old('capacity', $event->capacity) }}" min="1">
+
+                                @error('capacity')
+                                    <div class="invalid-feedback">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
+                            </div>
+
                             <div class="col-md-12">
                                 <label class="form-label" for="eventLocation">Event Location</label>
                                 <input class="form-control" id="event_location" name="event_location"

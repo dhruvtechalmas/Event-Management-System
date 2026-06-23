@@ -23,14 +23,15 @@ class StoreEventRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'event_name'     => 'required|string|max:255',
-            'event_type'     => 'nullable|string|max:255',
-            'event_date'     => 'required|date',
-            'event_time'     => 'nullable|date_format:H:i:s',
+            'event_name' => 'required|string|max:255',
+            'event_type' => 'nullable|string|max:255',
+            'event_date' => 'required|date',
+            'event_time' => 'nullable|date_format:H:i:s',
             'event_location' => 'nullable|string|max:255',
-            'description'    => 'nullable|string',
-            'status'         => 'required|in:Draft,Upcoming,Ongoing,Completed,Cancelled',
-            'event_image'    => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
+            'capacity' => 'required|integer|min:1',
+            'description' => 'nullable|string',
+            'status' => 'required|in:Draft,Upcoming,Ongoing,Completed,Cancelled',
+            'event_image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
         ];
     }
 
@@ -40,8 +41,11 @@ class StoreEventRequest extends FormRequest
             'event_name.required' => 'Event name is required.',
             'event_date.required' => 'Event date is required.',
             'event_time.date_format' => 'Event time must be in HH:MM:SS format.',
-            'event_image.image' => 'The file must be an image.', 
-            'event_image.mimes' => 'Allowed formats are jpeg, png, jpg, and webp.', 
+            'event_image.image' => 'The file must be an image.',
+            'event_image.mimes' => 'Allowed formats are jpeg, png, jpg, and webp.',
+            'capacity.required' => 'Event capacity is required.',
+            'capacity.integer' => 'Capacity must be a number.',
+            'capacity.min' => 'Capacity must be at least 1.',
             'status.in' => 'Invalid status selected.',
         ];
     }

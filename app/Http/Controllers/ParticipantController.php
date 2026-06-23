@@ -29,20 +29,35 @@ class ParticipantController extends Controller implements HasMiddleware
     /**
      * Display a listing of the resource.
      */
+
     public function index()
     {
         if (auth()->user()->hasRole('SuperAdmin')) {
-            $participants = Participant::with('event')->latest()->paginate(10);
+
+            $query = Participant::with('event');
+
         } else {
+
             $eventIds = Task::where('assigned_to', auth()->id())->pluck('event_id');
 
-            $participants = Participant::with('event')->whereIn('event_id', $eventIds)->latest()->paginate(10);
+            $query = Participant::with('event')->whereIn('event_id', $eventIds);
         }
 
-        $events = Event::all();
+        if (request()->filled('event_id')) {
+            $query->where('event_id', request()->event_id);
+        }
+
+        $participants = $query->latest()->paginate(10);
+
+        if (auth()->user()->hasRole('SuperAdmin')) {
+            $events = Event::all();
+        } else {
+            $events = Event::whereIn('id', $eventIds)->get();
+        }
 
         return view('backend.participants.list', compact('participants', 'events'));
     }
+
 
     /**
      * Show the form for creating a new resource.
@@ -59,18 +74,32 @@ class ParticipantController extends Controller implements HasMiddleware
     public function store(StoreParticipantRequest $request)
     {
 
+        $event = Event::findOrFail($request->event_id);
+
+        if ($event->participants()->count() >= $event->capacity) {
+
+            return redirect()->back()->with([
+                'message' => 'This event is sold out.',
+                'alert-type' => 'error'
+            ]);
+        }
+
         $participant = Participant::create($request->validated());
 
         $event = Event::findOrFail($participant->event_id);
 
         Mail::to($participant->email)
-            ->send(new EventInvitationMail($event, $participant));
-
-        Mail::to($participant->email)
             ->send(new ParticipantRegistrationMail($participant, $event));
 
-        // dd($participant->email);
+        Mail::to($participant->email)
+            ->send(new EventInvitationMail($event, $participant));
 
+        if ($event->participants()->count() >= $event->capacity) {
+
+            $event->update([
+                'status' => 'Sold Out'
+            ]);
+        }
 
         return redirect()->route('participants.index')->with([
             'message' => 'Participant Created successful!',
@@ -125,19 +154,35 @@ class ParticipantController extends Controller implements HasMiddleware
 
     public function eventRegister(StoreParticipantRequest $request)
     {
+        $event = Event::findOrFail($request->event_id)->get();
+
+        if ($event->participants()->count() >= $event->capacity) {
+
+            return redirect('/')->with([
+                'message' => 'Sorry! This event is sold out.',
+                'alert-type' => 'error'
+            ]);
+        }
+
         $participant = Participant::create($request->validated());
-
-        $event = Event::findOrFail($participant->event_id);
-
-        Mail::to($participant->email)
-            ->send(new EventInvitationMail($event, $participant));
 
         Mail::to($participant->email)
             ->send(new ParticipantRegistrationMail($participant, $event));
 
-        return redirect('/')
-            ->with('success', 'You are registered for the event successfully!');
+        Mail::to($participant->email)
+            ->send(new EventInvitationMail($event, $participant));
 
+        if ($event->participants()->count() >= $event->capacity) {
+
+            $event->update([
+                'status' => 'Sold Out'
+            ]);
+        }
+
+        return redirect('/')->with([
+            'message' => 'You are registered for the event successfully!',
+            'alert-type' => 'success'
+        ]);
     }
 
 }

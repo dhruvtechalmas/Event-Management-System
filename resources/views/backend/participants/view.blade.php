@@ -36,8 +36,6 @@
 
                 <div class="panel h-100 text-center profile-card">
 
-                    <div class="profile-cover"></div>
-
                     <div class="profile-hero">
 
                         <div class="profile-avatar" style="background-color: {{ $color }}">

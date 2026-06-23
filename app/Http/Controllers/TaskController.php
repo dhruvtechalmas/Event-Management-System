@@ -51,9 +51,18 @@ class TaskController extends Controller implements HasMiddleware
             $query->where('status', request('status'));
         }
 
+        if (request()->filled('event_id')) {
+            $query->where('event_id', request()->event_id);
+        }
+
         $tasks = $query->latest()->paginate(10)->withQueryString();
 
-        $events = Event::all();
+        if (auth()->user()->hasRole('SuperAdmin')) {
+            $events = Event::all();
+        } else {
+            $assignedEventIds = Task::where('assigned_to', auth()->id())->pluck('event_id');
+            $events = Event::whereIn('id', $assignedEventIds)->get();
+        }
 
         $users = User::withoutRole('SuperAdmin')->where('id', '!=', Auth::id())->get();
 

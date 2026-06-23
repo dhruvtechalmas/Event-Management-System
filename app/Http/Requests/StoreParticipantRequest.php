@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StoreParticipantRequest extends FormRequest
 {
@@ -14,11 +15,13 @@ class StoreParticipantRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'full_name' => 'required|string|max:255',
-            'email' => 'required|email|max:255|unique:participants,email',
+            'full_name' => 'required|string|max:20',
+            'email' => ['required','email','max:30',
+                Rule::unique('participants', 'email')->where(function ($query) {
+                    return $query->where('event_id', $this->event_id);}),],
             'event_id' => 'required|exists:events,id',
             'phone' => 'required|digits_between:10,11',
-            'address' => 'nullable|string|max:255',
+            'address' => 'nullable|string|max:150',
             'notes' => 'nullable|string',
         ];
     }

@@ -63,6 +63,25 @@
                 </option>
               </select>
             </form>
+
+            <form action="{{ url()->current() }}" method="GET" class="m-0">
+              <select name="event_id" class="form-select form-select-sm" onchange="this.form.submit()"
+                style="width:220px;">
+                <option value="">All Events</option>
+                @foreach($events as $event)
+                  <option value="{{ $event->id }}" {{ request('event_id') == $event->id ? 'selected' : '' }}>
+                    {{ $event->event_name }}
+                  </option>
+                @endforeach
+              </select>
+            </form>
+
+            <!-- Clear Filter Button -->
+            @if(request('event_id'))
+              <a href="{{ url()->current() }}" class="btn btn-sm btn-outline-danger px-2" title="Clear Filter">
+                <i class="fa-solid fa-xmark"></i>
+              </a>
+            @endif
           </div>
 
           <a href="{{ route('tasks.pdf.all') }}" class="btn btn-outline-secondary btn-sm">
@@ -95,7 +114,7 @@
                           <td>{{ $task->due_date }}</td>
                           <td>
                             <span class="badge        
-                                                                                                                       {{ $task->status == 'pending' ? 'bg-primary' :
+                                                                                                                                               {{ $task->status == 'pending' ? 'bg-primary' :
                 ($task->status == 'in_progress' ? 'bg-success' :
                   ($task->status == 'completed' ? 'bg-info' : 'bg-danger')) }}">
 

@@ -47,6 +47,7 @@ class Event extends Model
         'event_date',
         'event_time',
         'event_location',
+        'capacity',
         'description',
         'event_image',
         'status',
@@ -62,7 +63,9 @@ class Event extends Model
 
     public function participants()
     {
-        return $this->hasMany(Participant::class, 'event_id')->withTrashed();
+        return $this->hasMany(Participant::class, 'event_id');
 
     }
+
+
 }

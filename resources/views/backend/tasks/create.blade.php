@@ -16,13 +16,13 @@
         <div class="row g-3">
             <div class="col-md-12">
                 <label class="form-label" for="title">Taks Title</label>
-                <input class="form-control" id="title" name="title" value="{{ old('title') }} type="text" placeholder="Enter Task Title" required>
+                <input class="form-control" id="title" name="title" value="{{ old('title') }}" type="text" placeholder="Enter Task Title" required>
                 <div class="invalid-feedback">Task Title is required.</div>
             </div>
 
             <div class="col-md-12">
                 <label class="form-label">Event</label>
-                <select class="form-control" id="event_id" name="event_id" value="{{ old('event_id') }} required>
+                <select class="form-control" id="event_id" name="event_id"  required>
                     <option value="">Select an Event</option>
                     @foreach($events as $event)
                         <option value="{{ $event->id }}" data-date="{{ $event->event_date }}">
@@ -35,7 +35,7 @@
 
             <div class="col-md-12">
                 <label class="form-label" for="assigned_to">Assign Task</label>
-                <select class="form-control" id="assigned_to" name="assigned_to" value="{{ old('assigned_to') }}>
+                <select class="form-control" id="assigned_to" name="assigned_to" value="{{ old('assigned_to') }}">
                     <option value="">Select an User</option>
                     @foreach ($users as $user)
                         <option value="{{ $user->id }}">{{ $user->name }}</option>
@@ -52,7 +52,7 @@
 
             <div class="col-md-12">
                 <label class="form-label">Due Date</label>
-                <input type="date" id="due_date" name="due_date" value="{{ old('due_date') }} class="form-control" required>
+                <input type="date" id="due_date" name="due_date" value="{{ old('due_date') }}" class="form-control" required>
                 <div class="invalid-feedback">
                     Due Date cannot be after Event Date.
                 </div>
@@ -60,7 +60,7 @@
 
             <div class="col-md-12">
                 <label class="form-label">Status</label>
-                <select name="status" value="{{ old('status') }} class="form-control" required>
+                <select name="status" value="{{ old('status') }}" class="form-control" required>
                     <option value="">Select Status</option>
                     <option value="pending">Pending</option>
                     <option value="in_progress">In Progress</option>

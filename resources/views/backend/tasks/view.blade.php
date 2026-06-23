@@ -40,13 +40,15 @@
 
                     <div class="panel h-100 text-center profile-card">
 
-                        <div class="profile-cover"></div>
-
                         <div class="profile-hero">
 
-                            <div class="profile-avatar" style="background-color: {{ $color }}">
-                                {{ strtoupper(substr($task->title, 0, 1)) }}
-                            </div>
+                            @if ($task->event && $task->event->event_image)
+                                <img src="{{ asset('storage/' . $task->event->event_image) }}" width="220" height="140"
+                                    class="rounded object-fit-cover shadow" alt="{{ $task->event->event_name }}">
+                            @else
+                                <img src="{{ asset('images/event-banner.jpg') }}" width="220" height="140"
+                                    class="rounded object-fit-cover shadow" alt="No Event Image">
+                            @endif
 
                             <h2 class="h5 mt-3 mb-1">
                                 {{ $task->title }}
@@ -57,7 +59,7 @@
                             </p>
 
                             <span class="badge
-                                                {{ $task->status == 'pending' ? 'bg-primary' :
+                                                    {{ $task->status == 'pending' ? 'bg-primary' :
         ($task->status == 'in_progress' ? 'bg-success' :
             ($task->status == 'completed' ? 'bg-info' : 'bg-danger')) }}">
                                 {{ ucwords(str_replace('_', ' ', $task->status)) }}

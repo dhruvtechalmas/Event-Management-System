@@ -48,7 +48,10 @@
               data-table-search="eventsTable" aria-label="Search events">
 
             <form action="{{ route('events.index') }}" method="GET" class="m-0">
-              <select name="status" class="form-select form-select-sm" onchange="this.form.submit()" style="width:180px;">
+              @if(request('event_date'))
+                <input type="hidden" name="event_date" value="{{ request('event_date') }}">
+              @endif
+              <select name="status" class="form-select form-select-sm" onchange="this.form.submit()" style="width:150px;">
                 <option value="">Filter Status</option>
                 <option value="Draft" {{ request('status') == 'Draft' ? 'selected' : '' }}>Draft</option>
                 <option value="Upcoming" {{ request('status') == 'Upcoming' ? 'selected' : '' }}>Upcoming</option>
@@ -57,7 +60,24 @@
                 <option value="Cancelled" {{ request('status') == 'Cancelled' ? 'selected' : '' }}>Cancelled</option>
               </select>
             </form>
+
+            <form action="{{ route('events.index') }}" method="GET" class="m-0 d-flex align-items-center gap-1">
+              @if(request('status'))
+                <input type="hidden" name="status" value="{{ request('status') }}">
+              @endif
+
+              <input type="date" name="event_date" value="{{ request('event_date') }}"
+                class="form-control form-control-sm" onchange="this.form.submit()" style="width: 160px;">
+
+              @if(request('event_date'))
+                <a href="{{ route('events.index', request()->except('event_date')) }}"
+                  class="btn btn-sm btn-outline-danger px-2" title="Clear Date">
+                  <i class="fa-solid fa-xmark"></i>
+                </a>
+              @endif
+            </form>
           </div>
+
 
           <a href="{{ route('events.pdf.all') }}" class="btn btn-outline-secondary btn-sm">
             <i class="bi bi-download"></i> Export PDF
@@ -75,6 +95,9 @@
                 <th>Event Type</th>
                 <th>Event Date</th>
                 <th>Event Time</th>
+                <th>Capacity</th>
+                <th>Registered</th>
+                <th>Remaining</th>
                 <th>Event Status</th>
                 <th>Action</th>
               </tr>
@@ -85,7 +108,7 @@
                           <td class="fw-semibold">{{ $loop->iteration }}</td>
                           <td>
                             @if ($event->event_image)
-                              <img src="{{ asset('storage/' . $event->event_image) }}" width="100" height="60"
+                              <img src="{{ asset('storage/' . $event->event_image) }}" width="80" height="50"
                                 class="rounded object-fit-cover" alt="{{ $event->event_name }}">
                             @else
                               <img src="{{ asset('images/event-banner.jpg') }}" width="100" height="60"
@@ -107,9 +130,21 @@
                             <span class="text-muted small">{{ \Carbon\Carbon::parse($event->event_time)->format('H:i:s') }}</span>
                           </td>
 
+                         <td>
+                            {{ $event->capacity }}
+                        </td>
+
+                        <td>
+                            {{ $event->participants_count }}
+                        </td>
+
+                        <td>
+                            {{ $event->capacity - $event->participants_count }}
+                        </td>
+
                           <td>
                             <span class="badge
-                                                                                                                                                      {{ $event->status == 'Draft' ? 'bg-secondary' :
+                                                                                                                                                                              {{ $event->status == 'Draft' ? 'bg-secondary' :
                 ($event->status == 'Upcoming' ? 'bg-primary' :
                   ($event->status == 'Ongoing' ? 'bg-success' :
                     ($event->status == 'Completed' ? 'bg-info' : 'bg-danger'))) }}">

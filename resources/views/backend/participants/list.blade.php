@@ -41,8 +41,32 @@
 
 
       <section class="panel">
-        <div class="panel-header"><input class="form-control form-control-sm table-search" type="search"
-            placeholder="Search participants" data-table-search="participantsTable" aria-label="Search participants">
+        <div class="panel-header">
+          <div class="d-flex align-items-center gap-3">
+            <!-- Your existing search input -->
+            <input class="form-control form-control-sm table-search" type="search" placeholder="Search..."
+              data-table-search="permissionsTable" aria-label="Search">
+
+            <!-- NEW: Independent Event Name Filter Dropdown -->
+            <form action="{{ url()->current() }}" method="GET" class="m-0">
+              <select name="event_id" class="form-select form-select-sm" onchange="this.form.submit()"
+                style="width:220px;">
+                <option value="">All Events</option>
+                @foreach($events as $event)
+                  <option value="{{ $event->id }}" {{ request('event_id') == $event->id ? 'selected' : '' }}>
+                    {{ $event->event_name }}
+                  </option>
+                @endforeach
+              </select>
+            </form>
+
+            <!-- Clear Filter Button -->
+            @if(request('event_id'))
+              <a href="{{ url()->current() }}" class="btn btn-sm btn-outline-danger px-2" title="Clear Filter">
+                <i class="fa-solid fa-xmark"></i>
+              </a>
+            @endif
+          </div>
         </div>
 
         <div class="table-responsive ">
