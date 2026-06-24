@@ -85,10 +85,13 @@
           <span class="nav-text">Recycle Bin</span>
         </a>
 
+        {{-- @feature('new-dashboard') --}}
         <a class="nav-link active" href="settings">
           <span class="nav-icon"><i class="bi bi-gear" aria-hidden="true"></i></span>
           <span class="nav-text">Settings</span>
         </a>
+        {{-- @endfeature --}}
+        
       </nav>
 
 

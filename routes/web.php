@@ -12,8 +12,11 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\UserController;
 use App\Models\Event;
+use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ReportController;
+use Laravel\Pennant\Feature;
+use Laravel\Pennant\Middleware\EnsureFeaturesAreActive;
 
 
 Route::get('/', function () {
@@ -31,11 +34,15 @@ Route::get('/pusher', function () {
 //     return view('backend.index');
 // })->middleware(['auth', 'verified'])->name('backend.index');
 
+// Auth::onceUsingId(5);
+
+// Route::get('/settings', function () {
+//     return 'You Are In';
+// })->Middleware(EnsureFeaturesAreActive::using('new-dashboard'));
 
 Route::get('/settings', function () {
     return view('backend.settings');
 });
-
 
 
 
